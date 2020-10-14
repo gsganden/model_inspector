@@ -27,8 +27,8 @@ def generate_linear_model_html(
     - `feature_names`: feature names in the order in which they were
     given to the model.
     - `target_name` : Name of target variable `y`
-    - intercept_formatter: Format specifier for model intercept
-    - coef_formatter: Format specifier for model coefficients
+    - `intercept_formatter`: Format specifier for model intercept
+    - `coef_formatter`: Format specifier for model coefficients
     """
     if len(model.coef_) != len(feature_names):
         raise ValueError("len(model.coef_) != len(feature_cols)")
@@ -66,8 +66,8 @@ def generate_logistic_model_html(
     - `feature_names`: feature names in the order in which they were
     given to the model.
     - `target_val_names`: Names of the values of the target variable
-    - intercept_formatter: Format specifier for model intercept
-    - coef_formatter: Format specifier for model coefficients
+    - `intercept_formatter`: Format specifier for model intercept
+    - `coef_formatter`: Format specifier for model coefficients
     """
     for coefs in model.coef_:
         if len(coefs) != len(feature_names):
