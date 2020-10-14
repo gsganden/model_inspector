@@ -2,19 +2,6 @@
 > Inspect machine learning models
 
 
-```python
-from IPython.display import HTML
-import sklearn.datasets
-from sklearn.linear_model import LinearRegression
-```
-
-```python
-%matplotlib inline
-%reload_ext autoreload
-%autoreload 2
-%load_ext lab_black
-```
-
 ## Install
 
 `pip install model_inspector`
@@ -24,6 +11,10 @@ from sklearn.linear_model import LinearRegression
 Fill me in please! Don't forget code examples:
 
 ```python
+from IPython.display import HTML
+import sklearn.datasets
+from sklearn.linear_model import LinearRegression
+
 from model_inspector.sklearn import generate_linear_model_html
 ```
 
