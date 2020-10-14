@@ -13,7 +13,7 @@ def generate_linear_model_html(
     intercept_formatter: str = ".2f",
     coef_formatter: str = ".2f",
 ):
-    """Generate an HTML equation that characterizes a linear model
+    """Generate an HTML equation that characterizes a linear model.
 
     Model components are color-coded as follows:
     - target: red
@@ -21,19 +21,14 @@ def generate_linear_model_html(
     - coefficients: green
     - features: blue
 
-    Parameters
-    ----------
-    model :
-        Fitted scikit-learn linear model of the form
-        `y = b0 + b1 * x1 + ...`
-    feature_names :
-        Feature names in the order in which they were given to the model
-    target_name :
-        Name of target variable `y`
-    intercept_formatter : str, optional
-        Format specifier for model intercept
-    coef_formatter : str, optional
-        Format specifier for model coefficients
+    Parameters:
+    - `model`: fitted scikit-learn linear model of the form
+    `y = b0 + b1 * x1 + ...`.
+    - `feature_names`: feature names in the order in which they were
+    given to the model.
+    - `target_name` : Name of target variable `y`
+    - intercept_formatter: Format specifier for model intercept
+    - coef_formatter: Format specifier for model coefficients
     """
     if len(model.coef_) != len(feature_names):
         raise ValueError("len(model.coef_) != len(feature_cols)")
@@ -57,7 +52,7 @@ def generate_logistic_model_html(
     coef_formatter: str = ".2f",
 ):
     """Generate an HTML equation that characterizes a logistic
-    regression model
+    regression model.
 
     Model components are color-coded as follows:
     - target: red
@@ -65,19 +60,14 @@ def generate_logistic_model_html(
     - coefficients: green
     - features: blue
 
-    Parameters
-    ----------
-    model
-        Fitted scikit-learn linear model of the form
-        `log-odds(y) = b0 + b1 * x1 + ...`
-    feature_names
-        Feature names in the order in which they were given to the model
-    target_val_names
-        Names of the values of the target variable
-    intercept_formatter
-        Format specifier for model intercept
-    coef_formatter
-        Format specifier for model coefficients
+    Parameters:
+    - `model`: fitted scikit-learn linear model of the form
+    `log-odds(y) = b0 + b1 * x1 + ...`.
+    - `feature_names`: feature names in the order in which they were
+    given to the model.
+    - `target_val_names`: Names of the values of the target variable
+    - intercept_formatter: Format specifier for model intercept
+    - coef_formatter: Format specifier for model coefficients
     """
     for coefs in model.coef_:
         if len(coefs) != len(feature_names):
