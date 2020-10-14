@@ -52,7 +52,7 @@ def generate_linear_model_html(
 def generate_logistic_model_html(
     model,
     feature_names: Iterable[str],
-    target_names: Iterable[str],
+    target_val_names: Iterable[str],
     intercept_formatter: str = ".2f",
     coef_formatter: str = ".2f",
 ):
@@ -72,7 +72,7 @@ def generate_logistic_model_html(
         `log-odds(y) = b0 + b1 * x1 + ...`
     feature_names
         Feature names in the order in which they were given to the model
-    target_names
+    target_val_names
         Names of the values of the target variable
     intercept_formatter
         Format specifier for model intercept
@@ -84,7 +84,7 @@ def generate_logistic_model_html(
             raise ValueError("len(model.coef_) != len(feature_cols)")
     model_string = "<p>"
     for target_name, coefs, intercept in zip(
-        target_names, model.coef_, model.intercept_
+        target_val_names, model.coef_, model.intercept_
     ):
         model_string += f"""
             <span style='color:red'>log-odds({target_name})</span>
