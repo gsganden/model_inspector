@@ -1,6 +1,7 @@
 {
   "model_inspector": {
     "Overview": "/",
-    "sklearn": "sklearn.html"
+    "inspect": "inspect.html",
+    "tune": "tune.html"
   }
 }

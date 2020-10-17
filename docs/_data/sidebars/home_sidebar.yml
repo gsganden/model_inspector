@@ -10,8 +10,11 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: sklearn
-      url: sklearn.html
+      title: inspect
+      url: inspect.html
+    - output: web,pdf
+      title: tune
+      url: tune.html
     output: web
     title: model_inspector
   output: web

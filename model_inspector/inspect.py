@@ -5,8 +5,6 @@ __all__ = ['generate_linear_model_html', 'generate_logistic_model_html']
 # Cell
 from typing import Iterable
 
-from sklearn import metrics
-
 # Cell
 def generate_linear_model_html(
     model,

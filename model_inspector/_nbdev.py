@@ -2,10 +2,15 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"generate_linear_model_html": "00_sklearn.ipynb",
-         "generate_logistic_model_html": "00_sklearn.ipynb"}
+index = {"generate_linear_model_html": "00_inspect.ipynb",
+         "generate_logistic_model_html": "00_inspect.ipynb",
+         "calculate_metrics_by_thresh": "01_tune.ipynb",
+         "coverage": "01_tune.ipynb",
+         "calculate_metric_ignoring_nan": "01_tune.ipynb",
+         "fbeta": "01_tune.ipynb"}
 
-modules = ["sklearn.py"]
+modules = ["inspect.py",
+           "tune.py"]
 
 doc_url = "https://gsganden.github.io/model_inspector/"
 
