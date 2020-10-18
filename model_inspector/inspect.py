@@ -108,18 +108,19 @@ def plot_linear_coefs_vs_hparam(
     - `hparam_vals`: Values of hyperparameter to use
     """
     model.fit(X, y)
+    setattr(model, hparam, hparam_vals[0])
     column_order = model.coef_.argsort()[::-1]
     X = X.iloc[:, column_order]
 
     coefs = []
     for val in hparam_vals:
         setattr(model, hparam, val)
-        coefs.append(model.fit(X.iloc[:, column_order], y).coef_)
+        coefs.append(model.fit(X, y).coef_)
 
     fig, ax = plt.subplots()
     ax.plot(hparam_vals, coefs)
     ax.set(xlabel=hparam, ylabel="coefficient value")
-    ax.legend(X.columns[column_order], bbox_to_anchor=(1.05, 1.0), loc="upper left")
+    ax.legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
     return ax
 
 # Cell
@@ -136,9 +137,9 @@ def plot_logistic_coefs_vs_hparam(
     - `hparam`: Name of hyperparameter
     - `hparam_vals`: Values of hyperparameter to use
     """
-    setattr(model, hparam, hparam_vals[0])
+    setattr(model, hparam, hparam_vals[-1])
     column_order = model.fit(X, y).coef_[0].argsort()[::-1]
-    X_sorted = X.iloc[:, column_order]
+    X = X.iloc[:, column_order]
 
     coef_arrays = []
     for val in hparam_vals:
