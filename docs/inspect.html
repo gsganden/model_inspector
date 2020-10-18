@@ -44,7 +44,6 @@ nb_path: "00_inspect.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">sklearn.datasets</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">,</span> <span class="n">Ridge</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span><span class="p">,</span> <span class="n">KFold</span>
@@ -68,7 +67,7 @@ nb_path: "00_inspect.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="generate_linear_model_html" class="doc_header"><code>generate_linear_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L12" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_linear_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_name</code></strong>:<code>str</code>, <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
+<h4 id="generate_linear_model_html" class="doc_header"><code>generate_linear_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L14" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_linear_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_name</code></strong>:<code>str</code>, <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
 </blockquote>
 <p>Generate an HTML equation that characterizes a linear model.</p>
 <p>Model components are color-coded as follows:</p>
@@ -190,7 +189,7 @@ given to the model.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="generate_logistic_model_html" class="doc_header"><code>generate_logistic_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L50" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_logistic_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_val_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
+<h4 id="generate_logistic_model_html" class="doc_header"><code>generate_logistic_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L52" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_logistic_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_val_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
 </blockquote>
 <p>Generate an HTML equation that characterizes a logistic
 regression model.</p>
@@ -320,42 +319,40 @@ given to the model.</li>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">plot_linear_coefs_vs_hparam</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">hparam</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hparam_vals</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plot linear regression coefficients against a hyperparameter</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters:</span>
-<span class="sd">    - `model`: fitted scikit-learn linear model of the form</span>
-<span class="sd">    `y = b0 + b1 * x1 + ...`.</span>
-<span class="sd">    - `X`: Feature matrix</span>
-<span class="sd">    - `y`: Target values</span>
-<span class="sd">    - `hparam`: Name of hyperparameter</span>
-<span class="sd">    - `hparam_vals`: Values of hyperparameter to use</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-    <span class="n">column_order</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">column_order</span><span class="p">]</span>
+<div class="output_wrapper">
+<div class="output">
 
-    <span class="n">coefs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">hparam_vals</span><span class="p">:</span>
-        <span class="nb">setattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">hparam</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
-        <span class="n">coefs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">column_order</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<div class="output_area">
 
-    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hparam_vals</span><span class="p">,</span> <span class="n">coefs</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">hparam</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;coefficient value&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">column_order</span><span class="p">],</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ax</span>
-</pre></div>
 
-    </div>
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_linear_coefs_vs_hparam" class="doc_header"><code>plot_linear_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L97" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_linear_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>[<code>T_co</code>], <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
+</blockquote>
+<p>Plot linear regression coefficients against a hyperparameter</p>
+<p>Parameters:</p>
+<ul>
+<li><code>model</code>: fitted scikit-learn linear model of the form
+<code>y = b0 + b1 * x1 + ...</code>.</li>
+<li><code>X</code>: Feature matrix</li>
+<li><code>y</code>: Target values</li>
+<li><code>hparam</code>: Name of hyperparameter</li>
+<li><code>hparam_vals</code>: Values of hyperparameter to use</li>
+</ul>
+
+</div>
+
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -552,55 +549,40 @@ given to the model.</li>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">plot_logistic_coefs_vs_hparam</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">hparam</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hparam_vals</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plot logistic regression coefficients against a hyperparameter</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters:</span>
-<span class="sd">    - `model`: fitted scikit-learn linear model of the form</span>
-<span class="sd">    `log-odds(y) = b0 + b1 * x1 + ...`.</span>
-<span class="sd">    - `X`: Feature matrix</span>
-<span class="sd">    - `y`: Target values</span>
-<span class="sd">    - `hparam`: Name of hyperparameter</span>
-<span class="sd">    - `hparam_vals`: Values of hyperparameter to use</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nb">setattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">hparam</span><span class="p">,</span> <span class="n">hparam_vals</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">column_order</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">X_sorted</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">column_order</span><span class="p">]</span>
+<div class="output_wrapper">
+<div class="output">
 
-    <span class="n">coef_arrays</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">hparam_vals</span><span class="p">:</span>
-        <span class="nb">setattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">hparam</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
-        <span class="n">coef_arrays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<div class="output_area">
 
-    <span class="n">num_target_vals</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">num_target_vals</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hparam_vals</span><span class="p">,</span> <span class="p">[</span><span class="n">coefs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">coefs</span> <span class="ow">in</span> <span class="n">coef_arrays</span><span class="p">])</span>
-        <span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ax</span><span class="p">)[</span><span class="kc">None</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
-            <span class="n">num_target_vals</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
-        <span class="k">for</span> <span class="n">target_val_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_target_vals</span><span class="p">):</span>
-            <span class="n">axes</span><span class="p">[</span><span class="n">target_val_num</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                <span class="n">hparam_vals</span><span class="p">,</span> <span class="p">[</span><span class="n">coefs</span><span class="p">[</span><span class="n">target_val_num</span><span class="p">]</span> <span class="k">for</span> <span class="n">coefs</span> <span class="ow">in</span> <span class="n">coef_arrays</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="n">axes</span><span class="p">[</span><span class="n">target_val_num</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y=</span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">y</span><span class="p">))[</span><span class="n">target_val_num</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
-    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Coefficient Value&quot;</span><span class="p">)</span>
-    <span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">hparam</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">axes</span>
-</pre></div>
 
-    </div>
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_logistic_coefs_vs_hparam" class="doc_header"><code>plot_logistic_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L126" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_logistic_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>[<code>T_co</code>], <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
+</blockquote>
+<p>Plot logistic regression coefficients against a hyperparameter</p>
+<p>Parameters:</p>
+<ul>
+<li><code>model</code>: fitted scikit-learn linear model of the form
+<code>log-odds(y) = b0 + b1 * x1 + ...</code>.</li>
+<li><code>X</code>: Feature matrix</li>
+<li><code>y</code>: Target values</li>
+<li><code>hparam</code>: Name of hyperparameter</li>
+<li><code>hparam_vals</code>: Values of hyperparameter to use</li>
+</ul>
+
+</div>
+
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -775,51 +757,40 @@ given to the model.</li>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">plot_binary_logistic_regression_decision_boundary</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">label_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plot decision boundary of a logistic regression model with two</span>
-<span class="sd">    features and a binary target</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters:</span>
-<span class="sd">    - `model`: fitted scikit-learn logistic regression model</span>
-<span class="sd">    - `X`: Feature matrix</span>
-<span class="sd">    - `y`: 0/1 target values</span>
-<span class="sd">    - `label_names`: strings labels for target values 0 and 1,</span>
-<span class="sd">    respectively</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">color</span><span class="p">,</span> <span class="n">y_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
-        <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">y_val</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-            <span class="n">x</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">y</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="n">label_names</span><span class="p">[</span><span class="n">y_val</span><span class="p">]</span> <span class="k">if</span> <span class="n">label_names</span> <span class="k">else</span> <span class="n">y_val</span><span class="p">,</span>
-            <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
-        <span class="p">)</span>
+<div class="output_wrapper">
+<div class="output">
 
-    <span class="n">boundary_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
-    <span class="n">boundary_y</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">lr</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">lr</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">boundary_x</span> <span class="o">+</span> <span class="n">lr</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">boundary_x</span><span class="p">,</span> <span class="n">boundary_y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model decision boundary&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<div class="output_area">
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-        <span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">],</span>
-        <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">],</span>
-    <span class="p">)</span>
 
-    <span class="c1"># fmt: off</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="n">ax</span>
-</pre></div>
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_binary_logistic_regression_decision_boundary" class="doc_header"><code>plot_binary_logistic_regression_decision_boundary</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L168" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_binary_logistic_regression_decision_boundary</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>[<code>T_co</code>], <strong><code>label_names</code></strong>:<code>Optional</code>[<code>Sequence</code>[<code>str</code>]]=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot decision boundary of a logistic regression model with two
+features and a binary target</p>
+<p>Parameters:</p>
+<ul>
+<li><code>model</code>: fitted scikit-learn logistic regression model</li>
+<li><code>X</code>: Feature matrix</li>
+<li><code>y</code>: 0/1 target values</li>
+<li><code>label_names</code>: strings labels for target values 0 and 1,
+respectively</li>
+</ul>
 
-    </div>
+</div>
+
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
