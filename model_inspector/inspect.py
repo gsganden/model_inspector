@@ -3,7 +3,7 @@
 __all__ = ['generate_linear_model_html', 'generate_logistic_model_html']
 
 # Cell
-from typing import Iterable, Sequence
+from typing import Iterable, Optional, Sequence
 
 import matplotlib.pyplot as plt
 import numpy as np
