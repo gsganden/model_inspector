@@ -107,8 +107,8 @@ def plot_linear_coefs_vs_hparam(
     - `hparam`: Name of hyperparameter
     - `hparam_vals`: Values of hyperparameter to use
     """
-    model.fit(X, y)
     setattr(model, hparam, hparam_vals[-1])
+    model.fit(X, y)
     column_order = model.coef_.argsort()[::-1]
     X = X.iloc[:, column_order]
 
