@@ -191,7 +191,9 @@ def plot_binary_logistic_regression_decision_boundary(
         )
 
     boundary_x = np.array([X.iloc[:, 0].min(), X.iloc[:, 0].max()])
-    boundary_y = (-1.0 / lr.coef_[0, 1]) * (lr.coef_[0, 0] * boundary_x + lr.intercept_)
+    boundary_y = (-1.0 / model.coef_[0, 1]) * (
+        model.coef_[0, 0] * boundary_x + model.intercept_
+    )
     ax.plot(boundary_x, boundary_y, label="Model decision boundary", c="k")
 
     ax.set(
