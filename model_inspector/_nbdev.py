@@ -4,7 +4,7 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"generate_linear_model_html": "00_inspect.ipynb",
          "generate_logistic_model_html": "00_inspect.ipynb",
-         "plot_2d_linear_regression": "00_inspect.ipynb",
+         "plot_2d_regression": "00_inspect.ipynb",
          "plot_2d_binary_logistic_regression": "00_inspect.ipynb",
          "plot_linear_coefs_vs_hparam": "00_inspect.ipynb",
          "plot_logistic_coefs_vs_hparam": "00_inspect.ipynb",
