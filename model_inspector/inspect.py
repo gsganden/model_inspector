@@ -4,7 +4,7 @@ __all__ = ['generate_linear_model_html', 'generate_logistic_model_html', 'plot_2
            'plot_2d_binary_logistic_regression', 'plot_linear_coefs_vs_hparam', 'plot_logistic_coefs_vs_hparam']
 
 # Cell
-from typing import Iterable, Optional, Sequence
+from typing import Iterable, Optional, Sequence, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -95,7 +95,7 @@ def generate_logistic_model_html(
     return model_string
 
 # Cell
-def plot_2d_linear_regression(model, X: pd.DataFrame, y: Sequence):
+def plot_2d_linear_regression(model, X: pd.DataFrame, y: Union[np.array, pd.Series]):
     """Plot data and predictions for linear regression model with two
     features
 
