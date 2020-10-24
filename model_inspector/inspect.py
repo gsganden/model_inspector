@@ -119,7 +119,7 @@ def plot_2d_linear_regression(model, X: pd.DataFrame, y: Sequence):
     preds = pd.DataFrame(preds, columns=x_grid, index=y_grid)
     ax = sns.heatmap(preds, cmap="viridis", vmin=y.min(), vmax=y.max())
 
-    X_normalized = sklearn.preprocessing.MinMaxScaler().fit_transform(X) * 99
+    X_normalized = MinMaxScaler().fit_transform(X) * 99
     ax.scatter(
         X_normalized[:, 0] + 0.5,
         X_normalized[:, 1].max() - X_normalized[:, 1] + 0.5,
