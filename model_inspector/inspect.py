@@ -110,6 +110,7 @@ def plot_2d_regression(
     - `X`: Feature matrix with at least two columns. The first two
     columns will be used.
     - `y`: Target values
+    - `cmap`: Colormap
     - `ticket_formatter`: Tick label format specifier
     """
 
@@ -162,8 +163,8 @@ def plot_2d_classification(
     model,
     X: pd.DataFrame,
     y: Union[np.array, pd.Series],
-    tick_formatter=".2f",
     cmap=None,
+    tick_formatter=".2f",
 ):
     """Plot data and predictions for classification model with two features
 
@@ -172,6 +173,8 @@ def plot_2d_classification(
     - `X`: Feature matrix with at least two columns. The first two
     columns will be used.
     - `y`: Target values
+    - `cmap`: Colormap
+    - `tick_formatter`: Tick label format specifier
     """
 
     def _plot_preds(model, X, y, ax, cmap):
@@ -192,7 +195,7 @@ def plot_2d_classification(
             preds,
             vmin=y.min(),
             vmax=y.max(),
-            cmap=sns.color_palette(None, len(pd.unique(y))),
+            cmap=cmap,
         )
 
         return ax
@@ -212,6 +215,7 @@ def plot_2d_classification(
         ax.add_patch(rectangle)
         return ax
 
+    cmap = sns.color_palette(None, len(pd.unique(y))) if cmap is None else cmap
     fig, ax = plt.subplots()
     ax = _plot_preds(model=model, X=X, y=y, ax=ax, cmap=cmap)
     ax = _wash_out(ax)
