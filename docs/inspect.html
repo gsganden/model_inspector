@@ -45,7 +45,6 @@ nb_path: "00_inspect.ipynb"
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 <span class="kn">import</span> <span class="nn">sklearn.datasets</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">,</span> <span class="n">Ridge</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span><span class="p">,</span> <span class="n">KFold</span>
 </pre></div>
@@ -68,7 +67,7 @@ nb_path: "00_inspect.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="generate_linear_model_html" class="doc_header"><code>generate_linear_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L15" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_linear_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_name</code></strong>:<code>str</code>, <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
+<h4 id="generate_linear_model_html" class="doc_header"><code>generate_linear_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L16" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_linear_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_name</code></strong>:<code>str</code>, <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
 </blockquote>
 <p>Generate an HTML equation that characterizes a linear model.</p>
 <p>Model components are color-coded as follows:</p>
@@ -190,7 +189,7 @@ given to the model.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="generate_logistic_model_html" class="doc_header"><code>generate_logistic_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L53" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_logistic_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_val_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
+<h4 id="generate_logistic_model_html" class="doc_header"><code>generate_logistic_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_logistic_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_val_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
 </blockquote>
 <p>Generate an HTML equation that characterizes a logistic
 regression model.</p>
@@ -328,7 +327,7 @@ given to the model.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_2d_linear_regression" class="doc_header"><code>plot_2d_linear_regression</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L98" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_linear_regression</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>])</p>
+<h4 id="plot_2d_linear_regression" class="doc_header"><code>plot_2d_linear_regression</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L99" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_linear_regression</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>])</p>
 </blockquote>
 <p>Plot data and predictions for linear regression model with two
 features</p>
@@ -457,7 +456,7 @@ columns will be used.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_2d_binary_logistic_regression" class="doc_header"><code>plot_2d_binary_logistic_regression</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L132" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_binary_logistic_regression</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>[<code>T_co</code>], <strong><code>label_names</code></strong>:<code>Optional</code>[<code>Sequence</code>[<code>str</code>]]=<em><code>None</code></em>)</p>
+<h4 id="plot_2d_binary_logistic_regression" class="doc_header"><code>plot_2d_binary_logistic_regression</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L133" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_binary_logistic_regression</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>[<code>T_co</code>], <strong><code>label_names</code></strong>:<code>Optional</code>[<code>Sequence</code>[<code>str</code>]]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot decision boundary of a logistic regression model with two
 features and a binary target</p>
@@ -542,7 +541,7 @@ respectively</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_linear_coefs_vs_hparam" class="doc_header"><code>plot_linear_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L172" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_linear_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>[<code>T_co</code>], <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
+<h4 id="plot_linear_coefs_vs_hparam" class="doc_header"><code>plot_linear_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L173" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_linear_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>[<code>T_co</code>], <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
 </blockquote>
 <p>Plot linear regression coefficients against a hyperparameter</p>
 <p>Parameters:</p>
@@ -772,7 +771,7 @@ respectively</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_logistic_coefs_vs_hparam" class="doc_header"><code>plot_logistic_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L202" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_logistic_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>[<code>T_co</code>], <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
+<h4 id="plot_logistic_coefs_vs_hparam" class="doc_header"><code>plot_logistic_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L203" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_logistic_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>[<code>T_co</code>], <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
 </blockquote>
 <p>Plot logistic regression coefficients against a hyperparameter</p>
 <p>Parameters:</p>
