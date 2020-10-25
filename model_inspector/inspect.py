@@ -190,14 +190,15 @@ def plot_2d_classification(
             )
             .reshape(len(y_grid), len(x_grid))
         )
+        y_vals = pd.unique(y)
+        label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
         preds = pd.DataFrame(preds, columns=x_grid, index=y_grid)
+        for col in preds:
+            preds.loc[:, col] = preds.loc[:, col].map(label_to_num)
         ax = sns.heatmap(
-            preds,
-            vmin=y.min(),
-            vmax=y.max(),
+            preds.astype(int),
             cmap=cmap,
         )
-
         return ax
 
     def _set_colorbar(ax, y):
@@ -215,13 +216,18 @@ def plot_2d_classification(
         ax.add_patch(rectangle)
         return ax
 
-    cmap = sns.color_palette(None, len(pd.unique(y))) if cmap is None else cmap
+    y = pd.Series(y)
+    y_vals = y.unique()
+
+    cmap = sns.color_palette(None, len(y_vals)) if cmap is None else cmap
     fig, ax = plt.subplots()
     ax = _plot_preds(model=model, X=X, y=y, ax=ax, cmap=cmap)
     ax = _wash_out(ax)
     colorbar = _set_colorbar(ax, y)
-    ax = _plot_data(X=X, y=y, ax=ax, cmap=colorbar.cmap)
-    _format_ticks(ax, tick_formatter)
+    y_vals = pd.unique(y)
+    label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
+    ax = _plot_data(X=X, y=y.map(label_to_num), ax=ax, cmap=colorbar.cmap)
+    _format_ticks(ax=ax, formatter=tick_formatter)
     return ax
 
 # Cell
