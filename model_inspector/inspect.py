@@ -102,6 +102,7 @@ def plot_2d_regression(
     y: Union[np.array, pd.Series],
     cmap="viridis",
     tick_formatter: str = ".2f",
+    ax=None,
 ):
     """Plot data and predictions for regression model with two features
 
@@ -112,6 +113,8 @@ def plot_2d_regression(
     - `y`: Target values
     - `cmap`: Colormap
     - `ticket_formatter`: Tick label format specifier
+    - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+    if provided; otherwise a new `Axes` object will be generated.
     """
 
     def _plot_preds(model, X, y, ax, cmap):
@@ -130,7 +133,8 @@ def plot_2d_regression(
         preds = pd.DataFrame(preds, columns=x_grid, index=y_grid)
         return sns.heatmap(preds, cmap=cmap, vmin=y.min(), vmax=y.max(), ax=ax)
 
-    fig, ax = plt.subplots()
+    if ax is None:
+        fig, ax = plt.subplots()
     ax = _plot_preds(model=model, X=X, y=y, ax=ax, cmap=cmap)
     ax = _plot_data(X=X, y=y, ax=ax, cmap=cmap)
     _format_ticks(ax=ax, formatter=tick_formatter)
@@ -165,6 +169,7 @@ def plot_2d_classification(
     y: Union[np.array, pd.Series],
     cmap=None,
     tick_formatter=".2f",
+    ax=None,
 ):
     """Plot data and predictions for classification model with two features
 
@@ -175,6 +180,8 @@ def plot_2d_classification(
     - `y`: Target values
     - `cmap`: Colormap
     - `tick_formatter`: Tick label format specifier
+    - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+    if provided; otherwise a new `Axes` object will be generated.
     """
 
     def _plot_preds(model, X, y, ax, cmap):
@@ -220,7 +227,8 @@ def plot_2d_classification(
     y_vals = y.unique()
 
     cmap = sns.color_palette(None, len(y_vals)) if cmap is None else cmap
-    fig, ax = plt.subplots()
+    if ax is None:
+        fig, ax = plt.subplots()
     ax = _plot_preds(model=model, X=X, y=y, ax=ax, cmap=cmap)
     ax = _wash_out(ax)
     colorbar = _set_colorbar(ax, y)
