@@ -103,6 +103,7 @@ def plot_2d_regression(
     cmap="viridis",
     tick_formatter: str = ".2f",
     ax=None,
+    plot_data: bool = True,
 ):
     """Plot data and predictions for regression model with two features
 
@@ -115,6 +116,8 @@ def plot_2d_regression(
     - `ticket_formatter`: Tick label format specifier
     - `ax`: Matplotlib `Axes` object. Plot will be added to this object
     if provided; otherwise a new `Axes` object will be generated.
+    - `plot_data`: Whether to plot the data points in addition to the
+    model predictions.
     """
 
     def _plot_preds(model, X, y, ax, cmap):
@@ -136,7 +139,8 @@ def plot_2d_regression(
     if ax is None:
         fig, ax = plt.subplots()
     ax = _plot_preds(model=model, X=X, y=y, ax=ax, cmap=cmap)
-    ax = _plot_data(X=X, y=y, ax=ax, cmap=cmap)
+    if plot_data:
+        ax = _plot_data(X=X, y=y, ax=ax, cmap=cmap)
     _format_ticks(ax=ax, formatter=tick_formatter)
     return ax
 
@@ -168,8 +172,9 @@ def plot_2d_classification(
     X: pd.DataFrame,
     y: Union[np.array, pd.Series],
     cmap=None,
-    tick_formatter=".2f",
+    tick_formatter: str = ".2f",
     ax=None,
+    plot_data: bool = True,
 ):
     """Plot data and predictions for classification model with two features
 
@@ -233,8 +238,9 @@ def plot_2d_classification(
     ax = _wash_out(ax)
     colorbar = _set_colorbar(ax, y)
     y_vals = pd.unique(y)
-    label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
-    ax = _plot_data(X=X, y=y.map(label_to_num), ax=ax, cmap=colorbar.cmap)
+    if plot_data:
+        label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
+        ax = _plot_data(X=X, y=y.map(label_to_num), ax=ax, cmap=colorbar.cmap)
     _format_ticks(ax=ax, formatter=tick_formatter)
     return ax
 
