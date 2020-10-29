@@ -108,9 +108,8 @@ def plot_2d_regression(
     """Plot data and predictions for regression model with two features
 
     Parameters:
-    - `model`: scikit-learn regression model
-    - `X`: Feature matrix with at least two columns. The first two
-    columns will be used.
+    - `model`: fitted scikit-learn regression model with two features
+    - `X`: Feature matrix
     - `y`: Target values
     - `cmap`: Colormap
     - `ticket_formatter`: Tick label format specifier
@@ -124,15 +123,9 @@ def plot_2d_regression(
         x_grid = np.linspace(X.iloc[:, 0].min(), X.iloc[:, 0].max(), 100)
         y_grid = np.linspace(X.iloc[:, 1].max(), X.iloc[:, 1].min(), 100)
 
-        preds = (
-            model.fit(X, y)
-            .predict(
-                np.transpose(
-                    [np.tile(x_grid, len(y_grid)), np.repeat(y_grid, len(x_grid))]
-                )
-            )
-            .reshape(len(y_grid), len(x_grid))
-        )
+        preds = model.predict(
+            np.transpose([np.tile(x_grid, len(y_grid)), np.repeat(y_grid, len(x_grid))])
+        ).reshape(len(y_grid), len(x_grid))
         preds = pd.DataFrame(preds, columns=x_grid, index=y_grid)
         return sns.heatmap(preds, cmap=cmap, vmin=y.min(), vmax=y.max(), ax=ax)
 
@@ -179,7 +172,7 @@ def plot_2d_classification(
     """Plot data and predictions for classification model with two features
 
     Parameters:
-    - `model`: scikit-learn classification model
+    - `model`: fitted scikit-learn classification model
     - `X`: Feature matrix with at least two columns. The first two
     columns will be used.
     - `y`: Target values
@@ -193,15 +186,9 @@ def plot_2d_classification(
         x_grid = np.linspace(X.iloc[:, 0].min(), X.iloc[:, 0].max(), 100)
         y_grid = np.linspace(X.iloc[:, 1].max(), X.iloc[:, 1].min(), 100)
 
-        preds = (
-            model.fit(X, y)
-            .predict(
-                np.transpose(
-                    [np.tile(x_grid, len(y_grid)), np.repeat(y_grid, len(x_grid))]
-                )
-            )
-            .reshape(len(y_grid), len(x_grid))
-        )
+        preds = model.predict(
+            np.transpose([np.tile(x_grid, len(y_grid)), np.repeat(y_grid, len(x_grid))])
+        ).reshape(len(y_grid), len(x_grid))
         y_vals = pd.unique(y)
         label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
         preds = pd.DataFrame(preds, columns=x_grid, index=y_grid)
