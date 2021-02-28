@@ -45,3 +45,5 @@ sidebars:
 site_title: model_inspector
 topnav_title: model_inspector
 use_math: true
+default_badges:
+  colab: true
