@@ -206,7 +206,14 @@ def plot_2d_regression_3d(
 
     x0_grid, x1_grid = _create_2d_grid(x0_density, x1_density, X)
     ax.plot_surface(
-        x0_grid, x1_grid, _get_grid_preds(), rstride=1, cstride=1, **surf_kwargs
+        x0_grid,
+        x1_grid,
+        _get_grid_preds(),
+        rstride=1,
+        cstride=1,
+        vmin=y.min(),
+        vmax=y.max(),
+        **surf_kwargs
     )
 
     if plot_data:
