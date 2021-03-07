@@ -69,7 +69,7 @@ nb_path: "00_inspect.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="generate_linear_model_html" class="doc_header"><code>generate_linear_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L16" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_linear_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_name</code></strong>:<code>str</code>, <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
+<h4 id="generate_linear_model_html" class="doc_header"><code>generate_linear_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L17" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_linear_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_name</code></strong>:<code>str</code>, <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
 </blockquote>
 <p>Generate an HTML equation that characterizes a linear model.</p>
 <p>Model components are color-coded as follows:</p>
@@ -191,7 +191,7 @@ given to the model.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="generate_logistic_model_html" class="doc_header"><code>generate_logistic_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_logistic_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_val_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
+<h4 id="generate_logistic_model_html" class="doc_header"><code>generate_logistic_model_html</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_logistic_model_html</code>(<strong><code>model</code></strong>, <strong><code>feature_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>target_val_names</code></strong>:<code>Iterable</code>[<code>str</code>], <strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
 </blockquote>
 <p>Generate an HTML equation that characterizes a logistic
 regression model.</p>
@@ -332,7 +332,7 @@ given to the model.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_2d_regression" class="doc_header"><code>plot_2d_regression</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L99" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_regression</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>cmap</code></strong>=<em><code>'viridis'</code></em>, <strong><code>tick_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>)</p>
+<h4 id="plot_2d_regression" class="doc_header"><code>plot_2d_regression</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L100" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_regression</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>cmap</code></strong>=<em><code>'viridis'</code></em>, <strong><code>tick_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Plot data and predictions for regression model with two features</p>
 <p>Parameters:</p>
@@ -580,73 +580,50 @@ model predictions.</li>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">plot_2d_regression_3d</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span>
-    <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">y</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">],</span>
-    <span class="n">plot_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">x0_density</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">x1_density</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">surf_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;viridis&quot;</span><span class="p">},</span>
-    <span class="n">scatter_kwargs</span><span class="o">=</span><span class="p">{},</span>
-    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plot data and predictions for regression model with 2 features </span>
-<span class="sd">    in 3D</span>
-<span class="sd">    </span>
-<span class="sd">    Best viewed with a tool such as https://github.com/matplotlib/ipympl</span>
-<span class="sd">    that supports rotating the output</span>
+<div class="output_wrapper">
+<div class="output">
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    - `model`: fitted scikit-learn regression model with two features</span>
-<span class="sd">    - `X`: Feature matrix</span>
-<span class="sd">    - `y`: Target values</span>
-<span class="sd">    - `plot_data`: Whether to plot the data points in addition to the</span>
-<span class="sd">    model predictions.</span>
-<span class="sd">    - `x0_density`: Number of points along first axis of grid for</span>
-<span class="sd">    plotting surface</span>
-<span class="sd">    - `x1_density`: Number of points along second axis of grid for</span>
-<span class="sd">    plotting surface</span>
-<span class="sd">    - `surf_kwargs`: kwargs to pass to the model prediction surface</span>
-<span class="sd">    - `scatter_kwargs`: kwargs to pass to the scatter plot of the data</span>
-<span class="sd">    - `ax`: Matplotlib `Axes` object. Plot will be added to this object</span>
-<span class="sd">    if provided; otherwise a new `Axes` object will be generated.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">_get_grid_preds</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x0_grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">x1_grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x0_grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">zlabel</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-
-    <span class="n">x0_grid</span><span class="p">,</span> <span class="n">x1_grid</span> <span class="o">=</span> <span class="n">_create_2d_grid</span><span class="p">(</span><span class="n">x0_density</span><span class="p">,</span> <span class="n">x1_density</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span>
-        <span class="n">x0_grid</span><span class="p">,</span> <span class="n">x1_grid</span><span class="p">,</span> <span class="n">_get_grid_preds</span><span class="p">(),</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">surf_kwargs</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">plot_data</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">scatter_kwargs</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">ax</span>
+<div class="output_area">
 
 
-<span class="k">def</span> <span class="nf">_create_2d_grid</span><span class="p">(</span><span class="n">x0_density</span><span class="p">,</span> <span class="n">x1_density</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-    <span class="n">x0_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">x0_density</span><span class="p">)</span>
-    <span class="n">x1_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">x1_density</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x0_grid</span><span class="p">,</span> <span class="n">x1_grid</span><span class="p">)</span>
-</pre></div>
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_2d_regression_3d" class="doc_header"><code>plot_2d_regression_3d</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L164" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_regression_3d</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>x0_density</code></strong>=<em><code>100</code></em>, <strong><code>x1_density</code></strong>=<em><code>100</code></em>, <strong><code>surf_kwargs</code></strong>=<em><code>{'alpha': 0.4, 'cmap': 'viridis'}</code></em>, <strong><code>scatter_kwargs</code></strong>=<em><code>{}</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot data and predictions for regression model with 2 features
+in 3D</p>
+<p>Best viewed with a tool such as <a href="https://github.com/matplotlib/ipympl">https://github.com/matplotlib/ipympl</a>
+that supports rotating the output</p>
+<p>Parameters:</p>
+<ul>
+<li><code>model</code>: fitted scikit-learn regression model with two features</li>
+<li><code>X</code>: Feature matrix</li>
+<li><code>y</code>: Target values</li>
+<li><code>plot_data</code>: Whether to plot the data points in addition to the
+model predictions.</li>
+<li><code>x0_density</code>: Number of points along first axis of grid for
+plotting surface</li>
+<li><code>x1_density</code>: Number of points along second axis of grid for
+plotting surface</li>
+<li><code>surf_kwargs</code>: kwargs to pass to the model prediction surface</li>
+<li><code>scatter_kwargs</code>: kwargs to pass to the scatter plot of the data</li>
+<li><code>ax</code>: Matplotlib <code>Axes</code> object. Plot will be added to this object
+if provided; otherwise a new <code>Axes</code> object will be generated.</li>
+</ul>
 
-    </div>
+</div>
+
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -745,7 +722,7 @@ model predictions.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_2d_classification" class="doc_header"><code>plot_2d_classification</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L163" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_classification</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>cmap</code></strong>=<em><code>None</code></em>, <strong><code>tick_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>)</p>
+<h4 id="plot_2d_classification" class="doc_header"><code>plot_2d_classification</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L224" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_classification</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>cmap</code></strong>=<em><code>None</code></em>, <strong><code>tick_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Plot data and predictions for classification model with two features</p>
 <p>Parameters:</p>
@@ -982,82 +959,55 @@ if provided; otherwise a new <code>Axes</code> object will be generated.</li>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">plot_2d_binary_classification_3d</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span>
-    <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
-    <span class="n">thresh</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">plot_prob</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">plot_thresh</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">plot_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">x0_density</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">x1_density</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">prob_surf_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;viridis&quot;</span><span class="p">},</span>
-    <span class="n">thresh_surf_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
-    <span class="n">scatter_kwargs</span><span class="o">=</span><span class="p">{},</span>
-    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plot data and predictions for binary classification model with 2</span>
-<span class="sd">    features in 3D</span>
-<span class="sd">    </span>
-<span class="sd">    Best viewed with a tool such as https://github.com/matplotlib/ipympl</span>
-<span class="sd">    that supports rotating the output</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters:</span>
-<span class="sd">    - `model`: fitted scikit-learn regression model with two features</span>
-<span class="sd">    - `X`: Feature matrix</span>
-<span class="sd">    - `y`: Target values</span>
-<span class="sd">    - `thresh`: Probability threshold for counting a prediction as</span>
-<span class="sd">    positive</span>
-<span class="sd">    - `plot_prob`: Whether to plot the model probabilities</span>
-<span class="sd">    - `plot_thresh`: Whether to plot a classification threshold</span>
-<span class="sd">    - `plot_data`: Whether to plot the data</span>
-<span class="sd">    - `x0_density`: Number of points along first axis of grid for</span>
-<span class="sd">    plotting surface</span>
-<span class="sd">    - `x1_density`: Number of points along second axis of grid for</span>
-<span class="sd">    plotting surface</span>
-<span class="sd">    - `prob_surf_kwargs`: kwargs to pass to the model probability</span>
-<span class="sd">    surface</span>
-<span class="sd">    - `thresh_surf_kwargs`: kwargs to pass to the threshold surface</span>
-<span class="sd">    - `scatter_kwargs`: kwargs to pass to the scatter plot of the data</span>
-<span class="sd">    - `ax`: Matplotlib `Axes` object. Plot will be added to this object</span>
-<span class="sd">    if provided; otherwise a new `Axes` object will be generated.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">_get_grid_probs</span><span class="p">():</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="n">model</span>
-            <span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x0_grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">x1_grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))[:,</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x0_grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        <span class="p">)</span>
-    
-    
-    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">zlabel</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> prediction&quot;</span><span class="p">)</span>
+<div class="output_wrapper">
+<div class="output">
 
-    <span class="n">x0_grid</span><span class="p">,</span> <span class="n">x1_grid</span> <span class="o">=</span> <span class="n">_create_2d_grid</span><span class="p">(</span><span class="n">x0_density</span><span class="p">,</span> <span class="n">x1_density</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<div class="output_area">
 
-    <span class="k">if</span> <span class="n">plot_prob</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">x0_grid</span><span class="p">,</span> <span class="n">x1_grid</span><span class="p">,</span> <span class="n">_get_grid_probs</span><span class="p">(),</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">prob_surf_kwargs</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">plot_data</span><span class="p">:</span>
-        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">==</span> <span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">==</span> <span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>  <span class="n">y</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">==</span> <span class="n">y</span><span class="p">],</span> <span class="o">**</span><span class="n">scatter_kwargs</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;correct&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">!=</span> <span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">!=</span> <span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>  <span class="n">y</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">!=</span> <span class="n">y</span><span class="p">],</span> <span class="o">**</span><span class="n">scatter_kwargs</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;incorrect&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">plot_thresh</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">x0_grid</span><span class="p">,</span> <span class="n">x1_grid</span><span class="p">,</span> <span class="n">thresh</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x0_grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x1_grid</span><span class="p">))),</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">thresh_surf_kwargs</span><span class="p">)</span>
-    
-    <span class="k">return</span> <span class="n">ax</span>
-</pre></div>
 
-    </div>
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_2d_binary_classification_3d" class="doc_header"><code>plot_2d_binary_classification_3d</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L296" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_binary_classification_3d</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Series</code>, <strong><code>thresh</code></strong>=<em><code>0.5</code></em>, <strong><code>plot_prob</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>plot_thresh</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>x0_density</code></strong>=<em><code>100</code></em>, <strong><code>x1_density</code></strong>=<em><code>100</code></em>, <strong><code>prob_surf_kwargs</code></strong>=<em><code>{'alpha': 0.4, 'cmap': 'viridis'}</code></em>, <strong><code>thresh_surf_kwargs</code></strong>=<em><code>{'alpha': 0.4}</code></em>, <strong><code>scatter_kwargs</code></strong>=<em><code>{}</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot data and predictions for binary classification model with 2
+features in 3D</p>
+<p>Best viewed with a tool such as <a href="https://github.com/matplotlib/ipympl">https://github.com/matplotlib/ipympl</a>
+that supports rotating the output</p>
+<p>Parameters:</p>
+<ul>
+<li><code>model</code>: fitted scikit-learn regression model with two features</li>
+<li><code>X</code>: Feature matrix</li>
+<li><code>y</code>: Target values</li>
+<li><code>thresh</code>: Probability threshold for counting a prediction as
+positive</li>
+<li><code>plot_prob</code>: Whether to plot the model probabilities</li>
+<li><code>plot_thresh</code>: Whether to plot a classification threshold</li>
+<li><code>plot_data</code>: Whether to plot the data</li>
+<li><code>x0_density</code>: Number of points along first axis of grid for
+plotting surface</li>
+<li><code>x1_density</code>: Number of points along second axis of grid for
+plotting surface</li>
+<li><code>prob_surf_kwargs</code>: kwargs to pass to the model probability
+surface</li>
+<li><code>thresh_surf_kwargs</code>: kwargs to pass to the threshold surface</li>
+<li><code>scatter_kwargs</code>: kwargs to pass to the scatter plot of the data</li>
+<li><code>ax</code>: Matplotlib <code>Axes</code> object. Plot will be added to this object
+if provided; otherwise a new <code>Axes</code> object will be generated.</li>
+</ul>
+
+</div>
+
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -1152,7 +1102,7 @@ if provided; otherwise a new <code>Axes</code> object will be generated.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="map_correlation" class="doc_header"><code>map_correlation</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L235" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>map_correlation</code>(<strong><code>df</code></strong>, <strong><code>h_neg</code></strong>:<code>float</code>=<em><code>220</code></em>, <strong><code>h_pos</code></strong>:<code>float</code>=<em><code>10</code></em>, <strong><code>n</code></strong>:<code>int</code>=<em><code>21</code></em>, <strong><code>annot</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="map_correlation" class="doc_header"><code>map_correlation</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L365" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>map_correlation</code>(<strong><code>df</code></strong>, <strong><code>h_neg</code></strong>:<code>float</code>=<em><code>220</code></em>, <strong><code>h_pos</code></strong>:<code>float</code>=<em><code>10</code></em>, <strong><code>n</code></strong>:<code>int</code>=<em><code>21</code></em>, <strong><code>annot</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Create correlation heatmap</p>
 <p>Parameters:</p>
@@ -1265,7 +1215,7 @@ if provided; otherwise a new <code>Axes</code> object will be generated.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_linear_coefs_vs_hparam" class="doc_header"><code>plot_linear_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L261" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_linear_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>, <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
+<h4 id="plot_linear_coefs_vs_hparam" class="doc_header"><code>plot_linear_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L391" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_linear_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>, <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
 </blockquote>
 <p>Plot linear regression coefficients against a hyperparameter</p>
 <p>Parameters:</p>
@@ -1453,7 +1403,7 @@ if provided; otherwise a new <code>Axes</code> object will be generated.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_logistic_coefs_vs_hparam" class="doc_header"><code>plot_logistic_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L291" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_logistic_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>, <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
+<h4 id="plot_logistic_coefs_vs_hparam" class="doc_header"><code>plot_logistic_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L421" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_logistic_coefs_vs_hparam</code>(<strong><code>model</code></strong>, <strong><code>X</code></strong>:<code>DataFrame</code>, <strong><code>y</code></strong>:<code>Sequence</code>, <strong><code>hparam</code></strong>:<code>str</code>, <strong><code>hparam_vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
 </blockquote>
 <p>Plot logistic regression coefficients against a hyperparameter</p>
 <p>Parameters:</p>
