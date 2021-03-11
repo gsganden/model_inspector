@@ -4,6 +4,7 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"generate_linear_model_html": "00_inspect.ipynb",
          "generate_logistic_model_html": "00_inspect.ipynb",
+         "plot_linear_waterfall": "00_inspect.ipynb",
          "plot_2d_regression": "00_inspect.ipynb",
          "plot_2d_regression_3d": "00_inspect.ipynb",
          "plot_2d_classification": "00_inspect.ipynb",
