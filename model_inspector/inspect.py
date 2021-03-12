@@ -87,7 +87,7 @@ def generate_logistic_model_html(
             intercept=intercept,
             coefs=coefs,
             feature_names=X_iris.columns,
-            target_name=f"log-odds({targ_name})",
+            target_name=f"log-odds({target_name})",
         )
         model_string += "</p>"
     return model_string
