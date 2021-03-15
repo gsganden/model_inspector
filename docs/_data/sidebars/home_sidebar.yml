@@ -15,6 +15,9 @@ entries:
     - output: web,pdf
       title: tune
       url: tune.html
+    - output: web,pdf
+      title: explore
+      url: explore.html
     output: web
     title: model_inspector
   output: web

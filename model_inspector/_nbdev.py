@@ -2,23 +2,19 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"generate_linear_model_html": "00_inspect.ipynb",
-         "generate_logistic_model_html": "00_inspect.ipynb",
-         "plot_linear_waterfall": "00_inspect.ipynb",
-         "plot_2d_regression": "00_inspect.ipynb",
-         "plot_2d_regression_3d": "00_inspect.ipynb",
-         "plot_2d_classification": "00_inspect.ipynb",
-         "plot_2d_binary_classification_3d": "00_inspect.ipynb",
-         "map_correlation": "00_inspect.ipynb",
-         "plot_linear_coefs_vs_hparam": "00_inspect.ipynb",
-         "plot_logistic_coefs_vs_hparam": "00_inspect.ipynb",
+index = {"COLORS": "00_inspect.ipynb",
+         "Inspector": "00_inspect.ipynb",
+         "LinRegInspector": "00_inspect.ipynb",
+         "LogRegInspector": "00_inspect.ipynb",
          "calculate_metrics_by_thresh": "01_tune.ipynb",
          "coverage": "01_tune.ipynb",
          "calculate_metric_ignoring_nan": "01_tune.ipynb",
-         "fbeta": "01_tune.ipynb"}
+         "fbeta": "01_tune.ipynb",
+         "plot_correlation": "02_explore.ipynb"}
 
 modules = ["inspect.py",
-           "tune.py"]
+           "tune.py",
+           "explore.py"]
 
 doc_url = "https://gsganden.github.io/model_inspector/"
 

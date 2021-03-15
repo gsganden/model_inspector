@@ -2,6 +2,7 @@
   "model_inspector": {
     "Overview": "/",
     "inspect": "inspect.html",
-    "tune": "tune.html"
+    "tune": "tune.html",
+    "explore": "explore.html"
   }
 }
