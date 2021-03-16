@@ -25,7 +25,7 @@ def plot_correlation(df: pd.DataFrame, ax: Optional[Axes] = None, heatmap_kwargs
     if heatmap_kwargs is None:
         kwargs = {
             "cmap": sns.diverging_palette(h_neg=220, h_pos=10, n=21),
-            "annot": True
+            "annot": True,
         }
     return sns.heatmap(
         df.corr(),

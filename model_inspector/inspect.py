@@ -47,20 +47,27 @@ def Inspector(model, X: pd.DataFrame, y: pd.Series):
     return result
 
 # Cell
-class _Inspector():
+class _Inspector:
     def __init__(self, model, X, y):
         check_is_fitted(model)
 
         self.model, self.X, self.y = model, X, y
 
-        self.plot_correlation = partial(plot_correlation, pd.concat((self.X, self.y), axis="columns"))
+        self.plot_correlation = partial(
+            plot_correlation, pd.concat((self.X, self.y), axis="columns")
+        )
         update_wrapper(self.plot_correlation, plot_correlation)
 
-        is_binary = isinstance(self.model, ClassifierMixin) and len(self.y.unique()) == 2
+        is_binary = (
+            isinstance(self.model, ClassifierMixin) and len(self.y.unique()) == 2
+        )
         if is_binary:
-            self.calculate_metrics_by_thresh = partial(calculate_metrics_by_thresh, self.y, model.predict_proba(self.X))
-            update_wrapper(self.calculate_metrics_by_thresh, calculate_metrics_by_thresh)
-
+            self.calculate_metrics_by_thresh = partial(
+                calculate_metrics_by_thresh, self.y, model.predict_proba(self.X)
+            )
+            update_wrapper(
+                self.calculate_metrics_by_thresh, calculate_metrics_by_thresh
+            )
 
         if len(X.columns) == 1:
             if is_binary:
@@ -193,39 +200,19 @@ class LinRegInspector(_LinearInspector):
             )
         )
 
-
-
 # Cell
 class LogRegInspector(_LinearInspector):
     """Logistic regression model inspector"""
 
-    def show_equation(
-        self,
-        intercept_formatter: str = ".2f",
-        coef_formatter: str = ".2f",
-    ):
-        """Show logistic model equation
-
-        Parameters:
-        - `intercept_formatter`: Intercept format specifier
-        - `coef_formatter`: Intercept format specifier
-        """
-        model_string = ""
-        for target_name, coefs, intercept in zip(
-            y.unique(), self.model.coef_, self.model.intercept_
-        ):
-            model_string += f"""
-                <p>
-                    {_generate_linear_model_html(
-                            intercept=intercept,
-                            coefs=coefs,
-                            feature_names=self.X.columns,
-                            target_name=f"log-odds({y.name} = {target_name})",
-                        )
-                    }
-                </p>
-            """
-        return HTML(model_string)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        is_binary = len(self.y.unique()) == 2
+        if is_binary:
+            self.show_equation = partial(_show_equation_bin, self)
+            update_wrapper(self.show_equation, _show_equation_bin)
+        else:
+            self.show_equation = partial(_show_equation_multiclass, self)
+            update_wrapper(self.show_equation, _show_equation_multiclass)
 
     def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]) -> np.array:
         """Plot coefficient values against a hyperparameter
@@ -259,12 +246,68 @@ class LogRegInspector(_LinearInspector):
                 axes[target_val_num].plot(
                     vals, [coefs[target_val_num] for coefs in coef_arrays]
                 )
-                axes[target_val_num].set_title(f"y={sorted(set(self.y))[target_val_num]}")
+                axes[target_val_num].set_title(
+                    f"y={sorted(set(self.y))[target_val_num]}"
+                )
         axes[0].set(xlabel=hparam, ylabel="Coefficient Value")
         for ax in axes:
             ax.axvline(current_val, c="k", label="current value")
         axes[0].legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
         return axes
+
+# Cell
+def _show_equation_multiclass(
+    inspector,
+    intercept_formatter: str = ".2f",
+    coef_formatter: str = ".2f",
+):
+    """Show multiclass logistic model equation
+
+    Parameters:
+    - `intercept_formatter`: Intercept format specifier
+    - `coef_formatter`: Intercept format specifier
+    """
+    model_string = ""
+    for target_name, coefs, intercept in zip(
+        self.y.unique(), self.model.coef_, self.model.intercept_
+    ):
+        model_string += f"""
+                <p>
+                    {_generate_linear_model_html(
+                            intercept=intercept,
+                            coefs=coefs,
+                            feature_names=self.X.columns,
+                            target_name=f"log-odds({self.y.name} = {target_name})",
+                            intercept_formatter=intercept_formatter,
+                            coef_formatter=coef_formatter,
+                        )
+                    }
+                </p>
+            """
+    return HTML(model_string)
+
+# Cell
+def _show_equation_bin(
+    inspector,
+    intercept_formatter: str = ".2f",
+    coef_formatter: str = ".2f",
+):
+    """Show binary logistic model equation
+
+    Parameters:
+    - `intercept_formatter`: Intercept format specifier
+    - `coef_formatter`: Intercept format specifier
+    """
+    return HTML(
+        _generate_linear_model_html(
+            intercept=inspector.model.intercept_[0],
+            coefs=inspector.model.coef_[0],
+            feature_names=inspector.X.columns,
+            target_name=f"log-odds({inspector.y.name})",
+            intercept_formatter=intercept_formatter,
+            coef_formatter=coef_formatter,
+        )
+    )
 
 # Cell
 def _plot1(
@@ -293,7 +336,7 @@ def _plot1(
             X_sorted.iloc[:, 0],
             inspector.model.predict(X_sorted),
             label="predictions",
-            **line_kwargs
+            **line_kwargs,
         )
         return ax
 
@@ -304,7 +347,7 @@ def _plot1(
     if ax is None:
         _, ax = plt.subplots()
     if plot_data:
-        ax.scatter(inspector.X.iloc[:, 0], y, **scatter_kwargs)
+        ax.scatter(inspector.X.iloc[:, 0], inspector.y, **scatter_kwargs)
     ax = _plot_preds(ax)
     ax.set(xlabel=inspector.X.columns[0], ylabel=inspector.y.name)
     ax.legend()
@@ -313,7 +356,7 @@ def _plot1(
 # Cell
 def _plot1_bin(
     inspector: Inspector,
-    thresh: Optional[float] = .5,
+    thresh: Optional[float] = 0.5,
     plot_data: bool = True,
     prob_line_kwargs: Optional[dict] = None,
     thresh_line_kwargs: Optional[dict] = None,
@@ -343,7 +386,7 @@ def _plot1_bin(
             X,
             inspector.model.predict_proba(X)[:, 1],
             label="probability",
-            **prob_line_kwargs
+            **prob_line_kwargs,
         )
         return ax
 
@@ -360,7 +403,11 @@ def _plot1_bin(
         ax.scatter(inspector.X.iloc[:, 0], inspector.y, **scatter_kwargs)
     ax = _plot_probs(ax)
     if thresh:
-        ax.plot(inspector.X.iloc[:, 0], thresh * np.ones(inspector.X.shape), **thresh_line_kwargs)
+        ax.plot(
+            inspector.X.iloc[:, 0],
+            thresh * np.ones(inspector.X.shape),
+            **thresh_line_kwargs,
+        )
     ax.set(xlabel=inspector.X.columns[0], ylabel=inspector.y.name)
     ax.legend()
     return ax
@@ -388,14 +435,24 @@ def _plot2_regression(
     """
 
     def _plot_preds(ax, **heatmap_kwargs):
-        x_grid = np.linspace(inspector.X.iloc[:, 0].min(), inspector.X.iloc[:, 0].max(), 100)
-        y_grid = np.linspace(inspector.X.iloc[:, 1].max(), inspector.X.iloc[:, 1].min(), 100)
+        x_grid = np.linspace(
+            inspector.X.iloc[:, 0].min(), inspector.X.iloc[:, 0].max(), 100
+        )
+        y_grid = np.linspace(
+            inspector.X.iloc[:, 1].max(), inspector.X.iloc[:, 1].min(), 100
+        )
 
         preds = inspector.model.predict(
             np.transpose([np.tile(x_grid, len(y_grid)), np.repeat(y_grid, len(x_grid))])
         ).reshape(len(y_grid), len(x_grid))
         preds = pd.DataFrame(preds, columns=x_grid, index=y_grid)
-        return sns.heatmap(preds, vmin=y.min(), vmax=y.max(), ax=ax, **heatmap_kwargs)
+        return sns.heatmap(
+            preds,
+            vmin=inspector.y.min(),
+            vmax=inspector.y.max(),
+            ax=ax,
+            **heatmap_kwargs,
+        )
 
     if ax is None:
         _, ax = plt.subplots()
@@ -409,7 +466,11 @@ def _plot2_regression(
     ax = _plot_preds(ax=ax, **heatmap_kwargs)
     if tick_formatter is not None:
         _format_ticks(ax=ax, formatter=tick_formatter)
-    ax.set(xlabel=inspector.X.columns[0], ylabel=inspector.X.columns[1], title=y.name)
+    ax.set(
+        xlabel=inspector.X.columns[0],
+        ylabel=inspector.X.columns[1],
+        title=inspector.y.name,
+    )
     return ax
 
 # Cell
@@ -436,8 +497,12 @@ def _plot2_clas(
 
     def _plot_preds(y_vals, label_to_num, ax, **scatter_kwargs):
         num_points = 100
-        x_grid = np.linspace(inspector.X.iloc[:, 0].min(), inspector.X.iloc[:, 0].max(), num_points)
-        y_grid = np.linspace(inspector.X.iloc[:, 1].max(), inspector.X.iloc[:, 1].min(), num_points)
+        x_grid = np.linspace(
+            inspector.X.iloc[:, 0].min(), inspector.X.iloc[:, 0].max(), num_points
+        )
+        y_grid = np.linspace(
+            inspector.X.iloc[:, 1].max(), inspector.X.iloc[:, 1].min(), num_points
+        )
 
         preds = inspector.model.predict(
             np.transpose([np.tile(x_grid, len(y_grid)), np.repeat(y_grid, len(x_grid))])
@@ -445,10 +510,7 @@ def _plot2_clas(
         preds = pd.DataFrame(preds, columns=x_grid, index=y_grid)
         for col in preds:
             preds.loc[:, col] = preds.loc[:, col].map(label_to_num)
-        ax = sns.heatmap(
-            preds.astype(int),
-            **heatmap_kwargs
-        )
+        ax = sns.heatmap(preds.astype(int), **heatmap_kwargs)
         return ax
 
     def _set_colorbar(y_vals, ax):
@@ -484,7 +546,9 @@ def _plot2_clas(
     if plot_data:
         if scatter_kwargs.get("cmap") is None:
             scatter_kwargs["cmap"] = colorbar.cmap
-        ax = _plot_data_2d(X=inspector.X, y=inspector.y.map(label_to_num), ax=ax, **scatter_kwargs)
+        ax = _plot_data_2d(
+            X=inspector.X, y=inspector.y.map(label_to_num), ax=ax, **scatter_kwargs
+        )
     _format_ticks(ax=ax, formatter=tick_formatter)
     return ax
 
@@ -497,7 +561,7 @@ def _plot_data_2d(X, y, ax, **scatter_kwargs):
         c=y,
         **scatter_kwargs,
     )
-    ax.set(xlabel=inspector.X.columns[0], ylabel=inspector.X.columns[1])
+    ax.set(xlabel=X.columns[0], ylabel=X.columns[1])
     return ax
 
 # Cell
@@ -530,6 +594,7 @@ def _plot3d_regression(
     - `ax`: Matplotlib `Axes` object. Plot will be added to this object
     if provided; otherwise a new `Axes` object will be generated.
     """
+
     def _plot_preds(ax):
 
         x0_grid, x1_grid = _create_2d_grid(inspector.X)
@@ -541,10 +606,9 @@ def _plot3d_regression(
             cstride=1,
             vmin=inspector.y.min(),
             vmax=inspector.y.max(),
-            **surf_kwargs
+            **surf_kwargs,
         )
         return ax
-
 
     if ax is None:
         fig = plt.figure()
@@ -554,9 +618,19 @@ def _plot3d_regression(
     if scatter_kwargs is None:
         scatter_kwargs = {"cmap": "viridis"}
     if plot_data:
-        ax.scatter(inspector.X.iloc[:, 0], inspector.X.iloc[:, 1], inspector.y, c=inspector.y, **scatter_kwargs)
+        ax.scatter(
+            inspector.X.iloc[:, 0],
+            inspector.X.iloc[:, 1],
+            inspector.y,
+            c=inspector.y,
+            **scatter_kwargs,
+        )
     ax = _plot_preds(ax)
-    ax.set(xlabel=inspector.X.columns[0], ylabel=inspector.X.columns[1], zlabel=inspector.y.name)
+    ax.set(
+        xlabel=inspector.X.columns[0],
+        ylabel=inspector.X.columns[1],
+        zlabel=inspector.y.name,
+    )
     return ax
 
 # Cell
@@ -594,14 +668,28 @@ def _plot3d_multiclass(
 
     y_pred_int = pd.Series(inspector.model.predict(inspector.X)).map(label_to_num)
     x0_grid, x1_grid = _create_2d_grid(inspector.X, num_points=20)
-    grid_preds = pd.DataFrame(_get_2d_grid_preds(inspector.model, x0_grid, x1_grid)).applymap(lambda x: label_to_num[x])
+    grid_preds = pd.DataFrame(
+        _get_2d_grid_preds(inspector.model, x0_grid, x1_grid)
+    ).applymap(lambda x: label_to_num[x])
 
     for val in y_int.unique():
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            ax.plot_surface(x0_grid, x1_grid, grid_preds[grid_preds == val], rstride=1, cstride=1, alpha=.3)
+            ax.plot_surface(
+                x0_grid,
+                x1_grid,
+                grid_preds[grid_preds == val],
+                rstride=1,
+                cstride=1,
+                alpha=0.3,
+            )
         if plot_data:
-            ax.scatter(inspector.X.iloc[:, 0].loc[y_int == val], inspector.X.iloc[:, 1].loc[y_int == val],  y_pred_int.loc[y_int == val], **scatter_kwargs)
+            ax.scatter(
+                inspector.X.iloc[:, 0].loc[y_int == val],
+                inspector.X.iloc[:, 1].loc[y_int == val],
+                y_pred_int.loc[y_int == val],
+                **scatter_kwargs,
+            )
 
     return ax
 
@@ -637,17 +725,15 @@ def _plot3d_bin(
     - `ax`: Matplotlib `Axes` object. Plot will be added to this object
     if provided; otherwise a new `Axes` object will be generated.
     """
-    def _get_grid_probs():
-        return (
-            inspector.model
-            .predict_proba(np.hstack((x0_grid.reshape(-1, 1), x1_grid.reshape(-1, 1))))[:, 1]
-            .reshape(x0_grid.shape)
-        )
 
+    def _get_grid_probs():
+        return inspector.model.predict_proba(
+            np.hstack((x0_grid.reshape(-1, 1), x1_grid.reshape(-1, 1)))
+        )[:, 1].reshape(x0_grid.shape)
 
     if ax is None:
         fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
+        ax = fig.add_subplot(111, projection="3d")
     if prob_surf_kwargs is None:
         prob_surf_kwargs = {"alpha": 0.4, "cmap": "viridis"}
     if thresh_surf_kwargs is None:
@@ -658,15 +744,45 @@ def _plot3d_bin(
     x0_grid, x1_grid = _create_2d_grid(inspector.X)
 
     if plot_prob:
-        ax.plot_surface(x0_grid, x1_grid, _get_grid_probs(), rstride=1, cstride=1, **prob_surf_kwargs)
+        ax.plot_surface(
+            x0_grid,
+            x1_grid,
+            _get_grid_probs(),
+            rstride=1,
+            cstride=1,
+            **prob_surf_kwargs,
+        )
     if plot_data:
         y_pred = inspector.model.predict_proba(inspector.X)[:, 1] > thresh
-        ax.scatter(inspector.X.loc[y_pred == inspector.y].iloc[:, 0], inspector.X.loc[y_pred == inspector.y].iloc[:, 1],  inspector.y.loc[y_pred == inspector.y], **scatter_kwargs, label="correct")
-        ax.scatter(inspector.X.loc[y_pred != inspector.y].iloc[:, 0], inspector.X.loc[y_pred != inspector.y].iloc[:, 1],  inspector.y.loc[y_pred != inspector.y], **scatter_kwargs, label="incorrect")
+        ax.scatter(
+            inspector.X.loc[y_pred == inspector.y].iloc[:, 0],
+            inspector.X.loc[y_pred == inspector.y].iloc[:, 1],
+            inspector.y.loc[y_pred == inspector.y],
+            **scatter_kwargs,
+            label="correct",
+        )
+        ax.scatter(
+            inspector.X.loc[y_pred != inspector.y].iloc[:, 0],
+            inspector.X.loc[y_pred != inspector.y].iloc[:, 1],
+            inspector.y.loc[y_pred != inspector.y],
+            **scatter_kwargs,
+            label="incorrect",
+        )
         ax.legend()
     if plot_thresh:
-        ax.plot_surface(x0_grid, x1_grid, thresh * np.ones((len(x0_grid), len(x1_grid))), rstride=1, cstride=1, **thresh_surf_kwargs)
-    ax.set(xlabel=inspector.X.columns[0], ylabel=inspector.X.columns[1], zlabel=f"{y.name} prediction")
+        ax.plot_surface(
+            x0_grid,
+            x1_grid,
+            thresh * np.ones((len(x0_grid), len(x1_grid))),
+            rstride=1,
+            cstride=1,
+            **thresh_surf_kwargs,
+        )
+    ax.set(
+        xlabel=inspector.X.columns[0],
+        ylabel=inspector.X.columns[1],
+        zlabel=f"{inspector.y.name} prediction",
+    )
     return ax
 
 # Cell
