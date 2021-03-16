@@ -4,8 +4,6 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"COLORS": "00_inspect.ipynb",
          "Inspector": "00_inspect.ipynb",
-         "LinRegInspector": "00_inspect.ipynb",
-         "LogRegInspector": "00_inspect.ipynb",
          "calculate_metrics_by_thresh": "01_tune.ipynb",
          "coverage": "01_tune.ipynb",
          "calculate_metric_ignoring_nan": "01_tune.ipynb",
