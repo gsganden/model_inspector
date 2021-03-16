@@ -14,9 +14,13 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from sklearn.base import ClassifierMixin, clone, RegressorMixin
+from sklearn import metrics
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.utils.validation import check_is_fitted
 import waterfall_chart
+
+from .explore import plot_correlation
+from .tune import calculate_metrics_by_thresh
 
 # Cell
 # Meant to be colorblind-friendly
@@ -25,11 +29,6 @@ COLORS = {"blue": "#377eb8", "orange": "#ff7f00", "green": "#4daf4a", "pink": "#
 # Cell
 def Inspector(model, X: pd.DataFrame, y: pd.Series):
     """Model inspector
-
-    Currently supports sklearn models that have `.intercept_` and
-    `.coef_` attributes (e.g. `LinearRegression`, `LogisticRegression`,
-    and their regularized counterparts such as `Ridge`) and arbitrary
-    sklearn models with one or two input features.
 
     Parameters:
     - `model`: Fitted sklearn model
@@ -44,10 +43,7 @@ def Inspector(model, X: pd.DataFrame, y: pd.Series):
         elif isinstance(model, ClassifierMixin):
             result = LogRegInspector(model, X, y)
     else:
-        if len(X.columns) > 2:
-            raise NotImplementedError("Model not supported")
-        else:
-            result = _Inspector(model, X, y)
+        result = _Inspector(model, X, y)
     return result
 
 # Cell
@@ -57,8 +53,17 @@ class _Inspector():
 
         self.model, self.X, self.y = model, X, y
 
+        self.plot_correlation = partial(plot_correlation, pd.concat((self.X, self.y), axis="columns"))
+        update_wrapper(self.plot_correlation, plot_correlation)
+
+        is_binary = isinstance(self.model, ClassifierMixin) and len(self.y.unique()) == 2
+        if is_binary:
+            self.calculate_metrics_by_thresh = partial(calculate_metrics_by_thresh, self.y, model.predict_proba(self.X))
+            update_wrapper(self.calculate_metrics_by_thresh, calculate_metrics_by_thresh)
+
+
         if len(X.columns) == 1:
-            if isinstance(self.model, ClassifierMixin) and len(self.y.unique()) == 2:
+            if is_binary:
                 self.plot = partial(_plot1_bin, self)
                 update_wrapper(self.plot, _plot1_bin)
             else:
@@ -68,7 +73,7 @@ class _Inspector():
             if isinstance(self.model, ClassifierMixin):
                 self.plot = partial(_plot2_clas, self)
                 update_wrapper(self.plot, _plot2_clas)
-                if len(self.y.unique()) == 2:
+                if is_binary:
                     self.plot3d = partial(_plot3d_bin, self)
                     update_wrapper(self.plot3d, _plot3d_bin)
                 else:
@@ -86,6 +91,7 @@ class _LinearInspector(_Inspector):
         super().__init__(model, X, y)
         if isinstance(self.model, ClassifierMixin) and len(self.y.unique()) == 2:
             self.plot_waterfall = partial(_plot_waterfall_bin, self)
+            update_wrapper(self.plot_waterfall, _plot_waterfall_bin)
 
     def show_equation(*args, **kwargs):
         raise NotImplementedError()
@@ -95,6 +101,35 @@ class _LinearInspector(_Inspector):
 
 # Cell
 class LinRegInspector(_LinearInspector):
+    """Linear regression model inspector"""
+
+    def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]):
+        """Plot coefficient values against a hyperparameter
+
+        Parameters:
+        - `hparam`: Name of hyperparameter; must be an attribute of
+        `self.model`
+        - `vals`: Values of that hyperparameter to use
+        """
+        current_val = getattr(self.model, hparam)
+        model = clone(self.model)
+        setattr(model, hparam, vals[-1])
+        model.fit(self.X, self.y)
+        column_order = model.coef_.argsort()[::-1]
+        X = self.X.iloc[:, column_order]
+
+        coefs = []
+        for val in vals:
+            setattr(model, hparam, val)
+            coefs.append(model.fit(X, self.y).coef_)
+
+        fig, ax = plt.subplots()
+        ax.plot(vals, coefs)
+        ax.axvline(current_val, c="k", label="current value")
+        ax.set(xlabel=hparam, ylabel="coefficient value")
+        ax.legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
+        return ax
+
     def plot_waterfall(
         self,
         item: Union[pd.Series, np.array],
@@ -110,7 +145,7 @@ class LinRegInspector(_LinearInspector):
         a single row from `self.X`
         - `bar_num_formatter`: Bar label format specifier
         - `tick_num_formatter`: Tick label format specifier
-        - ``waterfall_kwargs`: kwargs to pass to `waterfall_chart.plot`
+        - `waterfall_kwargs`: kwargs to pass to `waterfall_chart.plot`
         """
         if waterfall_kwargs is None:
             waterfall_kwargs = {
@@ -158,36 +193,11 @@ class LinRegInspector(_LinearInspector):
             )
         )
 
-    def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]):
-        """Plot coefficient values against a hyperparameter
-
-        Parameters:
-        - `hparam`: Name of hyperparameter; must be an attribute of
-        `self.model`
-        - `vals`: Values of that hyperparameter to use
-        """
-        current_val = getattr(self.model, hparam)
-        model = clone(self.model)
-        setattr(model, hparam, vals[-1])
-        model.fit(self.X, self.y)
-        column_order = model.coef_.argsort()[::-1]
-        X = self.X.iloc[:, column_order]
-
-        coefs = []
-        for val in vals:
-            setattr(model, hparam, val)
-            coefs.append(model.fit(X, self.y).coef_)
-
-        fig, ax = plt.subplots()
-        ax.plot(vals, coefs)
-        ax.axvline(current_val, c="k", label="current value")
-        ax.set(xlabel=hparam, ylabel="coefficient value")
-        ax.legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
-        return ax
 
 
 # Cell
 class LogRegInspector(_LinearInspector):
+    """Logistic regression model inspector"""
 
     def show_equation(
         self,
@@ -327,10 +337,11 @@ def _plot1_bin(
     """
 
     def _plot_probs(ax):
-        X_sorted = inspector.X.sort_values(inspector.X.columns[0])
+        num_points = 100
+        X = np.linspace(inspector.X.min(), inspector.X.max(), num_points)
         ax.plot(
-            X_sorted.iloc[:, 0],
-            inspector.model.predict_proba(X_sorted)[:, 1],
+            X,
+            inspector.model.predict_proba(X)[:, 1],
             label="probability",
             **prob_line_kwargs
         )
@@ -346,7 +357,7 @@ def _plot1_bin(
         scatter_kwargs = {"c": "k", "alpha": 0.4}
 
     if plot_data:
-        ax.scatter(inspector.X.iloc[:, 0], y, **scatter_kwargs)
+        ax.scatter(inspector.X.iloc[:, 0], inspector.y, **scatter_kwargs)
     ax = _plot_probs(ax)
     if thresh:
         ax.plot(inspector.X.iloc[:, 0], thresh * np.ones(inspector.X.shape), **thresh_line_kwargs)
@@ -479,7 +490,7 @@ def _plot2_clas(
 
 # Cell
 def _plot_data_2d(X, y, ax, **scatter_kwargs):
-    X_normalized = MinMaxScaler().fit_transform(inspector.X) * 99
+    X_normalized = MinMaxScaler().fit_transform(X) * 99
     ax.scatter(
         X_normalized[:, 0] + 0.5,
         X_normalized[:, 1].max() - X_normalized[:, 1] + 0.5,
@@ -543,7 +554,7 @@ def _plot3d_regression(
     if scatter_kwargs is None:
         scatter_kwargs = {"cmap": "viridis"}
     if plot_data:
-        ax.scatter(inspector.X.iloc[:, 0], inspector.X.iloc[:, 1], y, c=y, **scatter_kwargs)
+        ax.scatter(inspector.X.iloc[:, 0], inspector.X.iloc[:, 1], inspector.y, c=inspector.y, **scatter_kwargs)
     ax = _plot_preds(ax)
     ax.set(xlabel=inspector.X.columns[0], ylabel=inspector.X.columns[1], zlabel=inspector.y.name)
     return ax
@@ -679,7 +690,8 @@ def _plot_waterfall_bin(
     waterfall_kwargs: Optional[dict] = None,
 ):
     """Make a waterfall chart showing how each feature contributes
-    to the prediction for the input item.
+    to the prediction for the input item for a binary classification
+    model.
 
     Parameters:
     - `item`: Input item, with the same shape and value meanings as
