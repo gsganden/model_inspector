@@ -31,7 +31,7 @@ def Inspector(model, X: pd.DataFrame, y: pd.Series):
     and their regularized counterparts such as `Ridge`) and arbitrary
     sklearn models with one or two input features.
 
-    Paramters:
+    Parameters:
     - `model`: Fitted sklearn model
     - `X`: Feature matrix with same shape and column meanings as
     features `model` was trained on
