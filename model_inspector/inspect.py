@@ -19,7 +19,8 @@ from sklearn.utils.validation import check_is_fitted
 import waterfall_chart
 
 # Cell
-COLORS = ["#377eb8", "#ff7f00", "#4daf4a", "#f781bf"]
+# Meant to be colorblind-friendly
+COLORS = {"blue": "#377eb8", "orange": "#ff7f00", "green": "#4daf4a", "pink": "#f781bf"}
 
 # Cell
 def Inspector(model, X: pd.DataFrame, y: pd.Series):
@@ -115,9 +116,9 @@ class LinRegInspector(_LinearInspector):
             waterfall_kwargs = {
                 "sorted_value": True,
                 "threshold": 0.01,
-                "blue_color": COLORS[0],
-                "red_color": COLORS[1],
-                "green_color": COLORS[2],
+                "blue_color": COLORS["blue"],
+                "green_color": COLORS["green"],
+                "red_color": COLORS["orange"],
             }
         index = ["int"] + [
             f"{name}: {val:{tick_num_formatter}}"
@@ -691,9 +692,9 @@ def _plot_waterfall_bin(
         waterfall_kwargs = {
             "sorted_value": True,
             "threshold": 0.01,
-            "blue_color": COLORS[0],
-            "red_color": COLORS[1],
-            "green_color": COLORS[2],
+            "blue_color": COLORS["blue"],
+            "green_color": COLORS["green"],
+            "red_color": COLORS["orange"],
         }
 
     index = ["int"] + [
@@ -724,12 +725,12 @@ def _generate_linear_model_html(
     if len(coefs) != len(feature_names):
         raise ValueError("len(coefs) != len(feature_cols)")
     model_string = f"""
-        <span style='color:{COLORS[0]}'>{target_name}</span>
-        = <span style='color:{COLORS[1]}'>{intercept:{intercept_formatter}}</span>
+        <span style='color:{COLORS["pink"]}'>{target_name}</span>
+        = <span style='color:{COLORS["orange"]}'>{intercept:{intercept_formatter}}</span>
     """
     for coef, feature_col in zip(coefs, feature_names):
         model_string += f"""
-            <span style='color:{COLORS[2]}'>{"+" if coef >= 0 else "-"} {abs(coef):{coef_formatter}}</span>
-            * <span style='color:{COLORS[3]}'>{feature_col}</span>
+            <span style='color:{COLORS["green"]}'>{"+" if coef >= 0 else "-"} {abs(coef):{coef_formatter}}</span>
+            * <span style='color:{COLORS["blue"]}'>{feature_col}</span>
         """
     return model_string
