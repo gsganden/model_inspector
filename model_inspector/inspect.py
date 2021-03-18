@@ -54,12 +54,14 @@ def get_inspector(model, X, y):
     return result
 
 # Cell
+# export
 class ModelType(Enum):
     REGRESSION = auto()
     BINARY = auto()
     MULTICLASS = auto()
 
 # Cell
+# export
 def identify_type(model, y):
     if isinstance(model, RegressorMixin):
         result = ModelType.REGRESSION
@@ -151,6 +153,7 @@ class _ClasInspector(_Inspector):
         )
 
 # Cell
+# export
 def generate_model_html(
     intercept: float,
     coefs: Sequence[float],
