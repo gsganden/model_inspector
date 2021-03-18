@@ -11,14 +11,14 @@ import pandas as pd
 import seaborn as sns
 
 # Cell
-def plot_correlation(df: pd.DataFrame, ax: Optional[Axes] = None, heatmap_kwargs=None):
-    """Create correlation heatmap
+def plot_correlation(df: pd.DataFrame, heatmap_kwargs=None, ax: Optional[Axes] = None):
+    """Plot correlation heatmap
 
     Parameters:
     - `df`: DataFrame
+    - `heatmap_kwargs`: kwargs to pass to `sns.heatmap`
     - `ax`: Matplotlib `Axes` object. Plot will be added to this object
     if provided; otherwise a new `Axes` object will be generated.
-    - `heatmap_kwargs`: kwargs to pass to `sns.heatmap`
     """
     if ax is None:
         _, ax = plt.subplots()
