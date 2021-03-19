@@ -211,7 +211,12 @@ class _LinRegInspector(_Inspector):
         item: Union[pd.Series, np.array],
         bar_num_formatter: str = ".1f",
         tick_num_formatter: str = ".2f",
-        waterfall_kwargs: Optional[dict] = None,
+        sorted_value=True,
+        threshold=0.01,
+        blue_color=COLORS["blue"],
+        green_color=COLORS["green"],
+        red_color=COLORS["orange"],
+        **waterfall_kwargs,
     ):
         """Make a waterfall chart showing how each feature contributes
         to the prediction for the input item.
@@ -221,31 +226,26 @@ class _LinRegInspector(_Inspector):
         a single row from `self.X`
         - `bar_num_formatter`: Bar label format specifier
         - `tick_num_formatter`: Tick label format specifier
-        - `waterfall_kwargs`: kwargs to pass to `waterfall_chart.plot`
+
+        Additional keyword arguments will be passed to
+        `waterfall_chart.plot`
         """
-        if waterfall_kwargs is None:
-            waterfall_kwargs = {
-                "sorted_value": True,
-                "threshold": 0.01,
-                "blue_color": COLORS["blue"],
-                "green_color": COLORS["green"],
-                "red_color": COLORS["orange"],
-            }
-        index = ["int"] + [
-            f"{name}: {val:{tick_num_formatter}}"
-            for name, val in zip(self.X.columns, item)
-        ]
-        vals = [self.model.intercept_] + list(self.model.coef_ * item)
-        waterfall_chart.plot(
-            index=index,
-            data=vals,
-            x_lab="Feature name and value",
+        return _plot_waterfall(
+            X=self.X,
+            y=self.y,
+            item=item,
+            intercept=self.model.intercept_,
+            coefs=self.model.intercept_,
             y_lab="Contribution to prediction",
-            formatting=f"{{:,{bar_num_formatter}}}",
-            net_label=self.y.name,
+            bar_num_formatter=bar_num_formatter,
+            tick_num_formatter=tick_num_formatter,
+            sorted_value=sorted_value,
+            threshold=threshold,
+            blue_color=blue_color,
+            green_color=green_color,
+            red_color=red_color,
             **waterfall_kwargs,
         )
-        return plt.gca()
 
     def show_equation(
         self,
@@ -268,6 +268,44 @@ class _LinRegInspector(_Inspector):
                 coef_formatter=coef_formatter,
             )
         )
+
+# Cell
+def _plot_waterfall(
+    X,
+    y,
+    item: Union[pd.Series, np.array],
+    intercept: float,
+    coefs: Sequence[float],
+    y_lab="",
+    bar_num_formatter: str = ".1f",
+    tick_num_formatter: str = ".2f",
+    sorted_value=True,
+    threshold=0.01,
+    blue_color=COLORS["blue"],
+    green_color=COLORS["green"],
+    red_color=COLORS["orange"],
+    **waterfall_kwargs,
+):
+    index = ["int"] + [
+        f"{name}: {val:{tick_num_formatter}}"
+        for name, val in zip(X.columns, item)
+    ]
+    vals = [intercept] + list(np.array(coefs) * item)
+    waterfall_chart.plot(
+        index=index,
+        data=vals,
+        x_lab="Feature name and value",
+        y_lab="y_lab",
+        formatting=f"{{:,{bar_num_formatter}}}",
+        net_label=y.name,
+        sorted_value=sorted_value,
+        threshold=threshold,
+        blue_color=blue_color,
+        green_color=green_color,
+        red_color=red_color,
+        **waterfall_kwargs,
+    )
+    return plt.gca()
 
 # Cell
 class _LinBinInspector(_ClasInspector):
@@ -341,7 +379,12 @@ class _LinBinInspector(_ClasInspector):
         item: Union[pd.Series, np.array],
         bar_num_formatter: str = ".1f",
         tick_num_formatter: str = ".2f",
-        waterfall_kwargs: Optional[dict] = None,
+        sorted_value=True,
+        threshold=0.01,
+        blue_color=COLORS["blue"],
+        green_color=COLORS["green"],
+        red_color=COLORS["orange"],
+        **waterfall_kwargs,
     ):
         """Make a waterfall chart showing how each feature contributes
         to the prediction for the input item for a binary classification
@@ -354,30 +397,22 @@ class _LinBinInspector(_ClasInspector):
         - `tick_num_formatter`: Tick label format specifier
         - ``waterfall_kwargs`: kwargs to pass to `waterfall_chart.plot`
         """
-        if waterfall_kwargs is None:
-            waterfall_kwargs = {
-                "sorted_value": True,
-                "threshold": 0.01,
-                "blue_color": COLORS["blue"],
-                "green_color": COLORS["green"],
-                "red_color": COLORS["orange"],
-            }
-
-        index = ["int"] + [
-            f"{name}: {val:{tick_num_formatter}}"
-            for name, val in zip(self.X.columns, item)
-        ]
-        vals = [self.model.intercept_[0]] + list(self.model.coef_[0] * item)
-        waterfall_chart.plot(
-            index=index,
-            data=vals,
-            x_lab="Feature name and value",
-            y_lab="Contribution to log-odds",
-            formatting=f"{{:,{bar_num_formatter}}}",
-            net_label=self.y.name,
+        return _plot_waterfall(
+            X=self.X,
+            y=self.y,
+            item=item,
+            intercept=self.model.intercept_[0],
+            coefs=self.model.intercept_[0],
+            y_lab="Contribution to predicted log-odds",
+            bar_num_formatter=bar_num_formatter,
+            tick_num_formatter=tick_num_formatter,
+            sorted_value=sorted_value,
+            threshold=threshold,
+            blue_color=blue_color,
+            green_color=green_color,
+            red_color=red_color,
             **waterfall_kwargs,
         )
-        return plt.gca()
 
 # Cell
 class _LinMultiInspector(_ClasInspector):
