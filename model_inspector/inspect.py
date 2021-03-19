@@ -287,8 +287,7 @@ def _plot_waterfall(
     **waterfall_kwargs,
 ):
     index = ["int"] + [
-        f"{name}: {val:{tick_num_formatter}}"
-        for name, val in zip(X.columns, item)
+        f"{name}: {val:{tick_num_formatter}}" for name, val in zip(X.columns, item)
     ]
     vals = [intercept] + list(np.array(coefs) * item)
     waterfall_chart.plot(
