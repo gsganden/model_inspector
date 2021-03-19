@@ -235,7 +235,7 @@ class _LinRegInspector(_Inspector):
             y=self.y,
             item=item,
             intercept=self.model.intercept_,
-            coefs=self.model.intercept_,
+            coefs=self.model.coefs,
             y_lab="Contribution to prediction",
             bar_num_formatter=bar_num_formatter,
             tick_num_formatter=tick_num_formatter,
