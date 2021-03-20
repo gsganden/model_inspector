@@ -175,7 +175,8 @@ class _RegInspector(_Inspector):
             scatter_kwargs = {}
         if "alpha" not in scatter_kwargs:
             scatter_kwargs["alpha"] = 0.3
-        ax.scatter(self.y, self.model.predict(self.X), **scatter_kwargs)
+        y_pred = self.model.predict(self.X)
+        ax.scatter(self.y, y_pred, **scatter_kwargs)
 
         if line_kwargs is None:
             line_kwargs = {}
@@ -183,11 +184,11 @@ class _RegInspector(_Inspector):
             line_kwargs["label"] = "predicted=actual"
         ax.plot(
             [self.y.min(), self.y.max()],
-            [self.y.min(), self.y.max()],
+            [y_pred.min(), y_pred.max()],
             **line_kwargs,
         )
 
-        ax.set(xlabel="Actual price", ylabel="Predicted price")
+        ax.set(xlabel="Actual", ylabel="Predicted")
         ax.legend()
         return ax
 
