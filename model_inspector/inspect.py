@@ -184,7 +184,7 @@ class _RegInspector(_Inspector):
             line_kwargs["label"] = "predicted=actual"
         ax.plot(
             [self.y.min(), self.y.max()],
-            [y_pred.min(), y_pred.max()],
+            [self.y.min(), self.y.max()],
             **line_kwargs,
         )
 
