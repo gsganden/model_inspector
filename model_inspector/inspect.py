@@ -19,6 +19,7 @@ import pandas as pd
 import seaborn as sns
 from sklearn.base import ClassifierMixin, clone, RegressorMixin
 import sklearn.datasets
+from sklearn.inspection import permutation_importance
 from sklearn.linear_model._base import LinearModel, LinearClassifierMixin
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.utils.validation import check_is_fitted
@@ -123,6 +124,51 @@ class _Inspector(_GetAttr):
                 result = _Multi2dPlotter
         return result
 
+    def permutation_importance(
+        self,
+        importance_kwargs: Optional[dict] = None,
+    ) -> pd.Series:
+        """Calculate permutation importance of features
+
+        - `importance_kwargs`: kwargs to pass to
+        `sklearn.inspection.permutation_importance`
+        """
+        if importance_kwargs is None:
+            importance_kwargs = {}
+        if "n_jobs" not in importance_kwargs:
+            importance_kwargs["n_jobs"] = -1
+        importances = permutation_importance(
+            self.model, self.X, self.y, **importance_kwargs
+        )["importances_mean"]
+        return pd.Series(importances, index=self.X.columns)
+
+    def plot_permutation_importance(
+        self,
+        ax: Optional[Axes] = None,
+        sort: bool = True,
+        importance_kwargs: Optional[dict] = None,
+        plot_kwargs: Optional[dict] = None,
+    ) -> Axes:
+        """Plot a correlation matrix for `self.X` and `self.y`
+
+        Parameters:
+        - `sort`: Sort features by decreasing importance
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
+        - `importance_kwargs`: kwargs to pass to
+        `sklearn.inspection.permutation_importance`
+        - `plot_kwargs`: kwargs to pass to `pd.Series.plot.barh`
+        """
+        importance = self.permutation_importance(importance_kwargs)
+        if sort:
+            importance = importance.sort_values()
+
+        if plot_kwargs is None:
+            plot_kwargs = {}
+        ax = importance.plot.barh(**plot_kwargs)
+        ax.set(title="Feature importances")
+        return ax
+
 # Cell
 class _ClasInspector(_Inspector):
     def calculate_metrics_by_thresh(
@@ -154,7 +200,6 @@ class _ClasInspector(_Inspector):
 
 # Cell
 class _RegInspector(_Inspector):
-
     def plot_pred_vs_act(
         self,
         ax: Optional[Axes] = None,
@@ -675,7 +720,6 @@ class _Bin1dPlotter(_Plotter):
 
         if ax is None:
             _, ax = plt.subplots()
-
 
         if plot_data:
             if scatter_kwargs is None:
