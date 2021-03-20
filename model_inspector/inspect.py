@@ -154,6 +154,7 @@ class _ClasInspector(_Inspector):
 
 # Cell
 class _RegInspector(_Inspector):
+
     def plot_pred_vs_act(
         self,
         ax: Optional[Axes] = None,
@@ -175,6 +176,8 @@ class _RegInspector(_Inspector):
             scatter_kwargs = {}
         if "alpha" not in scatter_kwargs:
             scatter_kwargs["alpha"] = 0.3
+        if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
+            scatter_kwargs["c"] = "k"
         y_pred = self.model.predict(self.X)
         ax.scatter(self.y, y_pred, **scatter_kwargs)
 
@@ -213,6 +216,8 @@ class _RegInspector(_Inspector):
             scatter_kwargs = {}
         if "alpha" not in scatter_kwargs:
             scatter_kwargs["alpha"] = 0.3
+        if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
+            scatter_kwargs["c"] = "k"
         ax.scatter(
             x=self.y.index, y=self.y - self.model.predict(self.X), **scatter_kwargs
         )
@@ -602,7 +607,7 @@ class _1dPlotter(_Plotter):
         if provided; otherwise a new `Axes` object will be generated.
         """
 
-        def _plot_preds(ax):
+        def _plot_preds(ax, line_kwargs):
             X_sorted = self.X.sort_values(self.X.columns[0])
             ax.plot(
                 X_sorted.iloc[:, 0],
@@ -612,15 +617,21 @@ class _1dPlotter(_Plotter):
             )
             return ax
 
-        if line_kwargs is None:
-            line_kwargs = {}
-        if scatter_kwargs is None:
-            scatter_kwargs = {"alpha": 0.4}
         if ax is None:
             _, ax = plt.subplots()
         if plot_data:
+            if scatter_kwargs is None:
+                scatter_kwargs = {}
+            if "alpha" not in scatter_kwargs:
+                scatter_kwargs["alpha"] = 0.3
+            if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
+                scatter_kwargs["c"] = "k"
             ax.scatter(self.X.iloc[:, 0], self.y, **scatter_kwargs)
-        ax = _plot_preds(ax)
+
+        if line_kwargs is None:
+            line_kwargs = {}
+        ax = _plot_preds(ax, line_kwargs)
+
         ax.set(xlabel=self.X.columns[0], ylabel=self.y.name)
         ax.legend()
         return ax
@@ -664,22 +675,30 @@ class _Bin1dPlotter(_Plotter):
 
         if ax is None:
             _, ax = plt.subplots()
-        if prob_line_kwargs is None:
-            prob_line_kwargs = {}
-        if thresh_line_kwargs is None:
-            thresh_line_kwargs = {}
-        if scatter_kwargs is None:
-            scatter_kwargs = {"alpha": 0.4}
+
 
         if plot_data:
+            if scatter_kwargs is None:
+                scatter_kwargs = {}
+            if "alpha" not in scatter_kwargs:
+                scatter_kwargs["alpha"] = 0.3
+            if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
+                scatter_kwargs["c"] = "k"
             ax.scatter(self.X.iloc[:, 0], self.y, **scatter_kwargs)
+
+        if prob_line_kwargs is None:
+            prob_line_kwargs = {}
         ax = _plot_probs(ax)
+
+        if thresh_line_kwargs is None:
+            thresh_line_kwargs = {}
         if thresh:
             ax.plot(
                 self.X.iloc[:, 0],
                 thresh * np.ones(self.X.shape),
                 **thresh_line_kwargs,
             )
+
         ax.set(xlabel=self.X.columns[0], ylabel=self.y.name)
         ax.legend()
         return ax
