@@ -50,7 +50,7 @@ def get_inspector(model, X, y):
     elif model_type in [ModelType.BINARY, ModelType.MULTICLASS]:
         result = _ClasInspector(model, X, y)
     else:
-        result = _Inspector(model, X, y)
+        result = _RegInspector(model, X, y)
     return result
 
 # Cell
@@ -153,6 +153,45 @@ class _ClasInspector(_Inspector):
         )
 
 # Cell
+class _RegInspector(_Inspector):
+    def plot_pred_vs_act(
+        self,
+        ax: Optional[Axes] = None,
+        scatter_kwargs: Optional[dict] = None,
+        line_kwargs: Optional[dict] = None,
+    ) -> Axes:
+        """Plot predicted vs. actual values
+
+        Parameters:
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
+        - `scatter_kwargs`: kwargs to pass to scatter plot
+        - `line_kwargs`: kwargs to pass to line plot
+        """
+        if ax is None:
+            _, ax = plt.subplots()
+
+        if scatter_kwargs is None:
+            scatter_kwargs = {}
+        if "alpha" not in scatter_kwargs:
+            scatter_kwargs["alpha"] = 0.3
+        ax.scatter(self.y, self.model.predict(self.X), c="k", **scatter_kwargs)
+
+        if line_kwargs is None:
+            line_kwargs = {}
+        if "label" not in line_kwargs:
+            line_kwargs["label"] = "predicted=actual"
+        ax.plot(
+            [self.y.min(), self.y.max()],
+            [self.y.min(), self.y.max()],
+            **line_kwargs,
+        )
+
+        ax.set(xlabel="Actual price", ylabel="Predicted price")
+        ax.legend()
+        return ax
+
+# Cell
 # export
 def generate_model_html(
     intercept: float,
@@ -176,7 +215,7 @@ def generate_model_html(
     return model_string
 
 # Cell
-class _LinRegInspector(_Inspector):
+class _LinRegInspector(_RegInspector):
     """Linear regression model inspector"""
 
     def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]):
@@ -493,18 +532,18 @@ class _Plotter:
     def __init__(self, model, X, y):
         self.model, self.X, self.y = model, X, y
 
-    def plot_correlation(self, heatmap_kwargs=None, ax: Optional[Axes] = None):
+    def plot_correlation(self, ax: Optional[Axes] = None, **heatmap_kwargs) -> Axes:
         """Plot a correlation matrix for `self.X` and `self.y`
 
         Parameters:
-        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap`
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
+        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap`
         """
         return plot_correlation(
             pd.concat((self.X, self.y), axis="columns"),
             ax=ax,
-            heatmap_kwargs=heatmap_kwargs,
+            **heatmap_kwargs,
         )
 
 # Cell
