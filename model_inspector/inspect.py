@@ -222,6 +222,8 @@ class _RegInspector(_Inspector):
         if "linestyle" not in line_kwargs:
             line_kwargs["linestyle"] = "dashed"
         ax.plot([self.y.index.min(), self.y.index.max()], [0, 0], **line_kwargs)
+
+        ax.set_ylabel("actual - predicted")
         return ax
 
 # Cell
