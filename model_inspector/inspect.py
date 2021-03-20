@@ -165,8 +165,8 @@ class _RegInspector(_Inspector):
         Parameters:
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
-        - `scatter_kwargs`: kwargs to pass to scatter plot
-        - `line_kwargs`: kwargs to pass to line plot
+        - `scatter_kwargs`: kwargs to pass to `plt.scatter`
+        - `line_kwargs`: kwargs to pass to `plt.plot`
         """
         if ax is None:
             _, ax = plt.subplots()
@@ -175,7 +175,7 @@ class _RegInspector(_Inspector):
             scatter_kwargs = {}
         if "alpha" not in scatter_kwargs:
             scatter_kwargs["alpha"] = 0.3
-        ax.scatter(self.y, self.model.predict(self.X), c="k", **scatter_kwargs)
+        ax.scatter(self.y, self.model.predict(self.X), **scatter_kwargs)
 
         if line_kwargs is None:
             line_kwargs = {}
@@ -189,6 +189,38 @@ class _RegInspector(_Inspector):
 
         ax.set(xlabel="Actual price", ylabel="Predicted price")
         ax.legend()
+        return ax
+
+    def plot_residuals(
+        self,
+        ax: Optional[Axes] = None,
+        scatter_kwargs: Optional[dict] = None,
+        line_kwargs: Optional[dict] = None,
+    ) -> Axes:
+        """Plot residuals
+
+        Parameters:
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
+        - `scatter_kwargs`: kwargs to pass to `plt.scatter`
+        - `line_kwargs`: kwargs to pass to `plt.plot` for line at y=0
+        """
+        if ax is None:
+            _, ax = plt.subplots()
+
+        if scatter_kwargs is None:
+            scatter_kwargs = {}
+        if "alpha" not in scatter_kwargs:
+            scatter_kwargs["alpha"] = 0.3
+        ax.scatter(
+            x=self.y.index, y=self.y - self.model.predict(self.X), **scatter_kwargs
+        )
+
+        if line_kwargs is None:
+            line_kwargs = {}
+        if "linestyle" not in line_kwargs:
+            line_kwargs["linestyle"] = "dashed"
+        ax.plot([self.y.index.min(), self.y.index.max()], [0, 0], **line_kwargs)
         return ax
 
 # Cell
@@ -440,7 +472,7 @@ class _LinBinInspector(_ClasInspector):
             y=self.y,
             item=item,
             intercept=self.model.intercept_[0],
-            coefs=self.model.intercept_[0],
+            coefs=self.model.coef_[0],
             y_lab="Contribution to predicted log-odds",
             bar_num_formatter=bar_num_formatter,
             tick_num_formatter=tick_num_formatter,
@@ -580,7 +612,7 @@ class _1dPlotter(_Plotter):
         if line_kwargs is None:
             line_kwargs = {}
         if scatter_kwargs is None:
-            scatter_kwargs = {"c": "k", "alpha": 0.4}
+            scatter_kwargs = {"alpha": 0.4}
         if ax is None:
             _, ax = plt.subplots()
         if plot_data:
@@ -634,7 +666,7 @@ class _Bin1dPlotter(_Plotter):
         if thresh_line_kwargs is None:
             thresh_line_kwargs = {}
         if scatter_kwargs is None:
-            scatter_kwargs = {"c": "k", "alpha": 0.4}
+            scatter_kwargs = {"alpha": 0.4}
 
         if plot_data:
             ax.scatter(self.X.iloc[:, 0], self.y, **scatter_kwargs)
