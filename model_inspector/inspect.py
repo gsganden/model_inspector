@@ -126,7 +126,7 @@ class _Inspector(_GetAttr):
 
     def permutation_importance(
         self,
-        importance_kwargs: Optional[dict] = None,
+        **importance_kwargs,
     ) -> pd.Series:
         """Calculate permutation importance of features
 
@@ -159,7 +159,9 @@ class _Inspector(_GetAttr):
         `sklearn.inspection.permutation_importance`
         - `plot_kwargs`: kwargs to pass to `pd.Series.plot.barh`
         """
-        importance = self.permutation_importance(importance_kwargs)
+        if importance_kwargs is None:
+            importance_kwargs = {}
+        importance = self.permutation_importance(**importance_kwargs)
         if sort:
             importance = importance.sort_values()
 
