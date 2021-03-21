@@ -688,7 +688,7 @@ class _1dPlotter(_Plotter):
 class _Bin1dPlotter(_Plotter):
     def plot(
         self,
-        thresh: Optional[float] = 0.5,
+        thresh: float = 0.5,
         plot_data: bool = True,
         ax: Optional[Axes] = None,
         prob_line_kwargs: Optional[dict] = None,
@@ -774,12 +774,11 @@ class _Bin1dPlotter(_Plotter):
             thresh_line_kwargs["label"] = f"threshold={thresh:.2f}"
         if "c" not in thresh_line_kwargs and "color" not in thresh_line_kwargs:
             thresh_line_kwargs["c"] = "k"
-        if thresh:
-            ax.plot(
-                self.X.iloc[:, 0],
-                thresh * np.ones(self.X.shape),
-                **thresh_line_kwargs,
-            )
+        ax.plot(
+            self.X.iloc[:, 0],
+            thresh * np.ones(self.X.shape),
+            **thresh_line_kwargs,
+        )
 
         ax.set(xlabel=self.X.columns[0], ylabel=self.y.name)
         ax.legend()
