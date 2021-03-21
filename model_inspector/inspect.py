@@ -659,7 +659,6 @@ class _1dPlotter(_Plotter):
             ax.plot(
                 X_sorted.iloc[:, 0],
                 self.model.predict(X_sorted),
-                label="predictions",
                 **line_kwargs,
             )
             return ax
@@ -677,6 +676,8 @@ class _1dPlotter(_Plotter):
 
         if line_kwargs is None:
             line_kwargs = {}
+        if "label" not in line_kwargs:
+            line_kwargs["label"] = "predictions"
         ax = _plot_preds(ax, line_kwargs)
 
         ax.set(xlabel=self.X.columns[0], ylabel=self.y.name)
@@ -715,7 +716,6 @@ class _Bin1dPlotter(_Plotter):
             ax.plot(
                 X,
                 self.model.predict_proba(X)[:, 1],
-                label="probability",
                 **prob_line_kwargs,
             )
             return ax
@@ -734,6 +734,8 @@ class _Bin1dPlotter(_Plotter):
 
         if prob_line_kwargs is None:
             prob_line_kwargs = {}
+        if "label" not in prob_line_kwargs:
+            prob_line_kwargs["label"] = "probability"
         ax = _plot_probs(ax)
 
         if thresh_line_kwargs is None:
