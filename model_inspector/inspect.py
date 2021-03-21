@@ -690,24 +690,29 @@ class _Bin1dPlotter(_Plotter):
         self,
         thresh: Optional[float] = 0.5,
         plot_data: bool = True,
+        ax: Optional[Axes] = None,
         prob_line_kwargs: Optional[dict] = None,
         thresh_line_kwargs: Optional[dict] = None,
-        scatter_kwargs: Optional[dict] = None,
-        ax: Optional[Axes] = None,
+        scatter_kwargs_correct: Optional[dict] = None,
+        scatter_kwargs_incorrect: Optional[dict] = None,
     ) -> Axes:
-        """Plot predictions from a binary classification model that provides
-        probabilities and has a single input
+        """Plot predictions from a binary classification model that
+        provides probabilities and has a single input
 
         Parameters:
         - `thresh`: Threshold probability
         - `plot_data`: Make a scatter plot of the data
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this
+        object if provided; otherwise a new `Axes` object will be
+        generated.
         - `prob_line_kwargs`: kwargs to pass to `ax.plot` for plotting
         model probabilities
         - `thresh_line_kwargs`: kwargs to pass to `ax.plot` for plotting
         threshold
-        - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting data
-        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
-        if provided; otherwise a new `Axes` object will be generated.
+        - `scatter_kwargs_correct`: kwargs to pass to `ax.scatter` for
+        plotting data points that the model predicted correctly
+        - `scatter_kwargs_incorrect`: kwargs to pass to `ax.scatter` for
+        plotting data points that the model predicted incorrectly
         """
 
         def _plot_probs(ax):
@@ -724,13 +729,38 @@ class _Bin1dPlotter(_Plotter):
             _, ax = plt.subplots()
 
         if plot_data:
-            if scatter_kwargs is None:
-                scatter_kwargs = {}
-            if "alpha" not in scatter_kwargs:
-                scatter_kwargs["alpha"] = 0.3
-            if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
-                scatter_kwargs["c"] = "k"
-            ax.scatter(self.X.iloc[:, 0], self.y, **scatter_kwargs)
+            if scatter_kwargs_correct is None:
+                scatter_kwargs_correct = {}
+            if scatter_kwargs_incorrect is None:
+                scatter_kwargs_incorrect = {}
+            for kwarg_dict in (scatter_kwargs_correct, scatter_kwargs_incorrect):
+                if "alpha" not in kwarg_dict:
+                    kwarg_dict["alpha"] = 0.3
+            if (
+                "c" not in scatter_kwargs_correct
+                and "color" not in scatter_kwargs_correct
+            ):
+                scatter_kwargs_correct["c"] = "b"
+            if (
+                "c" not in scatter_kwargs_incorrect
+                and "color" not in scatter_kwargs_incorrect
+            ):
+                scatter_kwargs_incorrect["c"] = "orange"
+            if "label" not in scatter_kwargs_correct:
+                scatter_kwargs_correct["label"] = "correct"
+            if "label" not in scatter_kwargs_incorrect:
+                scatter_kwargs_incorrect["label"] = "incorrect"
+            is_correct = self.y == (self.model.predict_proba(self.X)[:, 1] > thresh)
+            ax.scatter(
+                self.X.loc[is_correct].iloc[:, 0],
+                self.y.loc[is_correct],
+                **scatter_kwargs_correct,
+            )
+            ax.scatter(
+                self.X.loc[~is_correct].iloc[:, 0],
+                self.y.loc[~is_correct],
+                **scatter_kwargs_incorrect,
+            )
 
         if prob_line_kwargs is None:
             prob_line_kwargs = {}
@@ -740,6 +770,10 @@ class _Bin1dPlotter(_Plotter):
 
         if thresh_line_kwargs is None:
             thresh_line_kwargs = {}
+        if "label" not in thresh_line_kwargs:
+            thresh_line_kwargs["label"] = f"threshold={thresh:.2f}"
+        if "c" not in thresh_line_kwargs and "color" not in thresh_line_kwargs:
+            thresh_line_kwargs["c"] = "k"
         if thresh:
             ax.plot(
                 self.X.iloc[:, 0],
