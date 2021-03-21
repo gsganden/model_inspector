@@ -48,8 +48,10 @@ def get_inspector(model, X, y):
             if model_type == ModelType.BINARY
             else _LinMultiInspector(model, X, y)
         )
-    elif model_type in [ModelType.BINARY, ModelType.MULTICLASS]:
-        result = _ClasInspector(model, X, y)
+    elif model_type == ModelType.BINARY:
+        result = _BinClasInspector(model, X, y)
+    elif model_type == ModelType.MULTICLASS:
+        result = _MultiClasInspector(model, X, y)
     else:
         result = _RegInspector(model, X, y)
     return result
@@ -172,19 +174,19 @@ class _Inspector(_GetAttr):
         return ax
 
 # Cell
-class _ClasInspector(_Inspector):
+class _BinClasInspector(_Inspector):
     def calculate_metrics_by_thresh(
         self,
-        prob_to_pred: Union[str, Callable],
         metrics: Union[Callable, Sequence[Callable]],
     ) -> pd.DataFrame:
         """Calculate classification metrics as a function of threshold
 
+        Assumes that `self.model` has a `.predict_proba()` method, takes
+        it to be making a positive prediction if its probability exceeds
+        a threshold and a negative prediction otherwise.
+
         Parameters:
-        - `prob_to_pred`: Callable that takes
-        `self.model.predict_proba(self.X)` and `thresh` as positional
-        arguments and returns `y_pred`
-        - `metrics`: Callables that take `self.y`, `y_pred` as
+        - `metrics`: Callables that take `y_true`, `y_pred` as
         positional arguments and return a number. Must have a `__name__`
         attribute.
 
@@ -196,7 +198,40 @@ class _ClasInspector(_Inspector):
         return calculate_metrics_by_thresh(
             y_true=self.y,
             y_prob=self.model.predict_proba(self.X),
-            prob_to_pred=prob_to_pred,
+            prob_to_pred=lambda y_prob, thresh: np.where(y_prob[:, 1] > thresh, 1, 0),
+            metrics=metrics,
+        )
+
+# Cell
+class _MultiClasInspector(_Inspector):
+    def calculate_metrics_by_thresh(
+        self,
+        metrics: Union[Callable, Sequence[Callable]],
+    ) -> pd.DataFrame:
+        """Calculate classification metrics as a function of threshold
+
+        Assumes that `self.model` has a `.predict_proba()` method, takes
+        it to be predicting a given class if its probability for that
+        class is above the threshold and greater than its probability
+        for any other class and to be predicting `np.nan` if its
+        probability does not exceed the threshold for any category.
+
+        Parameters:
+        - `metrics`: Callables that take `y_true`, `y_pred` as
+        positional arguments and return a number. Must have a `__name__`
+        attribute and must be able to handle `np.nan` values.
+
+        Returns: DataFrame with one column "thresh" indicating the
+        thresholds used, which is 0 and the sorted set of values that
+        occur in `y_prob`, and an additional column for each input
+        metric giving the value of that metric at that threshold.
+        """
+        return calculate_metrics_by_thresh(
+            y_true=self.y,
+            y_prob=self.model.predict_proba(self.X),
+            prob_to_pred=lambda y_prob, thresh: np.where(
+                y_prob.max(axis=1) > thresh, y_prob.argmax(axis=1), np.nan
+            ),
             metrics=metrics,
         )
 
@@ -433,7 +468,7 @@ def _plot_waterfall(
     return plt.gca()
 
 # Cell
-class _LinBinInspector(_ClasInspector):
+class _LinBinInspector(_BinClasInspector):
     """Linear binary classification model inspector"""
 
     def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]) -> np.array:
@@ -540,7 +575,7 @@ class _LinBinInspector(_ClasInspector):
         )
 
 # Cell
-class _LinMultiInspector(_ClasInspector):
+class _LinMultiInspector(_MultiClasInspector):
     """Linear multiclass classification model inspector"""
 
     def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]) -> np.array:
