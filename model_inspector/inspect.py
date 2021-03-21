@@ -693,6 +693,7 @@ class _Bin1dPlotter(_Plotter):
         ax: Optional[Axes] = None,
         prob_line_kwargs: Optional[dict] = None,
         thresh_line_kwargs: Optional[dict] = None,
+        scatter_kwargs: Optional[dict] = None,
         scatter_kwargs_correct: Optional[dict] = None,
         scatter_kwargs_incorrect: Optional[dict] = None,
     ) -> Axes:
@@ -709,11 +710,48 @@ class _Bin1dPlotter(_Plotter):
         model probabilities
         - `thresh_line_kwargs`: kwargs to pass to `ax.plot` for plotting
         threshold
+        - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting
+        all data points
         - `scatter_kwargs_correct`: kwargs to pass to `ax.scatter` for
-        plotting data points that the model predicted correctly
+        plotting data points that the model predicted correctly.
+        Overrides `scatter_kwargs`.
         - `scatter_kwargs_incorrect`: kwargs to pass to `ax.scatter` for
-        plotting data points that the model predicted incorrectly
+        plotting data points that the model predicted incorrectly.
+        Overrides `scatter_kwargs`.
         """
+
+        def _set_scatter_kwargs(
+            scatter_kwargs, scatter_kwargs_correct, scatter_kwargs_incorrect
+        ):
+            if scatter_kwargs is None:
+                scatter_kwargs = {}
+            if "alpha" not in scatter_kwargs:
+                scatter_kwargs["alpha"] = 0.3
+
+            if scatter_kwargs_correct is None:
+                scatter_kwargs_correct = {}
+            if scatter_kwargs_incorrect is None:
+                scatter_kwargs_incorrect = {}
+            if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
+                if (
+                    "c" not in scatter_kwargs_correct
+                    and "color" not in scatter_kwargs_correct
+                ):
+                    scatter_kwargs_correct["c"] = "b"
+                if (
+                    "c" not in scatter_kwargs_incorrect
+                    and "color" not in scatter_kwargs_incorrect
+                ):
+                    scatter_kwargs_incorrect["c"] = "orange"
+            if "label" not in scatter_kwargs:
+                if "label" not in scatter_kwargs_correct:
+                    scatter_kwargs_correct["label"] = "correct"
+                if "label" not in scatter_kwargs_incorrect:
+                    scatter_kwargs_incorrect["label"] = "incorrect"
+            return {**scatter_kwargs, **scatter_kwargs_correct}, {
+                **scatter_kwargs,
+                **scatter_kwargs_incorrect,
+            }
 
         def _plot_probs(ax):
             num_points = 100
@@ -729,27 +767,11 @@ class _Bin1dPlotter(_Plotter):
             _, ax = plt.subplots()
 
         if plot_data:
-            if scatter_kwargs_correct is None:
-                scatter_kwargs_correct = {}
-            if scatter_kwargs_incorrect is None:
-                scatter_kwargs_incorrect = {}
-            for kwarg_dict in (scatter_kwargs_correct, scatter_kwargs_incorrect):
-                if "alpha" not in kwarg_dict:
-                    kwarg_dict["alpha"] = 0.3
-            if (
-                "c" not in scatter_kwargs_correct
-                and "color" not in scatter_kwargs_correct
-            ):
-                scatter_kwargs_correct["c"] = "b"
-            if (
-                "c" not in scatter_kwargs_incorrect
-                and "color" not in scatter_kwargs_incorrect
-            ):
-                scatter_kwargs_incorrect["c"] = "orange"
-            if "label" not in scatter_kwargs_correct:
-                scatter_kwargs_correct["label"] = "correct"
-            if "label" not in scatter_kwargs_incorrect:
-                scatter_kwargs_incorrect["label"] = "incorrect"
+            scatter_kwargs_correct, scatter_kwargs_incorrect = _set_scatter_kwargs(
+                scatter_kwargs=scatter_kwargs,
+                scatter_kwargs_correct=scatter_kwargs_correct,
+                scatter_kwargs_incorrect=scatter_kwargs_incorrect,
+            )
             is_correct = self.y == (self.model.predict_proba(self.X)[:, 1] > thresh)
             ax.scatter(
                 self.X.loc[is_correct].iloc[:, 0],
