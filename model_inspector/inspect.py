@@ -155,8 +155,8 @@ class _Inspector(_GetAttr):
         """
         if importance_kwargs is None:
             importance_kwargs = {}
-        if "n_jobs" not in importance_kwargs:
-            importance_kwargs["n_jobs"] = -1
+        importance_kwargs = {**{"n_jobs": -1}, **importance_kwargs}
+
         importances = permutation_importance(
             self.model, self.X, self.y, **importance_kwargs
         )["importances_mean"]
@@ -339,8 +339,7 @@ class _RegInspector(_Inspector):
 
         if scatter_kwargs is None:
             scatter_kwargs = {}
-        if "alpha" not in scatter_kwargs:
-            scatter_kwargs["alpha"] = 0.3
+        scatter_kwargs = {**{"alpha": 0.3}, **scatter_kwargs}
         if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
             scatter_kwargs["c"] = "k"
         y_pred = self.model.predict(self.X)
@@ -348,10 +347,10 @@ class _RegInspector(_Inspector):
 
         if line_kwargs is None:
             line_kwargs = {}
-        if "label" not in line_kwargs:
-            line_kwargs["label"] = "predicted=actual"
-        if "linestyle" not in line_kwargs:
-            line_kwargs["linestyle"] = "dashed"
+        line_kwargs = {
+            **{"label": "predicted=actual", "linestyle": "dashed"},
+            **line_kwargs,
+        }
         ax.plot(
             [self.y.min(), self.y.max()],
             [self.y.min(), self.y.max()],
@@ -381,8 +380,7 @@ class _RegInspector(_Inspector):
 
         if scatter_kwargs is None:
             scatter_kwargs = {}
-        if "alpha" not in scatter_kwargs:
-            scatter_kwargs["alpha"] = 0.3
+        scatter_kwargs = {**{"alpha": 0.3}, **scatter_kwargs}
         if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
             scatter_kwargs["c"] = "k"
         ax.scatter(
@@ -391,8 +389,7 @@ class _RegInspector(_Inspector):
 
         if line_kwargs is None:
             line_kwargs = {}
-        if "linestyle" not in line_kwargs:
-            line_kwargs["linestyle"] = "dashed"
+        line_kwargs = {**{"linestyle": "dashed"}, **line_kwargs}
         ax.plot([self.y.index.min(), self.y.index.max()], [0, 0], **line_kwargs)
 
         ax.set_ylabel("actual - predicted")
@@ -744,9 +741,9 @@ class _1dPlotter(_Plotter):
     def plot(
         self,
         plot_data: bool = True,
+        ax: Optional[Axes] = None,
         line_kwargs: Optional[dict] = None,
         scatter_kwargs: Optional[dict] = None,
-        ax: Optional[Axes] = None,
     ) -> Axes:
         """Plot predictions from a regression or multiclass model with a
         single input as a line
@@ -774,16 +771,14 @@ class _1dPlotter(_Plotter):
         if plot_data:
             if scatter_kwargs is None:
                 scatter_kwargs = {}
-            if "alpha" not in scatter_kwargs:
-                scatter_kwargs["alpha"] = 0.3
+            scatter_kwargs = {**{"alpha": 0.3}, **scatter_kwargs}
             if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
                 scatter_kwargs["c"] = "k"
             ax.scatter(self.X.iloc[:, 0], self.y, **scatter_kwargs)
 
         if line_kwargs is None:
             line_kwargs = {}
-        if "label" not in line_kwargs:
-            line_kwargs["label"] = "predictions"
+        line_kwargs = {**{"label": "predictions"}, **line_kwargs}
         ax = _plot_preds(ax, line_kwargs)
 
         ax.set(xlabel=self.X.columns[0], ylabel=self.y.name)
@@ -832,33 +827,34 @@ class _Bin1dPlotter(_Plotter):
         ):
             if scatter_kwargs is None:
                 scatter_kwargs = {}
-            if "alpha" not in scatter_kwargs:
-                scatter_kwargs["alpha"] = 0.3
+            scatter_kwargs = {**{"alpha": 0.3}, **scatter_kwargs}
 
             if scatter_kwargs_correct is None:
                 scatter_kwargs_correct = {}
+            scatter_kwargs_correct = {
+                **{"label": "correct"},
+                **scatter_kwargs,
+                **scatter_kwargs_correct,
+            }
             if scatter_kwargs_incorrect is None:
                 scatter_kwargs_incorrect = {}
-            if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
-                if (
-                    "c" not in scatter_kwargs_correct
-                    and "color" not in scatter_kwargs_correct
-                ):
-                    scatter_kwargs_correct["c"] = "b"
-                if (
-                    "c" not in scatter_kwargs_incorrect
-                    and "color" not in scatter_kwargs_incorrect
-                ):
-                    scatter_kwargs_incorrect["c"] = "orange"
-            if "label" not in scatter_kwargs:
-                if "label" not in scatter_kwargs_correct:
-                    scatter_kwargs_correct["label"] = "correct"
-                if "label" not in scatter_kwargs_incorrect:
-                    scatter_kwargs_incorrect["label"] = "incorrect"
-            return {**scatter_kwargs, **scatter_kwargs_correct}, {
+            scatter_kwargs_incorrect = {
+                **{"label": "incorrect"},
                 **scatter_kwargs,
-                **scatter_kwargs_incorrect,
+                **scatter_kwargs_correct,
             }
+            if (
+                "c" not in scatter_kwargs_correct
+                and "color" not in scatter_kwargs_correct
+            ):
+                scatter_kwargs_correct["c"] = "b"
+            if (
+                "c" not in scatter_kwargs_incorrect
+                and "color" not in scatter_kwargs_incorrect
+            ):
+                scatter_kwargs_incorrect["c"] = "orange"
+
+            return scatter_kwargs_correct, scatter_kwargs_incorrect
 
         def _plot_probs(ax):
             num_points = 100
@@ -893,14 +889,15 @@ class _Bin1dPlotter(_Plotter):
 
         if prob_line_kwargs is None:
             prob_line_kwargs = {}
-        if "label" not in prob_line_kwargs:
-            prob_line_kwargs["label"] = "probability"
+        prob_line_kwargs = {**{"label": "probability"}, **prob_line_kwargs}
         ax = _plot_probs(ax)
 
         if thresh_line_kwargs is None:
             thresh_line_kwargs = {}
-        if "label" not in thresh_line_kwargs:
-            thresh_line_kwargs["label"] = f"threshold={thresh:.2f}"
+        thresh_line_kwargs = {
+            **{"label": f"threshold={thresh:.2f}"},
+            **thresh_line_kwargs,
+        }
         if "c" not in thresh_line_kwargs and "color" not in thresh_line_kwargs:
             thresh_line_kwargs["c"] = "k"
         ax.plot(
@@ -947,21 +944,21 @@ class _Reg2dPlotter(_2dPlotter):
     def plot(
         self,
         plot_data: bool = True,
+        tick_formatter: Optional[str] = ".2f",
+        ax: Axes = None,
         heatmap_kwargs: Optional[dict] = None,
         scatter_kwargs: Optional[dict] = None,
-        tick_formatter: Optional[str] = ".2f",
-        ax=None,
     ):
         """Plot predictions from a model with two inputs as a heatmap.
 
         Parameters:
         - `plot_data`: Make a scatter plot of the data
-        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap` for plotting
-        predictions
-        - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting data
         - `tick_formatter`: Tick label format specifier
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
+        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap` for plotting
+        predictions
+        - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting data
         """
 
         def _plot_preds(ax, **heatmap_kwargs):
@@ -985,9 +982,14 @@ class _Reg2dPlotter(_2dPlotter):
         if ax is None:
             _, ax = plt.subplots()
         if heatmap_kwargs is None:
-            heatmap_kwargs = {"cmap": "viridis"}
+            heatmap_kwargs = {}
+        heatmap_kwargs = {**{"cmap": "viridis"}, **heatmap_kwargs}
         if scatter_kwargs is None:
-            scatter_kwargs = {"cmap": "viridis", "edgecolor": "k", "zorder": 999}
+            scatter_kwargs = {}
+        scatter_kwargs = {
+            **{"cmap": "viridis", "edgecolor": "k", "zorder": 999},
+            **scatter_kwargs,
+        }
 
         if plot_data:
             ax = self._plot_data(ax=ax, **scatter_kwargs)
@@ -1004,9 +1006,9 @@ class _Reg2dPlotter(_2dPlotter):
     def plot3d(
         self,
         plot_data: bool = True,
+        ax: Axes = None,
         surf_kwargs: Optional[dict] = None,
         scatter_kwargs: Optional[dict] = None,
-        ax=None,
     ):
         """Plot data and predictions in 3d
 
@@ -1015,11 +1017,11 @@ class _Reg2dPlotter(_2dPlotter):
 
         Parameters:
         - `plot_data`: Make a scatter plot of the data
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
         - `surf_kwargs`: kwargs to pass to `ax.plot_surface` for plotting
         predictions
         - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting data
-        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
-        if provided; otherwise a new `Axes` object will be generated.
         """
 
         def _plot_preds(ax):
@@ -1041,9 +1043,11 @@ class _Reg2dPlotter(_2dPlotter):
             fig = plt.figure()
             ax = fig.add_subplot(111, projection="3d")
         if surf_kwargs is None:
-            surf_kwargs = {"alpha": 0.4, "cmap": "viridis"}
+            surf_kwargs = {}
+        surf_kwargs = {**{"alpha": 0.4, "cmap": "viridis"}, **surf_kwargs}
         if scatter_kwargs is None:
-            scatter_kwargs = {"cmap": "viridis"}
+            scatter_kwargs = {}
+        scatter_kwargs = {**{"cmap": "viridis"}, **scatter_kwargs}
         if plot_data:
             ax.scatter(
                 self.X.iloc[:, 0],
@@ -1065,21 +1069,21 @@ class _Clas2dPlotter(_2dPlotter):
     def plot(
         self,
         plot_data: bool = True,
+        tick_formatter: Optional[str] = ".2f",
+        ax: Axes = None,
         heatmap_kwargs: Optional[dict] = None,
         scatter_kwargs: Optional[dict] = None,
-        tick_formatter: Optional[str] = ".2f",
-        ax=None,
     ):
         """Plot data and predictions
 
         Parameters:
         - `plot_data`: Make a scatter plot of the data
-        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap` for plotting
-        predictions
-        - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting data
         - `tick_formatter`: Tick label format specifier
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
+        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap` for plotting
+        predictions
+        - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting data
         """
 
         def _plot_preds(y_vals, label_to_num, ax, **scatter_kwargs):
@@ -1121,23 +1125,27 @@ class _Clas2dPlotter(_2dPlotter):
 
         if ax is None:
             _, ax = plt.subplots()
-        if heatmap_kwargs is None:
-            heatmap_kwargs = {}
-        if scatter_kwargs is None:
-            scatter_kwargs = {"edgecolor": "k", "zorder": 999}
 
         y_vals = self.y.unique()
         label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
-        if heatmap_kwargs.get("cmap") is None:
-            heatmap_kwargs["cmap"] = sns.color_palette(None, len(y_vals))
 
+        if heatmap_kwargs is None:
+            heatmap_kwargs = {}
+        heatmap_kwargs = {
+            **{"cmap": sns.color_palette(None, len(y_vals))},
+            **heatmap_kwargs,
+        }
         ax = _plot_preds(y_vals, label_to_num, ax=ax, **heatmap_kwargs)
         ax = _wash_out(ax)
         colorbar = _set_colorbar(y_vals=y_vals, ax=ax)
 
         if plot_data:
-            if scatter_kwargs.get("cmap") is None:
-                scatter_kwargs["cmap"] = colorbar.cmap
+            if scatter_kwargs is None:
+                scatter_kwargs = {}
+            scatter_kwargs = {
+                **{"cmap": colorbar.cmap, "edgecolor": "k", "zorder": 999},
+                **scatter_kwargs,
+            }
             ax = self._plot_data(y=self.y.map(label_to_num), ax=ax, **scatter_kwargs)
         _format_ticks(ax=ax, formatter=tick_formatter)
         return ax
@@ -1150,10 +1158,10 @@ class _Bin2dPlotter(_Clas2dPlotter):
         plot_prob: bool = True,
         plot_thresh: bool = True,
         plot_data: bool = True,
+        ax: Axes = None,
         prob_surf_kwargs: Optional[dict] = None,
         thresh_surf_kwargs: Optional[dict] = None,
         scatter_kwargs: Optional[dict] = None,
-        ax=None,
     ):
         """Plot data and predictions in 3D
 
@@ -1166,12 +1174,12 @@ class _Bin2dPlotter(_Clas2dPlotter):
         - `plot_prob`: Whether to plot the model probabilities
         - `plot_thresh`: Whether to plot a classification threshold
         - `plot_data`: Whether to plot the data
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
         - `prob_surf_kwargs`: kwargs to pass to the model probability
         surface
         - `thresh_surf_kwargs`: kwargs to pass to the threshold surface
         - `scatter_kwargs`: kwargs to pass to the scatter plot of the data
-        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
-        if provided; otherwise a new `Axes` object will be generated.
         """
 
         def _get_grid_probs():
@@ -1183,9 +1191,11 @@ class _Bin2dPlotter(_Clas2dPlotter):
             fig = plt.figure()
             ax = fig.add_subplot(111, projection="3d")
         if prob_surf_kwargs is None:
-            prob_surf_kwargs = {"alpha": 0.4, "cmap": "viridis"}
+            prob_surf_kwargs = {}
+        prob_surf_kwargs = {**{"alpha": 0.4, "cmap": "viridis"}, **prob_surf_kwargs}
         if thresh_surf_kwargs is None:
-            thresh_surf_kwargs = {"alpha": 0.4, "color": "k"}
+            thresh_surf_kwargs = {}
+        thresh_surf_kwargs = {**{"alpha": 0.4, "color": "k"}, **thresh_surf_kwargs}
         if scatter_kwargs is None:
             scatter_kwargs = {}
 
@@ -1238,9 +1248,9 @@ class _Multi2dPlotter(_Clas2dPlotter):
     def plot3d(
         self,
         plot_data: bool = True,
+        ax: Axes = None,
         surf_kwargs: Optional[dict] = None,
         scatter_kwargs: Optional[dict] = None,
-        ax=None,
     ):
         """Plot data and predictions in 3D
 
@@ -1249,19 +1259,21 @@ class _Multi2dPlotter(_Clas2dPlotter):
 
         Parameters:
         - `plot_data`: Make a scatter plot of the data
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
         - `surf_kwargs`: kwargs to pass to `ax.plot_surface` for plotting
         predictions
         - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting data
-        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
-        if provided; otherwise a new `Axes` object will be generated.
         """
         if ax is None:
             fig = plt.figure()
             ax = fig.add_subplot(111, projection="3d")
         if surf_kwargs is None:
-            surf_kwargs = {"alpha": 0.4, "cmap": "viridis"}
+            surf_kwargs = {}
+        surf_kwargs = {**{"alpha": 0.4, "cmap": "viridis"}, **surf_kwargs}
         if scatter_kwargs is None:
             scatter_kwargs = {}
+
         y_vals = self.y.unique()
         label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
         y_int = self.y.map(label_to_num)
