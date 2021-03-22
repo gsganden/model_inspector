@@ -21,6 +21,7 @@ from sklearn.base import ClassifierMixin, clone, RegressorMixin
 from sklearn.inspection import permutation_importance
 from sklearn.linear_model._base import LinearModel, LinearClassifierMixin
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.utils import check_X_y
 from sklearn.utils.validation import check_is_fitted
 import waterfall_chart
 
@@ -115,6 +116,9 @@ class _Inspector(_GetAttr):
 
     def __init__(self, model, X, y):
         check_is_fitted(model)
+        check_X_y(X, y)
+        model._check_n_features(X, reset=False)
+
         self.model, self.X, self.y = model, X, y
         self._plotter = self._get_plotter_class()(self.model, self.X, self.y)
         self.default = self._plotter
