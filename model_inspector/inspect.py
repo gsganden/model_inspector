@@ -103,11 +103,27 @@ class _GetAttr:
 
 # Cell
 class _Inspector(_GetAttr):
+    """Model inspector base class
+
+    Users should use `get_inspector` to generate appropriate
+    `_Inspector` objects rather than instantiating this class or its
+    subclasses directly.
+
+    Subclasses of this class are based on distinctions among model types
+    only, including the distinction between binary and multiclass
+    classification. Plotting functionality that depends on how many
+    columns are in the feature DataFrame is delegated to a separate
+    `_Plotter` class hierarchy. We use custom `__getattr__` and
+    `__dir__` methods to expose the `_Plotter` methods through the
+    `_Inspector` object, so that the user does not need to interact with
+    the `_Plotter` directly.
+    """
+
     def __init__(self, model, X, y):
         check_is_fitted(model)
         self.model, self.X, self.y = model, X, y
-        self.plotter = self._get_plotter_class()(self.model, self.X, self.y)
-        self.default = self.plotter
+        self._plotter = self._get_plotter_class()(self.model, self.X, self.y)
+        self.default = self._plotter
 
     def _get_plotter_class(self):
         result = _Plotter
@@ -176,6 +192,20 @@ class _Inspector(_GetAttr):
         ax = importance.plot.barh(**plot_kwargs)
         ax.set(title="Feature importances")
         return ax
+
+    def plot_correlation(self, ax: Optional[Axes] = None, **heatmap_kwargs) -> Axes:
+        """Plot a correlation matrix for `self.X` and `self.y`
+
+        Parameters:
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
+        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap`
+        """
+        return plot_correlation(
+            pd.concat((self.X, self.y), axis="columns"),
+            ax=ax,
+            **heatmap_kwargs,
+        )
 
 # Cell
 class _BinClasInspector(_Inspector):
@@ -710,20 +740,6 @@ class _LinMultiInspector(_MultiClasInspector):
 class _Plotter:
     def __init__(self, model, X, y):
         self.model, self.X, self.y = model, X, y
-
-    def plot_correlation(self, ax: Optional[Axes] = None, **heatmap_kwargs) -> Axes:
-        """Plot a correlation matrix for `self.X` and `self.y`
-
-        Parameters:
-        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
-        if provided; otherwise a new `Axes` object will be generated.
-        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap`
-        """
-        return plot_correlation(
-            pd.concat((self.X, self.y), axis="columns"),
-            ax=ax,
-            **heatmap_kwargs,
-        )
 
 # Cell
 class _1dPlotter(_Plotter):
