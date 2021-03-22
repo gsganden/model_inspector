@@ -29,6 +29,7 @@ from .explore import plot_correlation
 from .tune import (
     calculate_metrics_by_thresh_binary,
     calculate_metrics_by_thresh_multi,
+    confusion_matrix,
 )
 
 # Cell
@@ -177,7 +178,29 @@ class _Inspector(_GetAttr):
         return ax
 
 # Cell
-class _BinClasInspector(_Inspector):
+class _ClasInspector(_Inspector):
+    def confusion_matrix(
+        self,
+        shade_axis: Optional[Union[str, int]] = None,
+        sample_weight: Optional[np.array] = None,
+        normalize: Optional[str] = None,
+    ) -> pd.DataFrame:
+        """Get confusion matrix
+
+        Uses `self.y` as ground-truth values,
+        `self.model.predict(self.X)` as predictions
+
+        Parameters:
+        - `shade_axis`: `axis` argument to pass to
+        `pd.DataFrame.style.background_gradient`
+
+        The remaining parameters are passed to
+        `sklearn.metrics.confusion_matrix`.
+        """
+        return confusion_matrix(y_true=self.y, y_pred=self.model.predict(self.X))
+
+# Cell
+class _BinClasInspector(_ClasInspector):
     def calculate_metrics_by_thresh(
         self,
         metrics: Union[Callable, Sequence[Callable]],
@@ -203,7 +226,7 @@ class _BinClasInspector(_Inspector):
         )
 
 # Cell
-class _MultiClasInspector(_Inspector):
+class _MultiClasInspector(_ClasInspector):
     def calculate_metrics_by_thresh(
         self,
         metrics: Union[Callable, Sequence[Callable]],

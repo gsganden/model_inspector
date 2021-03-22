@@ -649,6 +649,171 @@ Name: 5, dtype: float64</pre>
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="confusion_matrix" class="doc_header"><code>confusion_matrix</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L142" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>confusion_matrix</code>(<strong><code>y_true</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>y_pred</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>shade_axis</code></strong>:<code>Union</code>[<code>str</code>, <code>int</code>, <code>NoneType</code>]=<em><code>None</code></em>, <strong><code>sample_weight</code></strong>:<code>Optional</code>[<code>array</code>]=<em><code>None</code></em>, <strong><code>normalize</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Get confusion matrix</p>
+<p>Parameters:</p>
+<ul>
+<li><code>y_true</code>: Ground-truth values</li>
+<li><code>y_pred</code>: Predicted values</li>
+<li><code>shade_axis</code>: <code>axis</code> argument to pass to
+<code>pd.DataFrame.style.background_gradient</code></li>
+</ul>
+<p>The remaining parameters are passed to
+<code>sklearn.metrics.confusion_matrix</code>.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span>
+    <span class="n">y_true</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+    <span class="n">y_pred</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style  type="text/css" >
+#T_ac97cc2a_8b24_11eb_b766_acde48001122row0_col0{
+            background-color:  #08306b;
+            color:  #f1f1f1;
+        }#T_ac97cc2a_8b24_11eb_b766_acde48001122row0_col1{
+            background-color:  #f7fbff;
+            color:  #000000;
+        }#T_ac97cc2a_8b24_11eb_b766_acde48001122row1_col0{
+            background-color:  #abd0e6;
+            color:  #000000;
+        }#T_ac97cc2a_8b24_11eb_b766_acde48001122row1_col1{
+            background-color:  #3787c0;
+            color:  #000000;
+        }</style><table id="T_ac97cc2a_8b24_11eb_b766_acde48001122" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >Predicted 0</th>        <th class="col_heading level0 col1" >Predicted 1</th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_ac97cc2a_8b24_11eb_b766_acde48001122level0_row0" class="row_heading level0 row0" >Actual 0</th>
+                        <td id="T_ac97cc2a_8b24_11eb_b766_acde48001122row0_col0" class="data row0 col0" >4</td>
+                        <td id="T_ac97cc2a_8b24_11eb_b766_acde48001122row0_col1" class="data row0 col1" >1</td>
+            </tr>
+            <tr>
+                        <th id="T_ac97cc2a_8b24_11eb_b766_acde48001122level0_row1" class="row_heading level0 row1" >Actual 1</th>
+                        <td id="T_ac97cc2a_8b24_11eb_b766_acde48001122row1_col0" class="data row1 col0" >2</td>
+                        <td id="T_ac97cc2a_8b24_11eb_b766_acde48001122row1_col1" class="data row1 col1" >3</td>
+            </tr>
+    </tbody></table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span>
+    <span class="n">y_true</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+    <span class="n">y_pred</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+    <span class="n">shade_axis</span><span class="o">=</span><span class="s2">&quot;rows&quot;</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style  type="text/css" >
+#T_b3bae028_8b24_11eb_b766_acde48001122row0_col0,#T_b3bae028_8b24_11eb_b766_acde48001122row1_col1,#T_b3bae028_8b24_11eb_b766_acde48001122row1_col2,#T_b3bae028_8b24_11eb_b766_acde48001122row2_col2{
+            background-color:  #08306b;
+            color:  #f1f1f1;
+        }#T_b3bae028_8b24_11eb_b766_acde48001122row0_col1,#T_b3bae028_8b24_11eb_b766_acde48001122row1_col0{
+            background-color:  #abd0e6;
+            color:  #000000;
+        }#T_b3bae028_8b24_11eb_b766_acde48001122row0_col2,#T_b3bae028_8b24_11eb_b766_acde48001122row2_col0,#T_b3bae028_8b24_11eb_b766_acde48001122row2_col1{
+            background-color:  #f7fbff;
+            color:  #000000;
+        }</style><table id="T_b3bae028_8b24_11eb_b766_acde48001122" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >Predicted 0</th>        <th class="col_heading level0 col1" >Predicted 1</th>        <th class="col_heading level0 col2" >Predicted 2</th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_b3bae028_8b24_11eb_b766_acde48001122level0_row0" class="row_heading level0 row0" >Actual 0</th>
+                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row0_col0" class="data row0 col0" >3</td>
+                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row0_col1" class="data row0 col1" >1</td>
+                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row0_col2" class="data row0 col2" >0</td>
+            </tr>
+            <tr>
+                        <th id="T_b3bae028_8b24_11eb_b766_acde48001122level0_row1" class="row_heading level0 row1" >Actual 1</th>
+                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row1_col0" class="data row1 col0" >1</td>
+                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row1_col1" class="data row1 col1" >3</td>
+                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row1_col2" class="data row1 col2" >1</td>
+            </tr>
+            <tr>
+                        <th id="T_b3bae028_8b24_11eb_b766_acde48001122level0_row2" class="row_heading level0 row2" >Actual 2</th>
+                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row2_col0" class="data row2 col0" >0</td>
+                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row2_col1" class="data row2 col1" >0</td>
+                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row2_col2" class="data row2 col2" >1</td>
+            </tr>
+    </tbody></table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 
