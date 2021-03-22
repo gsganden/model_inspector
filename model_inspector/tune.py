@@ -6,7 +6,7 @@ __all__ = ['calculate_metrics_by_thresh_binary', 'calculate_metrics_by_thresh_mu
 # Cell
 from collections import defaultdict
 from functools import partial
-from typing import Callable, Iterable, Optional, Sequence, Union
+from typing import Callable, Optional, Sequence, Union
 
 import numpy as np
 import pandas as pd
@@ -127,7 +127,7 @@ def calculate_metric_ignoring_nan(
         y_true=y_true[~np.isnan(y_pred)],
         y_pred=y_pred[~np.isnan(y_pred)],
         *args,
-        **kwargs
+        **kwargs,
     )
 
 # Cell
@@ -144,7 +144,7 @@ def confusion_matrix(
     y_pred: Union[np.array, pd.Series],
     shade_axis: Optional[Union[str, int]] = None,
     sample_weight: Optional[np.array] = None,
-    normalize: Optional[str] = None
+    normalize: Optional[str] = None,
 ) -> pd.DataFrame:
     """Get confusion matrix
 
@@ -157,7 +157,13 @@ def confusion_matrix(
     The remaining parameters are passed to
     `sklearn.metrics.confusion_matrix`.
     """
-    cm = metrics.confusion_matrix(y_true=y_true, y_pred=y_pred, sample_weight=sample_weight, normalize=normalize)
+    cm = metrics.confusion_matrix(
+        y_true=y_true, y_pred=y_pred, sample_weight=sample_weight, normalize=normalize
+    )
     vals = sorted(np.unique(y_true))
-    result = pd.DataFrame(cm, columns=[f"Predicted {val}" for val in vals], index=[f"Actual {val}" for val in vals]).style.background_gradient('Blues', axis=shade_axis)
+    result = pd.DataFrame(
+        cm,
+        columns=[f"Predicted {val}" for val in vals],
+        index=[f"Actual {val}" for val in vals],
+    ).style.background_gradient("Blues", axis=shade_axis)
     return result

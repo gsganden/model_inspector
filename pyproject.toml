@@ -1,0 +1,5 @@
+[tool.nbqa.addopts]
+flake8 = [
+    "--extend-ignore=E402 F403",
+    "--max-line-length=88"
+]

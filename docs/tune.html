@@ -232,12 +232,11 @@ the value of that metric at that threshold.</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;thresh&quot;</span><span class="p">)</span>
-<span class="n">best_row</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;f1_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">(),</span> <span class="p">:]</span>
+<span class="n">best_row</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;f1_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span>
 <span class="n">best_thresh</span> <span class="o">=</span> <span class="n">best_row</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;thresh&quot;</span><span class="p">]</span>
-<span class="c1"># fmt: off</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">best_thresh</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">);</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">best_thresh</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best result:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best result:&quot;</span><span class="p">)</span>
 <span class="n">best_row</span>
 </pre></div>
 
@@ -465,7 +464,7 @@ arguments</li>
 <span class="p">)</span>
 <span class="n">precision_ignoring_nan</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;precision_ignoring_nan&quot;</span>
 
-<span class="n">results</span> <span class="o">=</span> <span class="n">calculate_metrics_by_thresh</span><span class="p">(</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">calculate_metrics_by_thresh_multi</span><span class="p">(</span>
     <span class="n">y_true</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span>
     <span class="n">y_prob</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]]),</span>
     <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">coverage</span><span class="p">,</span> <span class="n">precision_ignoring_nan</span><span class="p">],</span>
@@ -598,7 +597,7 @@ arguments</li>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;thresh&quot;</span><span class="p">)</span>
 <span class="n">best_row</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;quasi_fbeta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">(),</span> <span class="p">:]</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">best_row</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;thresh&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best result:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best result:&quot;</span><span class="p">)</span>
 <span class="n">best_row</span>
 </pre></div>
 
@@ -699,7 +698,7 @@ Name: 5, dtype: float64</pre>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span>
     <span class="n">y_true</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
-    <span class="n">y_pred</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+    <span class="n">y_pred</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
 <span class="p">)</span>
 </pre></div>
 
@@ -715,28 +714,28 @@ Name: 5, dtype: float64</pre>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <style  type="text/css" >
-#T_ac97cc2a_8b24_11eb_b766_acde48001122row0_col0{
+#T_6462a310_8b44_11eb_a034_acde48001122row0_col0{
             background-color:  #08306b;
             color:  #f1f1f1;
-        }#T_ac97cc2a_8b24_11eb_b766_acde48001122row0_col1{
+        }#T_6462a310_8b44_11eb_a034_acde48001122row0_col1{
             background-color:  #f7fbff;
             color:  #000000;
-        }#T_ac97cc2a_8b24_11eb_b766_acde48001122row1_col0{
+        }#T_6462a310_8b44_11eb_a034_acde48001122row1_col0{
             background-color:  #abd0e6;
             color:  #000000;
-        }#T_ac97cc2a_8b24_11eb_b766_acde48001122row1_col1{
+        }#T_6462a310_8b44_11eb_a034_acde48001122row1_col1{
             background-color:  #3787c0;
             color:  #000000;
-        }</style><table id="T_ac97cc2a_8b24_11eb_b766_acde48001122" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >Predicted 0</th>        <th class="col_heading level0 col1" >Predicted 1</th>    </tr></thead><tbody>
+        }</style><table id="T_6462a310_8b44_11eb_a034_acde48001122" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >Predicted 0</th>        <th class="col_heading level0 col1" >Predicted 1</th>    </tr></thead><tbody>
                 <tr>
-                        <th id="T_ac97cc2a_8b24_11eb_b766_acde48001122level0_row0" class="row_heading level0 row0" >Actual 0</th>
-                        <td id="T_ac97cc2a_8b24_11eb_b766_acde48001122row0_col0" class="data row0 col0" >4</td>
-                        <td id="T_ac97cc2a_8b24_11eb_b766_acde48001122row0_col1" class="data row0 col1" >1</td>
+                        <th id="T_6462a310_8b44_11eb_a034_acde48001122level0_row0" class="row_heading level0 row0" >Actual 0</th>
+                        <td id="T_6462a310_8b44_11eb_a034_acde48001122row0_col0" class="data row0 col0" >4</td>
+                        <td id="T_6462a310_8b44_11eb_a034_acde48001122row0_col1" class="data row0 col1" >1</td>
             </tr>
             <tr>
-                        <th id="T_ac97cc2a_8b24_11eb_b766_acde48001122level0_row1" class="row_heading level0 row1" >Actual 1</th>
-                        <td id="T_ac97cc2a_8b24_11eb_b766_acde48001122row1_col0" class="data row1 col0" >2</td>
-                        <td id="T_ac97cc2a_8b24_11eb_b766_acde48001122row1_col1" class="data row1 col1" >3</td>
+                        <th id="T_6462a310_8b44_11eb_a034_acde48001122level0_row1" class="row_heading level0 row1" >Actual 1</th>
+                        <td id="T_6462a310_8b44_11eb_a034_acde48001122row1_col0" class="data row1 col0" >2</td>
+                        <td id="T_6462a310_8b44_11eb_a034_acde48001122row1_col1" class="data row1 col1" >3</td>
             </tr>
     </tbody></table>
 </div>
@@ -759,7 +758,7 @@ Name: 5, dtype: float64</pre>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span>
     <span class="n">y_true</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
     <span class="n">y_pred</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
-    <span class="n">shade_axis</span><span class="o">=</span><span class="s2">&quot;rows&quot;</span>
+    <span class="n">shade_axis</span><span class="o">=</span><span class="s2">&quot;rows&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 
@@ -775,33 +774,33 @@ Name: 5, dtype: float64</pre>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <style  type="text/css" >
-#T_b3bae028_8b24_11eb_b766_acde48001122row0_col0,#T_b3bae028_8b24_11eb_b766_acde48001122row1_col1,#T_b3bae028_8b24_11eb_b766_acde48001122row1_col2,#T_b3bae028_8b24_11eb_b766_acde48001122row2_col2{
+#T_64651f3c_8b44_11eb_a034_acde48001122row0_col0,#T_64651f3c_8b44_11eb_a034_acde48001122row1_col1,#T_64651f3c_8b44_11eb_a034_acde48001122row1_col2,#T_64651f3c_8b44_11eb_a034_acde48001122row2_col2{
             background-color:  #08306b;
             color:  #f1f1f1;
-        }#T_b3bae028_8b24_11eb_b766_acde48001122row0_col1,#T_b3bae028_8b24_11eb_b766_acde48001122row1_col0{
+        }#T_64651f3c_8b44_11eb_a034_acde48001122row0_col1,#T_64651f3c_8b44_11eb_a034_acde48001122row1_col0{
             background-color:  #abd0e6;
             color:  #000000;
-        }#T_b3bae028_8b24_11eb_b766_acde48001122row0_col2,#T_b3bae028_8b24_11eb_b766_acde48001122row2_col0,#T_b3bae028_8b24_11eb_b766_acde48001122row2_col1{
+        }#T_64651f3c_8b44_11eb_a034_acde48001122row0_col2,#T_64651f3c_8b44_11eb_a034_acde48001122row2_col0,#T_64651f3c_8b44_11eb_a034_acde48001122row2_col1{
             background-color:  #f7fbff;
             color:  #000000;
-        }</style><table id="T_b3bae028_8b24_11eb_b766_acde48001122" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >Predicted 0</th>        <th class="col_heading level0 col1" >Predicted 1</th>        <th class="col_heading level0 col2" >Predicted 2</th>    </tr></thead><tbody>
+        }</style><table id="T_64651f3c_8b44_11eb_a034_acde48001122" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >Predicted 0</th>        <th class="col_heading level0 col1" >Predicted 1</th>        <th class="col_heading level0 col2" >Predicted 2</th>    </tr></thead><tbody>
                 <tr>
-                        <th id="T_b3bae028_8b24_11eb_b766_acde48001122level0_row0" class="row_heading level0 row0" >Actual 0</th>
-                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row0_col0" class="data row0 col0" >3</td>
-                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row0_col1" class="data row0 col1" >1</td>
-                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row0_col2" class="data row0 col2" >0</td>
+                        <th id="T_64651f3c_8b44_11eb_a034_acde48001122level0_row0" class="row_heading level0 row0" >Actual 0</th>
+                        <td id="T_64651f3c_8b44_11eb_a034_acde48001122row0_col0" class="data row0 col0" >3</td>
+                        <td id="T_64651f3c_8b44_11eb_a034_acde48001122row0_col1" class="data row0 col1" >1</td>
+                        <td id="T_64651f3c_8b44_11eb_a034_acde48001122row0_col2" class="data row0 col2" >0</td>
             </tr>
             <tr>
-                        <th id="T_b3bae028_8b24_11eb_b766_acde48001122level0_row1" class="row_heading level0 row1" >Actual 1</th>
-                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row1_col0" class="data row1 col0" >1</td>
-                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row1_col1" class="data row1 col1" >3</td>
-                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row1_col2" class="data row1 col2" >1</td>
+                        <th id="T_64651f3c_8b44_11eb_a034_acde48001122level0_row1" class="row_heading level0 row1" >Actual 1</th>
+                        <td id="T_64651f3c_8b44_11eb_a034_acde48001122row1_col0" class="data row1 col0" >1</td>
+                        <td id="T_64651f3c_8b44_11eb_a034_acde48001122row1_col1" class="data row1 col1" >3</td>
+                        <td id="T_64651f3c_8b44_11eb_a034_acde48001122row1_col2" class="data row1 col2" >1</td>
             </tr>
             <tr>
-                        <th id="T_b3bae028_8b24_11eb_b766_acde48001122level0_row2" class="row_heading level0 row2" >Actual 2</th>
-                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row2_col0" class="data row2 col0" >0</td>
-                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row2_col1" class="data row2 col1" >0</td>
-                        <td id="T_b3bae028_8b24_11eb_b766_acde48001122row2_col2" class="data row2 col2" >1</td>
+                        <th id="T_64651f3c_8b44_11eb_a034_acde48001122level0_row2" class="row_heading level0 row2" >Actual 2</th>
+                        <td id="T_64651f3c_8b44_11eb_a034_acde48001122row2_col0" class="data row2 col0" >0</td>
+                        <td id="T_64651f3c_8b44_11eb_a034_acde48001122row2_col1" class="data row2 col1" >0</td>
+                        <td id="T_64651f3c_8b44_11eb_a034_acde48001122row2_col2" class="data row2 col2" >1</td>
             </tr>
     </tbody></table>
 </div>

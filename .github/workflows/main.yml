@@ -19,6 +19,7 @@ jobs:
     - name: Check notebook linting
       run: |
         nbqa black --check .
+        nbqa flake8 .
     - name: Check if all notebooks are cleaned
       run: |
         echo "Check we are starting with clean git checkout"

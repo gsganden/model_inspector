@@ -413,12 +413,12 @@ def generate_model_html(
     model_string = f"""
         <span style='color:{COLORS["pink"]}'>{target_name}</span>
         = <span style='color:{COLORS["orange"]}'>{intercept:{intercept_formatter}}</span>
-    """
+    """  # noqa: E501
     for coef, feature_col in zip(coefs, feature_names):
         model_string += f"""
             <span style='color:{COLORS["green"]}'>{"+" if coef >= 0 else "-"} {abs(coef):{coef_formatter}}</span>
             * <span style='color:{COLORS["blue"]}'>{feature_col}</span>
-        """
+        """  # noqa: E501
     return model_string
 
 # Cell
