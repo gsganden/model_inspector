@@ -40,6 +40,13 @@ nb_path: "01_tune.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
 <div class="output_wrapper">
 <div class="output">
 
@@ -47,28 +54,64 @@ nb_path: "01_tune.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="calculate_metrics_by_thresh" class="doc_header"><code>calculate_metrics_by_thresh</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L15" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]], <strong><code>prob_to_pred</code></strong>:<code>Union</code>[<code>str</code>, <code>Callable</code>]=<em><code>'infer'</code></em>)</p>
+<h4 id="calculate_metrics_by_thresh_binary" class="doc_header"><code>calculate_metrics_by_thresh_binary</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L36" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh_binary</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
 </blockquote>
-<p>Calculate classification metrics as a function of threshold</p>
+<p>Calculate binary classification metrics as a function of
+threshold</p>
+<p>Takes prediction to be <code>1</code> when <code>y_prob</code> is greater than the
+threshold, <code>0</code> otherwise.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>y_true</code>: Ground-truth values with shape (n_items,)</li>
+<li><code>y_prob</code>: Probability distributions with shape (n_items, 2)</li>
+<li><code>metrics</code>: Callables that take <code>y_true</code>, <code>y_pred</code> as positional arguments
+and return a number. Must have a <code>__name__</code> attribute.</li>
+</ul>
+<p>Returns: DataFrame with one column "thresh" indicating the
+thresholds used, which is 0 and the sorted set of values that occur in
+<code>y_prob</code>, and an additional column for each input metric giving
+the value of that metric at that threshold.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="calculate_metrics_by_thresh_multi" class="doc_header"><code>calculate_metrics_by_thresh_multi</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L67" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh_multi</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
+</blockquote>
+<p>Calculate multiclass metrics as a function of threshold</p>
+<p>Takes prediction to be the position of the column in <code>y_prob</code> with
+the greatest value if that value is greater than the threshold,
+<code>np.nan</code> otherwise.</p>
 <p>Parameters:</p>
 <ul>
 <li><code>y_true</code>: Ground-truth values</li>
 <li><code>y_prob</code>: Probability distributions</li>
 <li><code>metrics</code>: Callables that take <code>y_true</code>, <code>y_pred</code> as positional arguments
 and return a number. Must have a <code>__name__</code> attribute.</li>
-<li><code>prob_to_pred</code>: How to convert probabilities into predictions.
-Options:<ul>
-<li>"infer": Use "binary" if <code>y_true</code> has two distinct values,
-"multiclass" otherwise.</li>
-<li>"binary": <code>1</code> if the second column is greater than the
-threshold, <code>0</code> otherwise.</li>
-<li>"multiclass": The index of the column with the greatest value
-if that value is greater than the threshold, <code>np.nan</code> otherwise</li>
-<li>A <code>Callable</code> that takes <code>y_prob</code> and a float <code>thresh</code> as
-keyword arguments and returns a 1d array that will be
-passed to your metrics as <code>y_pred</code>.</li>
-</ul>
-</li>
 </ul>
 <p>Returns: DataFrame with one column "thresh" indicating the
 thresholds used, which is 0 and the sorted set of values that occur in
@@ -94,7 +137,7 @@ the value of that metric at that threshold.</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>For instance, we can use <a href="/model_inspector/tune.html#calculate_metrics_by_thresh"><code>calculate_metrics_by_thresh</code></a> to find the threshold that maximizes a model's F1 score.</p>
+<p>For instance, we can use <a href="/model_inspector/tune.html#calculate_metrics_by_thresh_binary"><code>calculate_metrics_by_thresh_binary</code></a> to find the threshold that maximizes a model's F1 score.</p>
 
 </div>
 </div>
@@ -106,7 +149,7 @@ the value of that metric at that threshold.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">calculate_metrics_by_thresh</span><span class="p">(</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">calculate_metrics_by_thresh_binary</span><span class="p">(</span>
     <span class="n">y_true</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
     <span class="n">y_prob</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
         <span class="p">[</span>
@@ -309,7 +352,7 @@ Name: 3, dtype: float64</pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="coverage" class="doc_header"><code>coverage</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L72" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>coverage</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>)</p>
+<h4 id="coverage" class="doc_header"><code>coverage</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L100" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>coverage</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>)</p>
 </blockquote>
 <p>How often the model makes a prediction, where <code>np.nan</code> indicates
 abstaining from predicting.</p>
@@ -348,7 +391,7 @@ indicate abstraining from predicting</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="calculate_metric_ignoring_nan" class="doc_header"><code>calculate_metric_ignoring_nan</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L84" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metric_ignoring_nan</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>, <strong><code>metric</code></strong>:<code>Callable</code>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>)</p>
+<h4 id="calculate_metric_ignoring_nan" class="doc_header"><code>calculate_metric_ignoring_nan</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L112" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metric_ignoring_nan</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>, <strong><code>metric</code></strong>:<code>Callable</code>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Calculate <code>metric</code> ignoring <code>np.nan</code> predictions</p>
 <p>Parameters:</p>
@@ -389,7 +432,7 @@ arguments</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fbeta" class="doc_header"><code>fbeta</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L106" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fbeta</code>(<strong><code>precision</code></strong>:<code>float</code>, <strong><code>recall</code></strong>:<code>float</code>, <strong><code>beta</code></strong>:<code>float</code>=<em><code>1</code></em>)</p>
+<h4 id="fbeta" class="doc_header"><code>fbeta</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L134" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fbeta</code>(<strong><code>precision</code></strong>:<code>float</code>, <strong><code>recall</code></strong>:<code>float</code>, <strong><code>beta</code></strong>:<code>float</code>=<em><code>1</code></em>)</p>
 </blockquote>
 
 </div>
