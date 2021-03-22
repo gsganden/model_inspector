@@ -18,7 +18,6 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from sklearn.base import ClassifierMixin, clone, RegressorMixin
-import sklearn.datasets
 from sklearn.inspection import permutation_importance
 from sklearn.linear_model._base import LinearModel, LinearClassifierMixin
 from sklearn.preprocessing import MinMaxScaler
@@ -45,20 +44,19 @@ def get_inspector(model, X, y):
     """
     model_type = identify_type(model, y)
     if isinstance(model, LinearModel):
-        result = _LinRegInspector(model, X, y)
+        return _LinRegInspector(model, X, y)
     elif isinstance(model, LinearClassifierMixin):
-        result = (
+        return (
             _LinBinInspector(model, X, y)
             if model_type == ModelType.BINARY
             else _LinMultiInspector(model, X, y)
         )
     elif model_type == ModelType.BINARY:
-        result = _BinClasInspector(model, X, y)
+        return _BinClasInspector(model, X, y)
     elif model_type == ModelType.MULTICLASS:
-        result = _MultiClasInspector(model, X, y)
+        return _MultiClasInspector(model, X, y)
     else:
-        result = _RegInspector(model, X, y)
-    return result
+        return _RegInspector(model, X, y)
 
 # Cell
 # export
@@ -71,15 +69,11 @@ class ModelType(Enum):
 # export
 def identify_type(model, y):
     if isinstance(model, RegressorMixin):
-        result = ModelType.REGRESSION
+        return ModelType.REGRESSION
     elif isinstance(model, ClassifierMixin):
-        if len(y.unique()) == 2:
-            result = ModelType.BINARY
-        else:
-            result = ModelType.MULTICLASS
+        return ModelType.BINARY if len(y.unique()) == 2 else ModelType.MULTICLASS
     else:
         raise NotImplementedError("Model type not recognized")
-    return result
 
 # Cell
 def _custom_dir(c, add):
