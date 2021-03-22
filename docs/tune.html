@@ -89,52 +89,6 @@ the value of that metric at that threshold.</p>
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="calculate_metrics_by_thresh_multi" class="doc_header"><code>calculate_metrics_by_thresh_multi</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L67" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh_multi</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
-</blockquote>
-<p>Calculate multiclass metrics as a function of threshold</p>
-<p>Takes prediction to be the position of the column in <code>y_prob</code> with
-the greatest value if that value is greater than the threshold,
-<code>np.nan</code> otherwise.</p>
-<p>Parameters:</p>
-<ul>
-<li><code>y_true</code>: Ground-truth values</li>
-<li><code>y_prob</code>: Probability distributions</li>
-<li><code>metrics</code>: Callables that take <code>y_true</code>, <code>y_pred</code> as positional arguments
-and return a number. Must have a <code>__name__</code> attribute.</li>
-</ul>
-<p>Returns: DataFrame with one column "thresh" indicating the
-thresholds used, which is 0 and the sorted set of values that occur in
-<code>y_prob</code>, and an additional column for each input metric giving
-the value of that metric at that threshold.</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>For instance, we can use <a href="/model_inspector/tune.html#calculate_metrics_by_thresh_binary"><code>calculate_metrics_by_thresh_binary</code></a> to find the threshold that maximizes a model's F1 score.</p>
@@ -330,6 +284,52 @@ Name: 3, dtype: float64</pre>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="calculate_metrics_by_thresh_multi" class="doc_header"><code>calculate_metrics_by_thresh_multi</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L67" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh_multi</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
+</blockquote>
+<p>Calculate multiclass metrics as a function of threshold</p>
+<p>Takes prediction to be the position of the column in <code>y_prob</code> with
+the greatest value if that value is greater than the threshold,
+<code>np.nan</code> otherwise.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>y_true</code>: Ground-truth values</li>
+<li><code>y_prob</code>: Probability distributions</li>
+<li><code>metrics</code>: Callables that take <code>y_true</code>, <code>y_pred</code> as positional arguments
+and return a number. Must have a <code>__name__</code> attribute.</li>
+</ul>
+<p>Returns: DataFrame with one column "thresh" indicating the
+thresholds used, which is 0 and the sorted set of values that occur in
+<code>y_prob</code>, and an additional column for each input metric giving
+the value of that metric at that threshold.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
