@@ -15,26 +15,49 @@ from sklearn import metrics
 def calculate_metrics_by_thresh(
     y_true: np.array,
     y_prob: np.array,
-    prob_to_pred: Union[str, Callable],
     metrics: Union[Callable, Sequence[Callable]],
+    prob_to_pred: Union[str, Callable] = "infer",
 ) -> pd.DataFrame:
     """Calculate classification metrics as a function of threshold
 
     Parameters:
     - `y_true`: Ground-truth values
     - `y_prob`: Probability distributions
-    - `prob_to_pred`: Callable that takes `y_prob` and `thresh` as positional
-    arguments and returns `y_pred`
     - `metrics`: Callables that take `y_true`, `y_pred` as positional arguments
     and return a number. Must have a `__name__` attribute.
+    - `prob_to_pred`: How to convert probabilities into predictions.
+    Options:
+        - "infer": Use "binary" if `y_true` has two distinct values,
+        "multiclass" otherwise.
+        - "binary": `1` if the second column is greater than the
+        threshold, `0` otherwise.
+        - "multiclass": The index of the column with the greatest value
+        if that value is greater than the threshold, `np.nan` otherwise
+        - A `Callable` that takes `y_prob` and a float `thresh` as
+        keyword arguments and returns a 1d array that will be
+        passed to your metrics as `y_pred`.
 
     Returns: DataFrame with one column "thresh" indicating the
     thresholds used, which is 0 and the sorted set of values that occur in
     `y_prob`, and an additional column for each input metric giving
     the value of that metric at that threshold.
     """
+
+    def _get_prob_to_pred_func(prob_to_pred, y_true):
+        if callable(prob_to_pred):
+            return prob_to_pred
+        if prob_to_pred == "binary" or (
+            prob_to_pred == "infer" and len(np.unique(y_true)) == 2
+        ):
+            return lambda y_prob, thresh: np.where(y_prob[:, 1] > thresh, 1, 0)
+        elif prob_to_pred in ["multiclass", "infer"]:
+            return lambda y_prob, thresh: np.where(
+                y_prob.max(axis=1) > thresh, y_prob.argmax(axis=1), np.nan
+            )
+
     if callable(metrics):
         metrics = [metrics]
+    prob_to_pred = _get_prob_to_pred_func(prob_to_pred=prob_to_pred, y_true=y_true)
 
     results = defaultdict(list)
     results["thresh"] = sorted(np.hstack([0, np.unique(y_prob)]))

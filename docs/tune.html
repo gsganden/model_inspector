@@ -47,17 +47,28 @@ nb_path: "01_tune.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="calculate_metrics_by_thresh" class="doc_header"><code>calculate_metrics_by_thresh</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L15" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>prob_to_pred</code></strong>:<code>Union</code>[<code>str</code>, <code>Callable</code>], <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
+<h4 id="calculate_metrics_by_thresh" class="doc_header"><code>calculate_metrics_by_thresh</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L15" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]], <strong><code>prob_to_pred</code></strong>:<code>Union</code>[<code>str</code>, <code>Callable</code>]=<em><code>'infer'</code></em>)</p>
 </blockquote>
 <p>Calculate classification metrics as a function of threshold</p>
 <p>Parameters:</p>
 <ul>
 <li><code>y_true</code>: Ground-truth values</li>
 <li><code>y_prob</code>: Probability distributions</li>
-<li><code>prob_to_pred</code>: Callable that takes <code>y_prob</code> and <code>thresh</code> as positional
-arguments and returns <code>y_pred</code></li>
 <li><code>metrics</code>: Callables that take <code>y_true</code>, <code>y_pred</code> as positional arguments
 and return a number. Must have a <code>__name__</code> attribute.</li>
+<li><code>prob_to_pred</code>: How to convert probabilities into predictions.
+Options:<ul>
+<li>"infer": Use "binary" if <code>y_true</code> has two distinct values,
+"multiclass" otherwise.</li>
+<li>"binary": <code>1</code> if the second column is greater than the
+threshold, <code>0</code> otherwise.</li>
+<li>"multiclass": The index of the column with the greatest value
+if that value is greater than the threshold, <code>np.nan</code> otherwise</li>
+<li>A <code>Callable</code> that takes <code>y_prob</code> and a float <code>thresh</code> as
+keyword arguments and returns a 1d array that will be
+passed to your metrics as <code>y_pred</code>.</li>
+</ul>
+</li>
 </ul>
 <p>Returns: DataFrame with one column "thresh" indicating the
 thresholds used, which is 0 and the sorted set of values that occur in
@@ -83,7 +94,7 @@ the value of that metric at that threshold.</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Suppose that in a binary classification problem, we will predict 1 if the model's probability for 1 exceeds a threshold and 0 otherwise. We can use <a href="/model_inspector/tune.html#calculate_metrics_by_thresh"><code>calculate_metrics_by_thresh</code></a> to find the threshold that maximizes, say, the model's F1 score.</p>
+<p>For instance, we can use <a href="/model_inspector/tune.html#calculate_metrics_by_thresh"><code>calculate_metrics_by_thresh</code></a> to find the threshold that maximizes a model's F1 score.</p>
 
 </div>
 </div>
@@ -112,7 +123,6 @@ the value of that metric at that threshold.</p>
         <span class="p">]</span>
     <span class="p">),</span>
     <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">,</span> <span class="n">metrics</span><span class="o">.</span><span class="n">precision_score</span><span class="p">,</span> <span class="n">metrics</span><span class="o">.</span><span class="n">f1_score</span><span class="p">],</span>
-    <span class="n">prob_to_pred</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y_prob</span><span class="p">,</span> <span class="n">thresh</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_prob</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
 <span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
 <span class="n">results</span>
 </pre></div>
@@ -283,7 +293,7 @@ Name: 3, dtype: float64</pre>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As another example, suppose that in a multiclass problem, we will predict the value with the highest probability if that probability exceeds a threshold; otherwise, we will not give a prediction at all. We want to track two metrics: coverage (how often we make a prediction) and precision (how often our predictions are right when we make them). We will choose the threshold an $F_\beta$=like metric that maximizes a weighted harmonic mean of those two metrics that puts twice as much weight on precision as coverage.</p>
+<p>Suppose that in a multiclass problem we want to track two metrics: coverage (how often we make a prediction) and precision (how often our predictions are right when we make them). We will choose the threshold an $F_\beta$=like metric that maximizes a weighted harmonic mean of those two metrics that puts twice as much weight on precision as coverage.</p>
 
 </div>
 </div>
@@ -299,7 +309,7 @@ Name: 3, dtype: float64</pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="coverage" class="doc_header"><code>coverage</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L49" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>coverage</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>)</p>
+<h4 id="coverage" class="doc_header"><code>coverage</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L72" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>coverage</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>)</p>
 </blockquote>
 <p>How often the model makes a prediction, where <code>np.nan</code> indicates
 abstaining from predicting.</p>
@@ -338,7 +348,7 @@ indicate abstraining from predicting</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="calculate_metric_ignoring_nan" class="doc_header"><code>calculate_metric_ignoring_nan</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L61" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metric_ignoring_nan</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>, <strong><code>metric</code></strong>:<code>Callable</code>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>)</p>
+<h4 id="calculate_metric_ignoring_nan" class="doc_header"><code>calculate_metric_ignoring_nan</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L84" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metric_ignoring_nan</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>, <strong><code>metric</code></strong>:<code>Callable</code>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Calculate <code>metric</code> ignoring <code>np.nan</code> predictions</p>
 <p>Parameters:</p>
@@ -379,7 +389,7 @@ arguments</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fbeta" class="doc_header"><code>fbeta</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L83" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fbeta</code>(<strong><code>precision</code></strong>:<code>float</code>, <strong><code>recall</code></strong>:<code>float</code>, <strong><code>beta</code></strong>:<code>float</code>=<em><code>1</code></em>)</p>
+<h4 id="fbeta" class="doc_header"><code>fbeta</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L106" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fbeta</code>(<strong><code>precision</code></strong>:<code>float</code>, <strong><code>recall</code></strong>:<code>float</code>, <strong><code>beta</code></strong>:<code>float</code>=<em><code>1</code></em>)</p>
 </blockquote>
 
 </div>
@@ -415,9 +425,6 @@ arguments</li>
 <span class="n">results</span> <span class="o">=</span> <span class="n">calculate_metrics_by_thresh</span><span class="p">(</span>
     <span class="n">y_true</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span>
     <span class="n">y_prob</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]]),</span>
-    <span class="n">prob_to_pred</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y_prob</span><span class="p">,</span> <span class="n">thresh</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">y_prob</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">y_prob</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="p">),</span>
     <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">coverage</span><span class="p">,</span> <span class="n">precision_ignoring_nan</span><span class="p">],</span>
 <span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
 <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;quasi_fbeta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
