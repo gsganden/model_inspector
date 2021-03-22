@@ -178,29 +178,7 @@ class _Inspector(_GetAttr):
         return ax
 
 # Cell
-class _ClasInspector(_Inspector):
-    def confusion_matrix(
-        self,
-        shade_axis: Optional[Union[str, int]] = None,
-        sample_weight: Optional[np.array] = None,
-        normalize: Optional[str] = None,
-    ) -> pd.DataFrame:
-        """Get confusion matrix
-
-        Uses `self.y` as ground-truth values,
-        `self.model.predict(self.X)` as predictions
-
-        Parameters:
-        - `shade_axis`: `axis` argument to pass to
-        `pd.DataFrame.style.background_gradient`
-
-        The remaining parameters are passed to
-        `sklearn.metrics.confusion_matrix`.
-        """
-        return confusion_matrix(y_true=self.y, y_pred=self.model.predict(self.X))
-
-# Cell
-class _BinClasInspector(_ClasInspector):
+class _BinClasInspector(_Inspector):
     def calculate_metrics_by_thresh(
         self,
         metrics: Union[Callable, Sequence[Callable]],
@@ -225,15 +203,49 @@ class _BinClasInspector(_ClasInspector):
             metrics=metrics,
         )
 
+    def confusion_matrix(
+        self,
+        thresh: float = 0.5,
+        shade_axis: Optional[Union[str, int]] = None,
+        sample_weight: Optional[np.array] = None,
+        normalize: Optional[str] = None,
+    ) -> pd.DataFrame:
+        """Get confusion matrix
+
+        Assumes that `self.model` has a `.predict_proba()` method. Uses
+        `self.y` as ground-truth values,
+        `self.model.predict_proba(self.X)[:, 1] > thresh` as
+        predictions.
+
+        Parameters:
+        - `thresh`: Probability threshold for counting a prediction as
+        positive
+        - `shade_axis`: `axis` argument to pass to
+        `pd.DataFrame.style.background_gradient`
+
+        The remaining parameters are passed to
+        `sklearn.metrics.confusion_matrix`.
+        """
+        return confusion_matrix(
+            y_true=self.y,
+            y_pred=self.model.predict_proba(self.X)[:, 1] > thresh,
+            shade_axis=shade_axis,
+            sample_weight=sample_weight,
+            normalize=normalize,
+        )
+
 # Cell
-class _MultiClasInspector(_ClasInspector):
+class _MultiClasInspector(_Inspector):
     def calculate_metrics_by_thresh(
         self,
         metrics: Union[Callable, Sequence[Callable]],
     ) -> pd.DataFrame:
         """Calculate classification metrics as a function of threshold
 
-        Assumes that `self.model` has a `.predict_proba()` method.
+        Assumes that `self.model` has a `.predict_proba()` method. Uses
+        `self.y` as ground-truth values,
+        `self.model.predict_proba(self.X)[:, 1] > thresh` as
+        predictions.
 
         Parameters:
         - `metrics`: Callables that take `y_true`, `y_pred` as
@@ -249,6 +261,33 @@ class _MultiClasInspector(_ClasInspector):
             y_true=self.y,
             y_prob=self.model.predict_proba(self.X),
             metrics=metrics,
+        )
+
+    def confusion_matrix(
+        self,
+        shade_axis: Optional[Union[str, int]] = None,
+        sample_weight: Optional[np.array] = None,
+        normalize: Optional[str] = None,
+    ) -> pd.DataFrame:
+        """Get confusion matrix
+
+        Uses `self.y` as ground-truth values,
+        `self.model.predict(self.X)` as predictions.
+
+        Parameters:
+        - `shade_axis`: `axis` argument to pass to
+        `pd.DataFrame.style.background_gradient`
+
+        The remaining parameters are passed to
+        `sklearn.metrics.confusion_matrix`.
+        """
+
+        return confusion_matrix(
+            y_true=self.y,
+            y_pred=self.model.predict(self.X),
+            shade_axis=shade_axis,
+            sample_weight=sample_weight,
+            normalize=normalize,
         )
 
 # Cell
@@ -754,7 +793,8 @@ class _Bin1dPlotter(_Plotter):
         provides probabilities and has a single input
 
         Parameters:
-        - `thresh`: Threshold probability
+        - `thresh`: Probability threshold for counting a prediction as
+        positive
         - `plot_data`: Make a scatter plot of the data
         - `ax`: Matplotlib `Axes` object. Plot will be added to this
         object if provided; otherwise a new `Axes` object will be
