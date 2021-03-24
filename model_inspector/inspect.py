@@ -21,6 +21,7 @@ from sklearn.base import ClassifierMixin, clone, RegressorMixin
 from sklearn.inspection import permutation_importance
 from sklearn.linear_model._base import LinearModel, LinearClassifierMixin
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.tree import BaseDecisionTree, plot_tree
 from sklearn.utils import check_X_y
 from sklearn.utils.validation import check_is_fitted
 import waterfall_chart
@@ -51,6 +52,12 @@ def get_inspector(model, X, y):
             _LinBinInspector(model, X, y)
             if model_type == ModelType.BINARY
             else _LinMultiInspector(model, X, y)
+        )
+    elif isinstance(model, BaseDecisionTree):
+        return (
+            _TreeRegInspector(model, X, y) if model_type == ModelType.REGRESSION
+            else _TreeBinInspector if model_type == ModelType.BINARY
+            else _TreeMultiInspector
         )
     elif model_type == ModelType.BINARY:
         return _BinClasInspector(model, X, y)
@@ -490,7 +497,7 @@ class _LinRegInspector(_RegInspector):
             **waterfall_kwargs,
         )
 
-    def show_equation(
+    def show_model(
         self,
         intercept_formatter: str = ".2f",
         coef_formatter: str = ".2f",
@@ -594,7 +601,7 @@ class _LinBinInspector(_BinClasInspector):
         axes[0].legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
         return axes
 
-    def show_equation(
+    def show_model(
         self,
         intercept_formatter: str = ".2f",
         coef_formatter: str = ".2f",
@@ -701,7 +708,7 @@ class _LinMultiInspector(_MultiClasInspector):
         axes[0].legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
         return axes
 
-    def show_equation(
+    def show_model(
         self,
         intercept_formatter: str = ".2f",
         coef_formatter: str = ".2f",
@@ -730,6 +737,35 @@ class _LinMultiInspector(_MultiClasInspector):
                     </p>
                 """
         return HTML(model_string)
+
+# Cell
+class _TreeMixin(_Inspector):
+
+    def show_model(self, ax: Optional[Axes] = None, **kwargs):
+        """Show decision tree
+
+        Parameters:
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this
+        object if provided; otherwise a new `Axes` object will be
+        generated.
+        - `kwargs`: kwargs to pass to `sklearn.tree.plot_tree`
+        """
+        if ax is None:
+            _, ax = plt.subplots(figsize=(self.model.get_n_leaves() * 3, self.model.get_depth() * 2))
+        kwargs = {"filled": True, **kwargs}
+        return plot_tree(self.model, feature_names=self.X.columns, class_names=self.y.unique(), ax=ax, **kwargs)
+
+# Cell
+class _TreeBinInspector(_BinClasInspector, _TreeMixin):
+    pass
+
+# Cell
+class _TreeMultiInspector(_MultiClasInspector, _TreeMixin):
+    pass
+
+# Cell
+class _TreeRegInspector(_RegInspector, _TreeMixin):
+    pass
 
 # Cell
 class _Plotter:
