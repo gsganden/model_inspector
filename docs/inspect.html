@@ -155,7 +155,8 @@ target <code>model</code> was trained on</li>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">t</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-    
+
+
 <span class="n">t</span><span class="p">()</span>
 </pre></div>
 
@@ -327,7 +328,7 @@ target <code>model</code> was trained on</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_Inspector.plot_correlation" class="doc_header"><code>_Inspector.plot_correlation</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L201" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Inspector.plot_correlation</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong>**<code>heatmap_kwargs</code></strong>)</p>
+<h3 id="_Inspector.plot_correlation" class="doc_header"><code>_Inspector.plot_correlation</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L203" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Inspector.plot_correlation</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong>**<code>heatmap_kwargs</code></strong>)</p>
 </blockquote>
 <p>Plot a correlation matrix for <code>self.X</code> and <code>self.y</code></p>
 <p>Parameters:</p>
@@ -400,7 +401,7 @@ if provided; otherwise a new <code>Axes</code> object will be generated.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_Inspector.permutation_importance" class="doc_header"><code>_Inspector.permutation_importance</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L154" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Inspector.permutation_importance</code>(<strong>**<code>importance_kwargs</code></strong>)</p>
+<h3 id="_Inspector.permutation_importance" class="doc_header"><code>_Inspector.permutation_importance</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L156" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Inspector.permutation_importance</code>(<strong>**<code>importance_kwargs</code></strong>)</p>
 </blockquote>
 <p>Calculate permutation importance of features</p>
 <ul>
@@ -472,7 +473,7 @@ dtype: float64</pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_Inspector.plot_permutation_importance" class="doc_header"><code>_Inspector.plot_permutation_importance</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L172" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Inspector.plot_permutation_importance</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>sort</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>importance_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>plot_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
+<h3 id="_Inspector.plot_permutation_importance" class="doc_header"><code>_Inspector.plot_permutation_importance</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L174" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Inspector.plot_permutation_importance</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>sort</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>importance_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>plot_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot a correlation matrix for <code>self.X</code> and <code>self.y</code></p>
 <p>Parameters:</p>
@@ -554,7 +555,7 @@ if provided; otherwise a new <code>Axes</code> object will be generated.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_RegInspector.plot_pred_vs_act" class="doc_header"><code>_RegInspector.plot_pred_vs_act</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L330" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_RegInspector.plot_pred_vs_act</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
+<h3 id="_RegInspector.plot_pred_vs_act" class="doc_header"><code>_RegInspector.plot_pred_vs_act</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L332" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_RegInspector.plot_pred_vs_act</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot predicted vs. actual values</p>
 <p>Parameters:</p>
@@ -621,7 +622,7 @@ if provided; otherwise a new <code>Axes</code> object will be generated.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_RegInspector.plot_residuals" class="doc_header"><code>_RegInspector.plot_residuals</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L371" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_RegInspector.plot_residuals</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
+<h3 id="_RegInspector.plot_residuals" class="doc_header"><code>_RegInspector.plot_residuals</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L373" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_RegInspector.plot_residuals</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot residuals</p>
 <p>Parameters:</p>
@@ -701,7 +702,7 @@ if provided; otherwise a new <code>Axes</code> object will be generated.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_BinClasInspector.calculate_metrics_by_thresh" class="doc_header"><code>_BinClasInspector.calculate_metrics_by_thresh</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L217" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_BinClasInspector.calculate_metrics_by_thresh</code>(<strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
+<h3 id="_BinClasInspector.calculate_metrics_by_thresh" class="doc_header"><code>_BinClasInspector.calculate_metrics_by_thresh</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L219" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_BinClasInspector.calculate_metrics_by_thresh</code>(<strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
 </blockquote>
 <p>Calculate classification metrics as a function of threshold</p>
 <p>Assumes that <code>self.model</code> has a <code>.predict_proba()</code> method.</p>
@@ -1126,7 +1127,7 @@ metric giving the value of that metric at that threshold.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_BinClasInspector.confusion_matrix" class="doc_header"><code>_BinClasInspector.confusion_matrix</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L241" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_BinClasInspector.confusion_matrix</code>(<strong><code>thresh</code></strong>:<code>float</code>=<em><code>0.5</code></em>, <strong><code>shade_axis</code></strong>:<code>Union</code>[<code>str</code>, <code>int</code>, <code>NoneType</code>]=<em><code>None</code></em>, <strong><code>sample_weight</code></strong>:<code>Optional</code>[<code>array</code>]=<em><code>None</code></em>, <strong><code>normalize</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>)</p>
+<h3 id="_BinClasInspector.confusion_matrix" class="doc_header"><code>_BinClasInspector.confusion_matrix</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L243" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_BinClasInspector.confusion_matrix</code>(<strong><code>thresh</code></strong>:<code>float</code>=<em><code>0.5</code></em>, <strong><code>shade_axis</code></strong>:<code>Union</code>[<code>str</code>, <code>int</code>, <code>NoneType</code>]=<em><code>None</code></em>, <strong><code>sample_weight</code></strong>:<code>Optional</code>[<code>array</code>]=<em><code>None</code></em>, <strong><code>normalize</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Get confusion matrix</p>
 <p>Assumes that <code>self.model</code> has a <code>.predict_proba()</code> method. Uses
@@ -1222,7 +1223,7 @@ positive</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_MultiClasInspector.calculate_metrics_by_thresh" class="doc_header"><code>_MultiClasInspector.calculate_metrics_by_thresh</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L274" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_MultiClasInspector.calculate_metrics_by_thresh</code>(<strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
+<h3 id="_MultiClasInspector.calculate_metrics_by_thresh" class="doc_header"><code>_MultiClasInspector.calculate_metrics_by_thresh</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L276" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_MultiClasInspector.calculate_metrics_by_thresh</code>(<strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
 </blockquote>
 <p>Calculate classification metrics as a function of threshold</p>
 <p>Assumes that <code>self.model</code> has a <code>.predict_proba()</code> method. Uses
@@ -1460,7 +1461,7 @@ metric giving the value of that metric at that threshold.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_MultiClasInspector.confusion_matrix" class="doc_header"><code>_MultiClasInspector.confusion_matrix</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L301" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_MultiClasInspector.confusion_matrix</code>(<strong><code>shade_axis</code></strong>:<code>Union</code>[<code>str</code>, <code>int</code>, <code>NoneType</code>]=<em><code>None</code></em>, <strong><code>sample_weight</code></strong>:<code>Optional</code>[<code>array</code>]=<em><code>None</code></em>, <strong><code>normalize</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>)</p>
+<h3 id="_MultiClasInspector.confusion_matrix" class="doc_header"><code>_MultiClasInspector.confusion_matrix</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L303" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_MultiClasInspector.confusion_matrix</code>(<strong><code>shade_axis</code></strong>:<code>Union</code>[<code>str</code>, <code>int</code>, <code>NoneType</code>]=<em><code>None</code></em>, <strong><code>sample_weight</code></strong>:<code>Optional</code>[<code>array</code>]=<em><code>None</code></em>, <strong><code>normalize</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Get confusion matrix</p>
 <p>Uses <code>self.y</code> as ground-truth values,
@@ -1564,7 +1565,7 @@ metric giving the value of that metric at that threshold.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_LinRegInspector.show_model" class="doc_header"><code>_LinRegInspector.show_model</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L500" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_LinRegInspector.show_model</code>(<strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
+<h3 id="_LinRegInspector.show_model" class="doc_header"><code>_LinRegInspector.show_model</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L502" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_LinRegInspector.show_model</code>(<strong><code>intercept_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>coef_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>)</p>
 </blockquote>
 <p>Show model equation</p>
 <p>Parameters:</p>
@@ -1885,7 +1886,7 @@ metric giving the value of that metric at that threshold.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_LinRegInspector.plot_coefs_vs_hparam" class="doc_header"><code>_LinRegInspector.plot_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L432" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_LinRegInspector.plot_coefs_vs_hparam</code>(<strong><code>hparam</code></strong>:<code>str</code>, <strong><code>vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
+<h3 id="_LinRegInspector.plot_coefs_vs_hparam" class="doc_header"><code>_LinRegInspector.plot_coefs_vs_hparam</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L434" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_LinRegInspector.plot_coefs_vs_hparam</code>(<strong><code>hparam</code></strong>:<code>str</code>, <strong><code>vals</code></strong>:<code>Sequence</code>[<code>float</code>])</p>
 </blockquote>
 <p>Plot coefficient values against a hyperparameter</p>
 <p>Parameters:</p>
@@ -1960,7 +1961,7 @@ metric giving the value of that metric at that threshold.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_LinRegInspector.plot_waterfall" class="doc_header"><code>_LinRegInspector.plot_waterfall</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L459" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_LinRegInspector.plot_waterfall</code>(<strong><code>item</code></strong>:<code>Union</code>[<code>Series</code>, <code>array</code>], <strong><code>bar_num_formatter</code></strong>:<code>str</code>=<em><code>'.1f'</code></em>, <strong><code>tick_num_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>sorted_value</code></strong>=<em><code>True</code></em>, <strong><code>threshold</code></strong>=<em><code>0.01</code></em>, <strong><code>blue_color</code></strong>=<em><code>'#377eb8'</code></em>, <strong><code>green_color</code></strong>=<em><code>'#4daf4a'</code></em>, <strong><code>red_color</code></strong>=<em><code>'#ff7f00'</code></em>, <strong>**<code>waterfall_kwargs</code></strong>)</p>
+<h3 id="_LinRegInspector.plot_waterfall" class="doc_header"><code>_LinRegInspector.plot_waterfall</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L461" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_LinRegInspector.plot_waterfall</code>(<strong><code>item</code></strong>:<code>Union</code>[<code>Series</code>, <code>array</code>], <strong><code>bar_num_formatter</code></strong>:<code>str</code>=<em><code>'.1f'</code></em>, <strong><code>tick_num_formatter</code></strong>:<code>str</code>=<em><code>'.2f'</code></em>, <strong><code>sorted_value</code></strong>=<em><code>True</code></em>, <strong><code>threshold</code></strong>=<em><code>0.01</code></em>, <strong><code>blue_color</code></strong>=<em><code>'#377eb8'</code></em>, <strong><code>green_color</code></strong>=<em><code>'#4daf4a'</code></em>, <strong><code>red_color</code></strong>=<em><code>'#ff7f00'</code></em>, <strong>**<code>waterfall_kwargs</code></strong>)</p>
 </blockquote>
 <p>Make a waterfall chart showing how each feature contributes
 to the prediction for the input item.</p>
@@ -2085,7 +2086,7 @@ a single row from <code>self.X</code></li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_TreeMixin.show_model" class="doc_header"><code>_TreeMixin.show_model</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L744" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_TreeMixin.show_model</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>)</p>
+<h3 id="_TreeMixin.show_model" class="doc_header"><code>_TreeMixin.show_model</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L745" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_TreeMixin.show_model</code>(<strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Show decision tree</p>
 <p>Parameters:</p>
@@ -2115,7 +2116,8 @@ generated.</li>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">get_inspector</span><span class="p">(</span>
     <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_diabetes</span><span class="p">,</span> <span class="n">y_diabetes</span><span class="p">),</span>
-    <span class="n">X_diabetes</span><span class="p">,</span> <span class="n">y_diabetes</span>
+    <span class="n">X_diabetes</span><span class="p">,</span>
+    <span class="n">y_diabetes</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">show_model</span><span class="p">()</span>
 </pre></div>
 
@@ -2168,7 +2170,7 @@ generated.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_Bin1dPlotter.plot" class="doc_header"><code>_Bin1dPlotter.plot</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L826" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Bin1dPlotter.plot</code>(<strong><code>thresh</code></strong>:<code>float</code>=<em><code>0.5</code></em>, <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>prob_line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>thresh_line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs_correct</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs_incorrect</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
+<h3 id="_Bin1dPlotter.plot" class="doc_header"><code>_Bin1dPlotter.plot</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L835" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Bin1dPlotter.plot</code>(<strong><code>thresh</code></strong>:<code>float</code>=<em><code>0.5</code></em>, <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>prob_line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>thresh_line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs_correct</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs_incorrect</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot predictions from a binary classification model that
 provides probabilities and has a single input</p>
@@ -2256,7 +2258,7 @@ Overrides <code>scatter_kwargs</code>.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_1dPlotter.plot" class="doc_header"><code>_1dPlotter.plot</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L777" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_1dPlotter.plot</code>(<strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
+<h3 id="_1dPlotter.plot" class="doc_header"><code>_1dPlotter.plot</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L786" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_1dPlotter.plot</code>(<strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>:<code>Optional</code>[<code>Axes</code>]=<em><code>None</code></em>, <strong><code>line_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot predictions from a regression or multiclass model with a
 single input as a line</p>
@@ -2386,7 +2388,7 @@ if provided; otherwise a new <code>Axes</code> object will be generated.</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_Clas2dPlotter.plot" class="doc_header"><code>_Clas2dPlotter.plot</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L1105" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Clas2dPlotter.plot</code>(<strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>tick_formatter</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>'.2f'</code></em>, <strong><code>ax</code></strong>:<code>Axes</code>=<em><code>None</code></em>, <strong><code>heatmap_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
+<h3 id="_Clas2dPlotter.plot" class="doc_header"><code>_Clas2dPlotter.plot</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L1114" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Clas2dPlotter.plot</code>(<strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>tick_formatter</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>'.2f'</code></em>, <strong><code>ax</code></strong>:<code>Axes</code>=<em><code>None</code></em>, <strong><code>heatmap_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot data and predictions</p>
 <p>Parameters:</p>
@@ -2628,7 +2630,7 @@ predictions</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_Bin2dPlotter.plot3d" class="doc_header"><code>_Bin2dPlotter.plot3d</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L1191" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Bin2dPlotter.plot3d</code>(<strong><code>thresh</code></strong>=<em><code>0.5</code></em>, <strong><code>plot_prob</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>plot_thresh</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>:<code>Axes</code>=<em><code>None</code></em>, <strong><code>prob_surf_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>thresh_surf_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
+<h3 id="_Bin2dPlotter.plot3d" class="doc_header"><code>_Bin2dPlotter.plot3d</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L1200" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Bin2dPlotter.plot3d</code>(<strong><code>thresh</code></strong>=<em><code>0.5</code></em>, <strong><code>plot_prob</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>plot_thresh</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>:<code>Axes</code>=<em><code>None</code></em>, <strong><code>prob_surf_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>thresh_surf_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot data and predictions in 3D</p>
 <p>Best viewed with a tool such as <a href="https://github.com/matplotlib/ipympl">https://github.com/matplotlib/ipympl</a>
@@ -2755,7 +2757,7 @@ surface</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h3 id="_Reg2dPlotter.plot3d" class="doc_header"><code>_Reg2dPlotter.plot3d</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L1042" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Reg2dPlotter.plot3d</code>(<strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>:<code>Axes</code>=<em><code>None</code></em>, <strong><code>surf_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
+<h3 id="_Reg2dPlotter.plot3d" class="doc_header"><code>_Reg2dPlotter.plot3d</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/inspect.py#L1051" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>_Reg2dPlotter.plot3d</code>(<strong><code>plot_data</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ax</code></strong>:<code>Axes</code>=<em><code>None</code></em>, <strong><code>surf_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>, <strong><code>scatter_kwargs</code></strong>:<code>Optional</code>[<code>dict</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot data and predictions in 3d</p>
 <p>Best viewed with a tool such as <a href="https://github.com/matplotlib/ipympl">https://github.com/matplotlib/ipympl</a>

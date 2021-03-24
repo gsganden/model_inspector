@@ -55,8 +55,10 @@ def get_inspector(model, X, y):
         )
     elif isinstance(model, BaseDecisionTree):
         return (
-            _TreeRegInspector(model, X, y) if model_type == ModelType.REGRESSION
-            else _TreeBinInspector if model_type == ModelType.BINARY
+            _TreeRegInspector(model, X, y)
+            if model_type == ModelType.REGRESSION
+            else _TreeBinInspector
+            if model_type == ModelType.BINARY
             else _TreeMultiInspector
         )
     elif model_type == ModelType.BINARY:
@@ -740,7 +742,6 @@ class _LinMultiInspector(_MultiClasInspector):
 
 # Cell
 class _TreeMixin(_Inspector):
-
     def show_model(self, ax: Optional[Axes] = None, **kwargs):
         """Show decision tree
 
@@ -751,9 +752,17 @@ class _TreeMixin(_Inspector):
         - `kwargs`: kwargs to pass to `sklearn.tree.plot_tree`
         """
         if ax is None:
-            _, ax = plt.subplots(figsize=(self.model.get_n_leaves() * 3, self.model.get_depth() * 2))
+            _, ax = plt.subplots(
+                figsize=(self.model.get_n_leaves() * 3, self.model.get_depth() * 2)
+            )
         kwargs = {"filled": True, **kwargs}
-        return plot_tree(self.model, feature_names=self.X.columns, class_names=self.y.unique(), ax=ax, **kwargs)
+        return plot_tree(
+            self.model,
+            feature_names=self.X.columns,
+            class_names=self.y.unique(),
+            ax=ax,
+            **kwargs,
+        )
 
 # Cell
 class _TreeBinInspector(_BinClasInspector, _TreeMixin):
