@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import sklearn
 from sklearn.base import ClassifierMixin, clone, RegressorMixin
 from sklearn.inspection import permutation_importance
 from sklearn.linear_model._base import LinearModel, LinearClassifierMixin
@@ -26,6 +27,7 @@ from sklearn.utils import check_X_y
 from sklearn.utils.validation import check_is_fitted
 import waterfall_chart
 
+from .delegate import GetAttr, delegates
 from .explore import plot_correlation
 from .tune import (
     calculate_metrics_by_thresh_binary,
@@ -86,27 +88,7 @@ def identify_type(model, y):
         raise NotImplementedError("Model type not recognized")
 
 # Cell
-def _custom_dir(c, add):
-    return set(sorted(dir(type(c)) + list(c.__dict__.keys()) + add))
-
-
-class _GetAttr:
-    "Base class for attr accesses in `self._xtra` passed down to `self.default`"
-
-    @property
-    def _xtra(self):
-        return [o for o in dir(self.default) if not o.startswith("_")]
-
-    def __getattr__(self, k):
-        if k in self._xtra:
-            return getattr(self.default, k)
-        raise AttributeError(k)
-
-    def __dir__(self):
-        return _custom_dir(self, self._xtra)
-
-# Cell
-class _Inspector(_GetAttr):
+class _Inspector(GetAttr):
     """Model inspector base class
 
     Users should use `get_inspector` to generate appropriate
@@ -153,22 +135,19 @@ class _Inspector(_GetAttr):
                 result = _Multi2dPlotter
         return result
 
+    @delegates(sklearn.inspection.permutation_importance)
     def permutation_importance(
         self,
-        **importance_kwargs,
+        **kwargs,
     ) -> pd.Series:
-        """Calculate permutation importance of features
+        """Calculate permutation importance"""
+        if kwargs is None:
+            kwargs = {}
+        kwargs = {**{"n_jobs": -1}, **kwargs}
 
-        - `importance_kwargs`: kwargs to pass to
-        `sklearn.inspection.permutation_importance`
-        """
-        if importance_kwargs is None:
-            importance_kwargs = {}
-        importance_kwargs = {**{"n_jobs": -1}, **importance_kwargs}
-
-        importances = permutation_importance(
-            self.model, self.X, self.y, **importance_kwargs
-        )["importances_mean"]
+        importances = permutation_importance(self.model, self.X, self.y, **kwargs)[
+            "importances_mean"
+        ]
         return pd.Series(importances, index=self.X.columns)
 
     def plot_permutation_importance(
@@ -200,18 +179,12 @@ class _Inspector(_GetAttr):
         ax.set(title="Feature importances")
         return ax
 
-    def plot_correlation(self, ax: Optional[Axes] = None, **heatmap_kwargs) -> Axes:
-        """Plot a correlation matrix for `self.X` and `self.y`
-
-        Parameters:
-        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
-        if provided; otherwise a new `Axes` object will be generated.
-        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap`
-        """
+    @delegates(plot_correlation)
+    def plot_correlation(self, **kwargs) -> Axes:
+        """Plot a correlation matrix for `self.X` and `self.y`"""
         return plot_correlation(
             pd.concat((self.X, self.y), axis="columns"),
-            ax=ax,
-            **heatmap_kwargs,
+            **kwargs,
         )
 
 # Cell
@@ -240,12 +213,12 @@ class _BinClasInspector(_Inspector):
             metrics=metrics,
         )
 
+    @delegates(sklearn.metrics.confusion_matrix)
     def confusion_matrix(
         self,
         thresh: float = 0.5,
         shade_axis: Optional[Union[str, int]] = None,
-        sample_weight: Optional[np.array] = None,
-        normalize: Optional[str] = None,
+        **kwargs,
     ) -> pd.DataFrame:
         """Get confusion matrix
 
@@ -259,16 +232,12 @@ class _BinClasInspector(_Inspector):
         positive
         - `shade_axis`: `axis` argument to pass to
         `pd.DataFrame.style.background_gradient`
-
-        The remaining parameters are passed to
-        `sklearn.metrics.confusion_matrix`.
         """
         return confusion_matrix(
             y_true=self.y,
             y_pred=self.model.predict_proba(self.X)[:, 1] > thresh,
             shade_axis=shade_axis,
-            sample_weight=sample_weight,
-            normalize=normalize,
+            **kwargs,
         )
 
 # Cell
@@ -303,8 +272,7 @@ class _MultiClasInspector(_Inspector):
     def confusion_matrix(
         self,
         shade_axis: Optional[Union[str, int]] = None,
-        sample_weight: Optional[np.array] = None,
-        normalize: Optional[str] = None,
+        **kwargs,
     ) -> pd.DataFrame:
         """Get confusion matrix
 
@@ -314,17 +282,13 @@ class _MultiClasInspector(_Inspector):
         Parameters:
         - `shade_axis`: `axis` argument to pass to
         `pd.DataFrame.style.background_gradient`
-
-        The remaining parameters are passed to
-        `sklearn.metrics.confusion_matrix`.
         """
 
         return confusion_matrix(
             y_true=self.y,
             y_pred=self.model.predict(self.X),
             shade_axis=shade_axis,
-            sample_weight=sample_weight,
-            normalize=normalize,
+            **kwargs,
         )
 
 # Cell
@@ -428,100 +392,6 @@ def generate_model_html(
     return model_string
 
 # Cell
-class _LinRegInspector(_RegInspector):
-    """Linear regression model inspector"""
-
-    def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]):
-        """Plot coefficient values against a hyperparameter
-
-        Parameters:
-        - `hparam`: Name of hyperparameter; must be an attribute of
-        `self.model`
-        - `vals`: Values of that hyperparameter to use
-        """
-        current_val = getattr(self.model, hparam)
-        model = clone(self.model)
-        setattr(model, hparam, vals[-1])
-        model.fit(self.X, self.y)
-        column_order = model.coef_.argsort()[::-1]
-        X = self.X.iloc[:, column_order]
-
-        coefs = []
-        for val in vals:
-            setattr(model, hparam, val)
-            coefs.append(model.fit(X, self.y).coef_)
-
-        fig, ax = plt.subplots()
-        ax.plot(vals, coefs)
-        ax.axvline(current_val, c="k", label="current value")
-        ax.set(xlabel=hparam, ylabel="coefficient value")
-        ax.legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
-        return ax
-
-    def plot_waterfall(
-        self,
-        item: Union[pd.Series, np.array],
-        bar_num_formatter: str = ".1f",
-        tick_num_formatter: str = ".2f",
-        sorted_value=True,
-        threshold=0.01,
-        blue_color=COLORS["blue"],
-        green_color=COLORS["green"],
-        red_color=COLORS["orange"],
-        **waterfall_kwargs,
-    ):
-        """Make a waterfall chart showing how each feature contributes
-        to the prediction for the input item.
-
-        Parameters:
-        - `item`: Input item, with the same shape and value meanings as
-        a single row from `self.X`
-        - `bar_num_formatter`: Bar label format specifier
-        - `tick_num_formatter`: Tick label format specifier
-
-        Additional keyword arguments will be passed to
-        `waterfall_chart.plot`
-        """
-        return _plot_waterfall(
-            X=self.X,
-            y=self.y,
-            item=item,
-            intercept=self.model.intercept_,
-            coefs=self.model.coef_,
-            y_lab="Contribution to prediction",
-            bar_num_formatter=bar_num_formatter,
-            tick_num_formatter=tick_num_formatter,
-            sorted_value=sorted_value,
-            threshold=threshold,
-            blue_color=blue_color,
-            green_color=green_color,
-            red_color=red_color,
-            **waterfall_kwargs,
-        )
-
-    def show_model(
-        self,
-        intercept_formatter: str = ".2f",
-        coef_formatter: str = ".2f",
-    ):
-        """Show model equation
-
-        Parameters:
-        - `intercept_formatter`: Intercept format specifier
-        - `coef_formatter`: Intercept format specifier
-        """
-        return HTML(
-            generate_model_html(
-                intercept=self.model.intercept_,
-                coefs=self.model.coef_,
-                feature_names=self.X.columns,
-                target_name=self.y.name,
-                intercept_formatter=intercept_formatter,
-                coef_formatter=coef_formatter,
-            )
-        )
-
-# Cell
 def _plot_waterfall(
     X,
     y,
@@ -557,6 +427,101 @@ def _plot_waterfall(
         **waterfall_kwargs,
     )
     return plt.gca()
+
+# Cell
+class _LinRegInspector(_RegInspector):
+    """Linear regression model inspector"""
+
+    def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]):
+        """Plot coefficient values against a hyperparameter
+
+        Parameters:
+        - `hparam`: Name of hyperparameter; must be an attribute of
+        `self.model`
+        - `vals`: Values of that hyperparameter to use
+        """
+        current_val = getattr(self.model, hparam)
+        model = clone(self.model)
+        setattr(model, hparam, vals[-1])
+        model.fit(self.X, self.y)
+        column_order = model.coef_.argsort()[::-1]
+        X = self.X.iloc[:, column_order]
+
+        coefs = []
+        for val in vals:
+            setattr(model, hparam, val)
+            coefs.append(model.fit(X, self.y).coef_)
+
+        fig, ax = plt.subplots()
+        ax.plot(vals, coefs)
+        ax.axvline(current_val, c="k", label="current value")
+        ax.set(xlabel=hparam, ylabel="coefficient value")
+        ax.legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
+        return ax
+
+    @delegates(waterfall_chart.plot)
+    def plot_waterfall(
+        self,
+        item: Union[pd.Series, np.array],
+        bar_num_formatter: str = ".1f",
+        tick_num_formatter: str = ".2f",
+        sorted_value=True,
+        threshold=0.01,
+        blue_color=COLORS["blue"],
+        green_color=COLORS["green"],
+        red_color=COLORS["orange"],
+        **kwargs,
+    ):
+        """Make a waterfall chart showing how each feature contributes
+        to the prediction for the input item.
+
+        Parameters:
+        - `item`: Input item, with the same shape and value meanings as
+        a single row from `self.X`
+        - `bar_num_formatter`: Bar label format specifier
+        - `tick_num_formatter`: Tick label format specifier
+
+        Additional keyword arguments will be passed to
+        `waterfall_chart.plot`
+        """
+        return _plot_waterfall(
+            X=self.X,
+            y=self.y,
+            item=item,
+            intercept=self.model.intercept_,
+            coefs=self.model.coef_,
+            y_lab="Contribution to prediction",
+            bar_num_formatter=bar_num_formatter,
+            tick_num_formatter=tick_num_formatter,
+            sorted_value=sorted_value,
+            threshold=threshold,
+            blue_color=blue_color,
+            green_color=green_color,
+            red_color=red_color,
+            **kwargs,
+        )
+
+    def show_model(
+        self,
+        intercept_formatter: str = ".2f",
+        coef_formatter: str = ".2f",
+    ):
+        """Show model equation
+
+        Parameters:
+        - `intercept_formatter`: Intercept format specifier
+        - `coef_formatter`: Intercept format specifier
+        """
+        return HTML(
+            generate_model_html(
+                intercept=self.model.intercept_,
+                coefs=self.model.coef_,
+                feature_names=self.X.columns,
+                target_name=self.y.name,
+                intercept_formatter=intercept_formatter,
+                coef_formatter=coef_formatter,
+            )
+        )
 
 # Cell
 class _LinBinInspector(_BinClasInspector):
@@ -625,6 +590,7 @@ class _LinBinInspector(_BinClasInspector):
             )
         )
 
+    @delegates(waterfall_chart.plot)
     def plot_waterfall(
         self,
         item: Union[pd.Series, np.array],
@@ -635,7 +601,7 @@ class _LinBinInspector(_BinClasInspector):
         blue_color=COLORS["blue"],
         green_color=COLORS["green"],
         red_color=COLORS["orange"],
-        **waterfall_kwargs,
+        **kwargs,
     ):
         """Make a waterfall chart showing how each feature contributes
         to the prediction for the input item for a binary classification
@@ -662,7 +628,7 @@ class _LinBinInspector(_BinClasInspector):
             blue_color=blue_color,
             green_color=green_color,
             red_color=red_color,
-            **waterfall_kwargs,
+            **kwargs,
         )
 
 # Cell
@@ -742,15 +708,9 @@ class _LinMultiInspector(_MultiClasInspector):
 
 # Cell
 class _TreeMixin(_Inspector):
+    @delegates(plot_tree)
     def show_model(self, ax: Optional[Axes] = None, **kwargs):
-        """Show decision tree
-
-        Parameters:
-        - `ax`: Matplotlib `Axes` object. Plot will be added to this
-        object if provided; otherwise a new `Axes` object will be
-        generated.
-        - `kwargs`: kwargs to pass to `sklearn.tree.plot_tree`
-        """
+        """Show decision tree"""
         if ax is None:
             _, ax = plt.subplots(
                 figsize=(self.model.get_n_leaves() * 3, self.model.get_depth() * 2)
