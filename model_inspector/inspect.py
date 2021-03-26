@@ -762,7 +762,7 @@ class _TreeMixin(_Inspector):
             class_names=self.y.unique(),
             ax=ax,
             **kwargs,
-        )
+        )[0].axes
 
 # Cell
 class _TreeBinInspector(_BinClasInspector, _TreeMixin):
