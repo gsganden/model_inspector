@@ -1147,7 +1147,7 @@ class _Reg2dPlotter(_2dPlotter):
             return ax
 
         if ax is None:
-            fig = plt.figure()
+            fig = plt.figure(figsize=(8, 8))
             ax = fig.add_subplot(111, projection="3d")
         if surf_kwargs is None:
             surf_kwargs = {}
@@ -1295,7 +1295,7 @@ class _Bin2dPlotter(_Clas2dPlotter):
             )[:, 1].reshape(x0_grid.shape)
 
         if ax is None:
-            fig = plt.figure()
+            fig = plt.figure(figsize=(8, 8))
             ax = fig.add_subplot(111, projection="3d")
         if prob_surf_kwargs is None:
             prob_surf_kwargs = {}
@@ -1373,7 +1373,7 @@ class _Multi2dPlotter(_Clas2dPlotter):
         - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting data
         """
         if ax is None:
-            fig = plt.figure()
+            fig = plt.figure(figsize=(8, 8))
             ax = fig.add_subplot(111, projection="3d")
         if surf_kwargs is None:
             surf_kwargs = {}
