@@ -24,6 +24,6 @@ modules = ["inspect.py",
 
 doc_url = "https://gsganden.github.io/model_inspector/"
 
-git_url = "https://github.com/gsganden/model_inspector/tree/master/"
+git_url = "https://github.com/gsganden/model_inspector/tree/main/"
 
 def custom_doc_links(name): return None
