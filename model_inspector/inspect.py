@@ -11,6 +11,7 @@ from enum import auto, Enum
 from typing import Callable, Iterable, Optional, Sequence, Union
 import warnings
 
+from fastcore.basics import GetAttr
 from IPython.display import HTML
 from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
@@ -28,7 +29,7 @@ from sklearn.utils import check_X_y
 from sklearn.utils.validation import check_is_fitted
 import waterfall_chart
 
-from .delegate import GetAttr, delegates
+from .delegate import delegates
 from .explore import plot_correlation
 from .tune import (
     calculate_metrics_by_thresh_binary,

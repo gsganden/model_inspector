@@ -54,7 +54,7 @@ nb_path: "01_tune.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="calculate_metrics_by_thresh_binary" class="doc_header"><code>calculate_metrics_by_thresh_binary</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L36" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh_binary</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
+<h4 id="calculate_metrics_by_thresh_binary" class="doc_header"><code>calculate_metrics_by_thresh_binary</code><a href="https://github.com/gsganden/model_inspector/tree/main/model_inspector/tune.py#L36" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh_binary</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
 </blockquote>
 <p>Calculate binary classification metrics as a function of
 threshold</p>
@@ -298,7 +298,7 @@ Name: 3, dtype: float64</pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="calculate_metrics_by_thresh_multi" class="doc_header"><code>calculate_metrics_by_thresh_multi</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L67" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh_multi</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
+<h4 id="calculate_metrics_by_thresh_multi" class="doc_header"><code>calculate_metrics_by_thresh_multi</code><a href="https://github.com/gsganden/model_inspector/tree/main/model_inspector/tune.py#L67" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metrics_by_thresh_multi</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_prob</code></strong>:<code>array</code>, <strong><code>metrics</code></strong>:<code>Union</code>[<code>Callable</code>, <code>Sequence</code>[<code>Callable</code>]])</p>
 </blockquote>
 <p>Calculate multiclass metrics as a function of threshold</p>
 <p>Takes prediction to be the position of the column in <code>y_prob</code> with
@@ -351,7 +351,7 @@ the value of that metric at that threshold.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="coverage" class="doc_header"><code>coverage</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L100" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>coverage</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>)</p>
+<h4 id="coverage" class="doc_header"><code>coverage</code><a href="https://github.com/gsganden/model_inspector/tree/main/model_inspector/tune.py#L100" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>coverage</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>)</p>
 </blockquote>
 <p>How often the model makes a prediction, where <code>np.nan</code> indicates
 abstaining from predicting.</p>
@@ -390,7 +390,7 @@ indicate abstraining from predicting</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="calculate_metric_ignoring_nan" class="doc_header"><code>calculate_metric_ignoring_nan</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L112" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metric_ignoring_nan</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>, <strong><code>metric</code></strong>:<code>Callable</code>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>)</p>
+<h4 id="calculate_metric_ignoring_nan" class="doc_header"><code>calculate_metric_ignoring_nan</code><a href="https://github.com/gsganden/model_inspector/tree/main/model_inspector/tune.py#L112" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>calculate_metric_ignoring_nan</code>(<strong><code>y_true</code></strong>:<code>array</code>, <strong><code>y_pred</code></strong>:<code>array</code>, <strong><code>metric</code></strong>:<code>Callable</code>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Calculate <code>metric</code> ignoring <code>np.nan</code> predictions</p>
 <p>Parameters:</p>
@@ -431,7 +431,7 @@ arguments</li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fbeta" class="doc_header"><code>fbeta</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L134" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fbeta</code>(<strong><code>precision</code></strong>:<code>float</code>, <strong><code>recall</code></strong>:<code>float</code>, <strong><code>beta</code></strong>:<code>float</code>=<em><code>1</code></em>)</p>
+<h4 id="fbeta" class="doc_header"><code>fbeta</code><a href="https://github.com/gsganden/model_inspector/tree/main/model_inspector/tune.py#L134" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fbeta</code>(<strong><code>precision</code></strong>:<code>float</code>, <strong><code>recall</code></strong>:<code>float</code>, <strong><code>beta</code></strong>:<code>float</code>=<em><code>1</code></em>)</p>
 </blockquote>
 
 </div>
@@ -673,7 +673,7 @@ Name: 5, dtype: float64</pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="confusion_matrix" class="doc_header"><code>confusion_matrix</code><a href="https://github.com/gsganden/model_inspector/tree/master/model_inspector/tune.py#L142" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>confusion_matrix</code>(<strong><code>y_true</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>y_pred</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>shade_axis</code></strong>:<code>Union</code>[<code>str</code>, <code>int</code>, <code>NoneType</code>]=<em><code>None</code></em>, <strong><code>sample_weight</code></strong>:<code>Optional</code>[<code>array</code>]=<em><code>None</code></em>, <strong><code>normalize</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>)</p>
+<h4 id="confusion_matrix" class="doc_header"><code>confusion_matrix</code><a href="https://github.com/gsganden/model_inspector/tree/main/model_inspector/tune.py#L142" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>confusion_matrix</code>(<strong><code>y_true</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>y_pred</code></strong>:<code>Union</code>[<code>array</code>, <code>Series</code>], <strong><code>shade_axis</code></strong>:<code>Union</code>[<code>str</code>, <code>int</code>, <code>NoneType</code>]=<em><code>None</code></em>, <strong><code>sample_weight</code></strong>:<code>Optional</code>[<code>array</code>]=<em><code>None</code></em>, <strong><code>normalize</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Get confusion matrix</p>
 <p>Parameters:</p>

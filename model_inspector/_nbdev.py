@@ -14,7 +14,6 @@ index = {"COLORS": "00_inspect.ipynb",
          "fbeta": "01_tune.ipynb",
          "confusion_matrix": "01_tune.ipynb",
          "plot_correlation": "02_explore.ipynb",
-         "GetAttr": "03_delegate.ipynb",
          "delegates": "03_delegate.ipynb"}
 
 modules = ["inspect.py",
