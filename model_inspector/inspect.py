@@ -781,9 +781,9 @@ class _Search1Inspector(_Inspector):
         if "mean_train_score" in results:
             results.plot(x=f"param_{hparam}", y="mean_train_score", ax=ax)
         ax.axvline(
-            grid.best_params_[hparam],
+            self.model.best_params_[hparam],
             c="k",
-            label=f"{hparam} = {grid.best_params_[hparam]}",
+            label=f"{hparam} = {self.model.best_params_[hparam]}",
         )
         ax.legend()
         return ax
