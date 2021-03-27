@@ -20,6 +20,7 @@ import pandas as pd
 import seaborn as sns
 import sklearn
 from sklearn.base import ClassifierMixin, clone, RegressorMixin
+from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.inspection import permutation_importance
 from sklearn.linear_model._base import LinearModel, LinearClassifierMixin
 from sklearn.model_selection._search import BaseSearchCV
@@ -58,7 +59,8 @@ class _Inspector(GetAttr):
     def __init__(self, model, X, y):
         check_is_fitted(model)
         check_X_y(X, y)
-        model._check_n_features(X, reset=False)
+        if not isinstance(model, (DummyClassifier, DummyRegressor)):
+            model._check_n_features(X, reset=False)
 
         self.model, self.X, self.y = model, X, y
         self._plotter = self._get_plotter_class()(self.model, self.X, self.y)
