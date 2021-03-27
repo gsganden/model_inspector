@@ -4,8 +4,8 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"COLORS": "00_inspect.ipynb",
          "get_inspector": "00_inspect.ipynb",
-         "ModelType": "00_inspect.ipynb",
          "identify_type": "00_inspect.ipynb",
+         "ModelType": "00_inspect.ipynb",
          "generate_model_html": "00_inspect.ipynb",
          "calculate_metrics_by_thresh_binary": "01_tune.ipynb",
          "calculate_metrics_by_thresh_multi": "01_tune.ipynb",
