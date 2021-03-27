@@ -59,9 +59,9 @@ def get_inspector(model, X, y):
         return (
             _TreeRegInspector(model, X, y)
             if model_type == ModelType.REGRESSION
-            else _TreeBinInspector
+            else _TreeBinInspector(model, X, y)
             if model_type == ModelType.BINARY
-            else _TreeMultiInspector
+            else _TreeMultiInspector(model, X, y)
         )
     elif model_type == ModelType.BINARY:
         return _BinClasInspector(model, X, y)
@@ -712,14 +712,15 @@ class _TreeMixin(_Inspector):
     def show_model(self, ax: Optional[Axes] = None, **kwargs):
         """Show decision tree"""
         if ax is None:
+            # these dimensions seem to work well empirically
             _, ax = plt.subplots(
-                figsize=(self.model.get_n_leaves() * 3, self.model.get_depth() * 2)
+                figsize=(self.model.get_n_leaves() * 3, self.model.get_depth() * 2.2)
             )
-        kwargs = {"filled": True, **kwargs}
+        kwargs = {"filled": True, "fontsize": 12, **kwargs}
         return plot_tree(
             self.model,
             feature_names=self.X.columns,
-            class_names=self.y.unique(),
+            class_names=self.y.unique().astype(str),
             ax=ax,
             **kwargs,
         )[0].axes
