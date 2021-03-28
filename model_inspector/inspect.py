@@ -12,6 +12,7 @@ from typing import Callable, Iterable, Optional, Sequence, Union
 import warnings
 
 from fastcore.basics import GetAttr
+from fastcore.test import test_fig_exists
 from IPython.display import HTML
 from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
