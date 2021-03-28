@@ -67,7 +67,7 @@ class _Inspector(GetAttr):
         self._plotter = self._get_plotter_class()(self.model, self.X, self.y)
         self.default = self._plotter
 
-    __repr__ = basic_repr(['model'])
+    __repr__ = basic_repr(["model"])
 
     def _get_plotter_class(self):
         result = _Plotter
@@ -849,7 +849,7 @@ class _Plotter:
     def __init__(self, model, X, y):
         store_attr()
 
-    __repr__ = basic_repr(['model'])
+    __repr__ = basic_repr(["model"])
 
 # Cell
 class _1dPlotter(_Plotter):
