@@ -11,7 +11,7 @@ from enum import auto, Enum
 from typing import Callable, Iterable, Optional, Sequence, Union
 import warnings
 
-from fastcore.basics import GetAttr
+from fastcore.basics import basic_repr, GetAttr, store_attr
 from fastcore.test import test_fig_exists
 from IPython.display import HTML
 from matplotlib.axes import Axes
@@ -63,9 +63,11 @@ class _Inspector(GetAttr):
         if not isinstance(model, (DummyClassifier, DummyRegressor)):
             model._check_n_features(X, reset=False)
 
-        self.model, self.X, self.y = model, X, y
+        store_attr()
         self._plotter = self._get_plotter_class()(self.model, self.X, self.y)
         self.default = self._plotter
+
+    __repr__ = basic_repr(['model'])
 
     def _get_plotter_class(self):
         result = _Plotter
@@ -845,7 +847,9 @@ class _Search2Inspector(_Inspector):
 # Cell
 class _Plotter:
     def __init__(self, model, X, y):
-        self.model, self.X, self.y = model, X, y
+        store_attr()
+
+    __repr__ = basic_repr(['model'])
 
 # Cell
 class _1dPlotter(_Plotter):
