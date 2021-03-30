@@ -3,4 +3,4 @@ from .explore import *
 from .tune import *
 
 
-__version__ = "0.19.10"
+__version__ = "0.19.11"

@@ -77,17 +77,26 @@ class _Inspector(GetAttr):
             if num_features == 1:
                 result = _1dPlotter
             elif num_features == 2:
-                result = _Reg2dPlotter
+                if hasattr(self.model, "estimators_"):
+                    result = _Reg2dMultiPlotter
+                else:
+                    result = _Reg2dPlotter
         elif model_type is ModelType.BINARY:
             if num_features == 1:
                 result = _Bin1dPlotter
             elif num_features == 2:
-                result = _Bin2dPlotter
+                if hasattr(self.model, "estimators_"):
+                    result = _Bin2dMultiPlotter
+                else:
+                    result = _Bin2dPlotter
         else:
             if num_features == 1:
                 result = _1dPlotter
             elif num_features == 2:
-                result = _Multi2dPlotter
+                if hasattr(self.model, "estimators_"):
+                    result = _Multi2dMultiPlotter
+                else:
+                    result = _Multi2dPlotter
         return result
 
     @delegates(sklearn.inspection.permutation_importance)
@@ -1055,6 +1064,32 @@ class _2dPlotter(_Plotter):
         ).reshape(x0_grid.shape)
 
 # Cell
+class _2dMultiPlotterMixin:
+    def plot_components(self, axes=None, **kwargs):
+        """Plot components estimators
+
+        Parameters:
+        - `axes`: NumPy array of Matplotlib `Axes` objects
+        - `kwargs`: kwargs to pass to `self.plot`
+        """
+        if axes is None:
+            _, axes = plt.subplots(
+                3, 3, constrained_layout=True, figsize=(8, 6), sharex=True, sharey=True
+            )
+        if kwargs is None:
+            kwargs = {}
+        kwargs = {**{"plot_data": False}, **kwargs}
+
+        for row_num, row in enumerate(axes):
+            for col_num, col in enumerate(row):
+                estimator_num = col_num + len(row) * row_num
+                get_inspector(
+                    self.model.estimators_[estimator_num], self.X, self.y
+                ).plot(ax=axes[row_num, col_num], **kwargs)
+                axes[row_num, col_num].set(title=None)
+        return axes
+
+# Cell
 class _Reg2dPlotter(_2dPlotter):
     def plot(
         self,
@@ -1185,7 +1220,7 @@ class _Clas2dPlotter(_2dPlotter):
         self,
         plot_data: bool = True,
         tick_formatter: Optional[str] = ".2f",
-        ax: Axes = None,
+        ax: Optional[Axes] = None,
         heatmap_kwargs: Optional[dict] = None,
         scatter_kwargs: Optional[dict] = None,
     ):
@@ -1218,7 +1253,7 @@ class _Clas2dPlotter(_2dPlotter):
             preds = pd.DataFrame(preds, columns=x_grid, index=y_grid)
             for col in preds:
                 preds.loc[:, col] = preds.loc[:, col].map(label_to_num)
-            ax = sns.heatmap(preds.astype(int), **heatmap_kwargs)
+            sns.heatmap(preds.astype(int), **heatmap_kwargs, ax=ax)
             return ax
 
         def _set_colorbar(y_vals, ax):
@@ -1250,8 +1285,8 @@ class _Clas2dPlotter(_2dPlotter):
             **{"cmap": sns.color_palette(None, len(y_vals))},
             **heatmap_kwargs,
         }
-        ax = _plot_preds(y_vals, label_to_num, ax=ax, **heatmap_kwargs)
-        ax = _wash_out(ax)
+        _plot_preds(y_vals, label_to_num, ax=ax, **heatmap_kwargs)
+        _wash_out(ax)
         colorbar = _set_colorbar(y_vals=y_vals, ax=ax)
 
         if plot_data:
@@ -1261,7 +1296,7 @@ class _Clas2dPlotter(_2dPlotter):
                 **{"cmap": colorbar.cmap, "edgecolor": "k", "zorder": 999},
                 **scatter_kwargs,
             }
-            ax = self._plot_data(y=self.y.map(label_to_num), ax=ax, **scatter_kwargs)
+            self._plot_data(y=self.y.map(label_to_num), ax=ax, **scatter_kwargs)
         _format_ticks(ax=ax, formatter=tick_formatter)
         return ax
 
