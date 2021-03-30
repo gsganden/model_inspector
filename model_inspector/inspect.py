@@ -1064,32 +1064,6 @@ class _2dPlotter(_Plotter):
         ).reshape(x0_grid.shape)
 
 # Cell
-class _2dMultiPlotterMixin:
-    def plot_components(self, axes=None, **kwargs):
-        """Plot components estimators
-
-        Parameters:
-        - `axes`: NumPy array of Matplotlib `Axes` objects
-        - `kwargs`: kwargs to pass to `self.plot`
-        """
-        if axes is None:
-            _, axes = plt.subplots(
-                3, 3, constrained_layout=True, figsize=(8, 6), sharex=True, sharey=True
-            )
-        if kwargs is None:
-            kwargs = {}
-        kwargs = {**{"plot_data": False}, **kwargs}
-
-        for row_num, row in enumerate(axes):
-            for col_num, col in enumerate(row):
-                estimator_num = col_num + len(row) * row_num
-                get_inspector(
-                    self.model.estimators_[estimator_num], self.X, self.y
-                ).plot(ax=axes[row_num, col_num], **kwargs)
-                axes[row_num, col_num].set(title=None)
-        return axes
-
-# Cell
 class _Reg2dPlotter(_2dPlotter):
     def plot(
         self,
@@ -1215,7 +1189,228 @@ class _Reg2dPlotter(_2dPlotter):
         return ax
 
 # Cell
-class _Clas2dPlotter(_2dPlotter):
+class _2dMultiPlotterMixin:
+    def plot_components(self, axes=None, **kwargs):
+        """Plot components estimators
+
+        Parameters:
+        - `axes`: NumPy array of Matplotlib `Axes` objects
+        - `kwargs`: kwargs to pass to `self.plot`
+        """
+        if axes is None:
+            _, axes = plt.subplots(
+                3, 3, constrained_layout=True, figsize=(8, 6), sharex=True, sharey=True
+            )
+        if kwargs is None:
+            kwargs = {}
+        kwargs = {**{"plot_data": False}, **kwargs}
+
+        for row_num, row in enumerate(axes):
+            for col_num, col in enumerate(row):
+                estimator_num = col_num + len(row) * row_num
+                get_inspector(
+                    self.model.estimators_[estimator_num], self.X, self.y
+                ).plot(ax=axes[row_num, col_num], **kwargs)
+                axes[row_num, col_num].set(title=None)
+        return axes
+
+    def plot_components3d(self, axes=None, **kwargs):
+        """Plot components estimators in 3D
+
+        Parameters:
+        - `axes`: NumPy array of Matplotlib `Axes` objects
+        - `kwargs`: kwargs to pass to `self.plot3d`
+        """
+        if axes is None:
+            fig = plt.figure(constrained_layout=True, figsize=(8, 6))
+            ax1 = fig.add_subplot(331, projection="3d")
+            for ax_ix in range(2, 10):
+                fig.add_subplot(
+                    330 + ax_ix, projection="3d", sharez=ax1, sharex=ax1, sharey=ax1
+                )
+            axes = np.array(fig.axes).reshape(3, 3)
+        if kwargs is None:
+            kwargs = {}
+        kwargs = {**{"plot_data": False}, **kwargs}
+
+        for row_num, row in enumerate(axes):
+            for col_num, col in enumerate(row):
+                estimator_num = col_num + len(row) * row_num
+                get_inspector(
+                    self.model.estimators_[estimator_num], self.X, self.y
+                ).plot3d(ax=axes[row_num, col_num], **kwargs)
+                axes[row_num, col_num].set(title=None)
+        return axes
+
+# Cell
+class _Bin2dPlotter(_2dPlotter):
+    def plot(
+        self,
+        plot_data: bool = True,
+        tick_formatter: Optional[str] = ".2f",
+        ax: Optional[Axes] = None,
+        heatmap_kwargs: Optional[dict] = None,
+        scatter_kwargs: Optional[dict] = None,
+    ):
+        """Plot data and predictions
+
+        Parameters:
+        - `plot_data`: Make a scatter plot of the data
+        - `tick_formatter`: Tick label format specifier
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
+        - `heatmap_kwargs`: kwargs to pass to `sns.heatmap` for plotting
+        predictions
+        - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting data
+        """
+
+        def _plot_preds(y_vals, label_to_num, ax, **scatter_kwargs):
+            num_points = 100
+            x_grid = np.linspace(
+                self.X.iloc[:, 0].min(), self.X.iloc[:, 0].max(), num_points
+            )
+            y_grid = np.linspace(
+                self.X.iloc[:, 1].max(), self.X.iloc[:, 1].min(), num_points
+            )
+
+            preds = self.model.predict_proba(
+                np.transpose(
+                    [np.tile(x_grid, len(y_grid)), np.repeat(y_grid, len(x_grid))]
+                )
+            )[:, 1].reshape(len(y_grid), len(x_grid))
+            preds = pd.DataFrame(preds, columns=x_grid, index=y_grid)
+            sns.heatmap(preds, **heatmap_kwargs, ax=ax)
+            return ax
+
+        def _wash_out(ax):
+            rectangle = plt.Rectangle((0, 0), 100, 100, fc="w", alpha=0.5)
+            ax.add_patch(rectangle)
+            return ax
+
+        if ax is None:
+            _, ax = plt.subplots()
+
+        y_vals = self.y.unique()
+        label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
+
+        if heatmap_kwargs is None:
+            heatmap_kwargs = {}
+        heatmap_kwargs = {
+            **{"cmap": sns.diverging_palette(10, 220, n=99), "vmin": 0, "vmax": 1},
+            **heatmap_kwargs,
+        }
+        _plot_preds(y_vals, label_to_num, ax=ax, **heatmap_kwargs)
+
+        if plot_data:
+            if scatter_kwargs is None:
+                scatter_kwargs = {}
+            scatter_kwargs = {
+                **{
+                    "cmap": ax.collections[0].colorbar.cmap,
+                    "edgecolor": "k",
+                    "zorder": 999,
+                },
+                **scatter_kwargs,
+            }
+            self._plot_data(y=self.y.map(label_to_num), ax=ax, **scatter_kwargs)
+        _format_ticks(ax=ax, formatter=tick_formatter)
+        return ax
+
+    def plot3d(
+        self,
+        thresh=0.5,
+        plot_prob: bool = True,
+        plot_thresh: bool = True,
+        plot_data: bool = True,
+        ax: Axes = None,
+        prob_surf_kwargs: Optional[dict] = None,
+        thresh_surf_kwargs: Optional[dict] = None,
+        scatter_kwargs: Optional[dict] = None,
+    ):
+        """Plot data and predictions in 3D
+
+        Best viewed with a tool such as https://github.com/matplotlib/ipympl
+        that supports rotating the output
+
+        Parameters:
+        - `thresh`: Probability threshold for counting a prediction as
+        positive
+        - `plot_prob`: Whether to plot the model probabilities
+        - `plot_thresh`: Whether to plot a classification threshold
+        - `plot_data`: Whether to plot the data
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
+        - `prob_surf_kwargs`: kwargs to pass to the model probability
+        surface
+        - `thresh_surf_kwargs`: kwargs to pass to the threshold surface
+        - `scatter_kwargs`: kwargs to pass to the scatter plot of the data
+        """
+
+        def _get_grid_probs():
+            return self.model.predict_proba(
+                np.hstack((x0_grid.reshape(-1, 1), x1_grid.reshape(-1, 1)))
+            )[:, 1].reshape(x0_grid.shape)
+
+        if ax is None:
+            fig = plt.figure(figsize=(8, 8))
+            ax = fig.add_subplot(111, projection="3d")
+        if prob_surf_kwargs is None:
+            prob_surf_kwargs = {}
+        prob_surf_kwargs = {**{"alpha": 0.4, "cmap": "bwr_r"}, **prob_surf_kwargs}
+        if thresh_surf_kwargs is None:
+            thresh_surf_kwargs = {}
+        thresh_surf_kwargs = {**{"alpha": 0.4, "color": "k"}, **thresh_surf_kwargs}
+        if scatter_kwargs is None:
+            scatter_kwargs = {}
+
+        x0_grid, x1_grid = self._create_grid()
+
+        if plot_prob:
+            ax.plot_surface(
+                x0_grid,
+                x1_grid,
+                _get_grid_probs(),
+                rstride=1,
+                cstride=1,
+                **prob_surf_kwargs,
+            )
+        if plot_data:
+            y_pred = self.model.predict_proba(self.X)[:, 1] > thresh
+            ax.scatter(
+                self.X.loc[self.y == 1].iloc[:, 0],
+                self.X.loc[self.y == 1].iloc[:, 1],
+                y_pred[self.y == 1],
+                c="b",
+                label="positive",
+                **scatter_kwargs,
+            )
+            ax.scatter(
+                self.X.loc[self.y == 0].iloc[:, 0],
+                self.X.loc[self.y == 0].iloc[:, 1],
+                y_pred[self.y == 0],
+                c="r",
+                label="negative",
+                **scatter_kwargs,
+            )
+            ax.legend()
+        if plot_thresh:
+            ax.plot_surface(
+                x0_grid,
+                x1_grid,
+                thresh * np.ones((len(x0_grid), len(x1_grid))),
+                rstride=1,
+                cstride=1,
+                **thresh_surf_kwargs,
+            )
+        ax.set(
+            xlabel=self.X.columns[0],
+            ylabel=self.X.columns[1],
+            zlabel=f"{self.y.name} prediction",
+        )
+        return ax
+
+# Cell
+class _Multi2dPlotter(_2dPlotter):
     def plot(
         self,
         plot_data: bool = True,
@@ -1300,101 +1495,6 @@ class _Clas2dPlotter(_2dPlotter):
         _format_ticks(ax=ax, formatter=tick_formatter)
         return ax
 
-# Cell
-class _Bin2dPlotter(_Clas2dPlotter):
-    def plot3d(
-        self,
-        thresh=0.5,
-        plot_prob: bool = True,
-        plot_thresh: bool = True,
-        plot_data: bool = True,
-        ax: Axes = None,
-        prob_surf_kwargs: Optional[dict] = None,
-        thresh_surf_kwargs: Optional[dict] = None,
-        scatter_kwargs: Optional[dict] = None,
-    ):
-        """Plot data and predictions in 3D
-
-        Best viewed with a tool such as https://github.com/matplotlib/ipympl
-        that supports rotating the output
-
-        Parameters:
-        - `thresh`: Probability threshold for counting a prediction as
-        positive
-        - `plot_prob`: Whether to plot the model probabilities
-        - `plot_thresh`: Whether to plot a classification threshold
-        - `plot_data`: Whether to plot the data
-        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
-        if provided; otherwise a new `Axes` object will be generated.
-        - `prob_surf_kwargs`: kwargs to pass to the model probability
-        surface
-        - `thresh_surf_kwargs`: kwargs to pass to the threshold surface
-        - `scatter_kwargs`: kwargs to pass to the scatter plot of the data
-        """
-
-        def _get_grid_probs():
-            return self.model.predict_proba(
-                np.hstack((x0_grid.reshape(-1, 1), x1_grid.reshape(-1, 1)))
-            )[:, 1].reshape(x0_grid.shape)
-
-        if ax is None:
-            fig = plt.figure(figsize=(8, 8))
-            ax = fig.add_subplot(111, projection="3d")
-        if prob_surf_kwargs is None:
-            prob_surf_kwargs = {}
-        prob_surf_kwargs = {**{"alpha": 0.4, "cmap": "viridis"}, **prob_surf_kwargs}
-        if thresh_surf_kwargs is None:
-            thresh_surf_kwargs = {}
-        thresh_surf_kwargs = {**{"alpha": 0.4, "color": "k"}, **thresh_surf_kwargs}
-        if scatter_kwargs is None:
-            scatter_kwargs = {}
-
-        x0_grid, x1_grid = self._create_grid()
-
-        if plot_prob:
-            ax.plot_surface(
-                x0_grid,
-                x1_grid,
-                _get_grid_probs(),
-                rstride=1,
-                cstride=1,
-                **prob_surf_kwargs,
-            )
-        if plot_data:
-            y_pred = self.model.predict_proba(self.X)[:, 1] > thresh
-            ax.scatter(
-                self.X.loc[y_pred == self.y].iloc[:, 0],
-                self.X.loc[y_pred == self.y].iloc[:, 1],
-                self.y.loc[y_pred == self.y],
-                **scatter_kwargs,
-                label="correct",
-            )
-            ax.scatter(
-                self.X.loc[y_pred != self.y].iloc[:, 0],
-                self.X.loc[y_pred != self.y].iloc[:, 1],
-                self.y.loc[y_pred != self.y],
-                **scatter_kwargs,
-                label="incorrect",
-            )
-            ax.legend()
-        if plot_thresh:
-            ax.plot_surface(
-                x0_grid,
-                x1_grid,
-                thresh * np.ones((len(x0_grid), len(x1_grid))),
-                rstride=1,
-                cstride=1,
-                **thresh_surf_kwargs,
-            )
-        ax.set(
-            xlabel=self.X.columns[0],
-            ylabel=self.X.columns[1],
-            zlabel=f"{self.y.name} prediction",
-        )
-        return ax
-
-# Cell
-class _Multi2dPlotter(_Clas2dPlotter):
     def plot3d(
         self,
         plot_data: bool = True,
