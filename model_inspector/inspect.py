@@ -747,10 +747,15 @@ class _TreeMixin(_Inspector):
         """Show decision tree"""
         if ax is None:
             # these dimensions seem to work well empirically
+            max_size = 50
+            depth = kwargs["max_depth"] + 1 if "max_depth" else self.model.get_depth()
+            fig_height = min(depth * 2.2, max_size)
+            width = 2 * kwargs["max_depth"] if "max_depth" in kwargs else self.model.get_n_leaves()
+            fig_width = min(width * 3.5, max_size)
             _, ax = plt.subplots(
-                figsize=(self.model.get_n_leaves() * 3, self.model.get_depth() * 2.2)
+                figsize=(fig_width, fig_height)
             )
-        kwargs = {"filled": True, "fontsize": 12, **kwargs}
+        kwargs = {"filled": True, "fontsize": 10, **kwargs}
         return plot_tree(
             self.model,
             feature_names=self.X.columns,
