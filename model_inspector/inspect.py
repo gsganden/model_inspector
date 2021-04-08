@@ -8,7 +8,7 @@ COLORS = {"blue": "#377eb8", "orange": "#ff7f00", "green": "#4daf4a", "pink": "#
 
 # Cell
 from enum import auto, Enum
-from typing import Callable, Iterable, Optional, Sequence, Union
+from typing import Callable, Iterable, List, Optional, Sequence, Union
 import warnings
 
 from fastcore.basics import basic_repr, GetAttr, store_attr
@@ -180,18 +180,7 @@ def get_inspector(model, X, y) -> _Inspector:
             else _TreeMultiInspector(model, X, y)
         )
     elif isinstance(model, BaseSearchCV):
-        results = pd.DataFrame(model.cv_results_)
-        hparams = results.params[0].keys()
-        if len(hparams) == 1:
-            return _Search1Inspector(model, X, y)
-        elif len(hparams) == 2:
-            return _Search2Inspector(model, X, y)
-        else:
-            raise NotImplementedError(
-                """
-                Only up to two hyperparameters are supported.
-                """
-            )
+        return _SearchInspector(model, X, y)
     elif model_type == ModelType.BINARY:
         return _BinClasInspector(model, X, y)
     elif model_type == ModelType.MULTICLASS:
@@ -748,14 +737,14 @@ class _TreeMixin(_Inspector):
         if ax is None:
             # these dimensions seem to work well empirically
             max_size = 50
-            depth = kwargs["max_depth"] + 1 if "max_depth" else self.model.get_depth()
+            depth = kwargs["max_depth"] + 1 if "max_depth" in kwargs else self.model.get_depth()
             fig_height = min(depth * 2.2, max_size)
             width = 2 * kwargs["max_depth"] if "max_depth" in kwargs else self.model.get_n_leaves()
             fig_width = min(width * 3.5, max_size)
             _, ax = plt.subplots(
                 figsize=(fig_width, fig_height)
             )
-        kwargs = {"filled": True, "fontsize": 10, **kwargs}
+        kwargs = {"filled": True, "fontsize": 12, **kwargs}
         return plot_tree(
             self.model,
             feature_names=self.X.columns,
@@ -783,80 +772,114 @@ class _TreeRegInspector(_RegInspector, _TreeMixin):
     pass
 
 # Cell
-class _Search1Inspector(_Inspector):
+class _SearchInspector(_Inspector):
     """Inspector for `BaseSearchCV` models with one hyperparameter"""
 
-    def plot_scores_vs_hparams(self, ax=None):
-        """Plot model scores against hyperparameter
+    def plot_scores_vs_hparam(
+        self,
+        hparam: Optional[str] = None,
+        score_cols: Optional[Union[str, List[str]]] = None,
+        ax=None,
+    ):
+        """Plot model scores against values of one hyperparameter
 
         Parameters:
+        - `hparam`: Name of the hyperparameter to plot against. The
+        values of that hyperparameter must be numeric. Must be provided
+        if there are multiple hyperparameters. Any other hyperparameters
+        will be fixed at the value they have in
+        `self.model.best_params_`.
+        - `score_cols`: Name of score columns to plot. By default will
+        be the mean test and (if present) train score for the primary
+        scoring metric.
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
         """
+
+        def _get_hparam():
+            hparams = list(self.model.param_grid.keys())
+            if len(hparams) == 1:
+                return hparams[0]
+            else:
+                raise ValueError(
+                    "Must provide `hparam` if there are multiple possibilities"
+                )
+
+        def _filter_to_best_values_of_other_hparams(results, hparam):
+            return results.query(_get_query_string(hparam))
+
+        def _get_query_string(hparam):
+            return " & ".join(
+                f"param_{param} == {repr(val)}"
+                for param, val in self.model.best_params_.items()
+                if param != hparam
+            )
+
+        def _get_default_score_cols(results):
+            score_cols = []
+            if self.model.refit is True:
+                score_cols.append("mean_test_score")
+            else:
+                score_cols.append(f"mean_test_{self.model.refit}")
+            train_cols = [
+                col.replace("test", "train")
+                for col in score_cols
+                if col.replace("test", "train") in results
+            ]
+            return score_cols + train_cols
+
+        if hparam is None:
+            hparam = _get_hparam()
+
+        results = pd.DataFrame(self.model.cv_results_)
+        if len(self.model.param_grid) > 1:
+            results = _filter_to_best_values_of_other_hparams(results, hparam)
+
+        if score_cols is None:
+            score_cols = _get_default_score_cols(results)
+
         if ax is None:
             _, ax = plt.subplots()
-        results = pd.DataFrame(self.model.cv_results_)
-        hparam = list(results.params[0].keys())[0]
-        results.plot(x=f"param_{hparam}", y="mean_test_score", ax=ax)
-        if "mean_train_score" in results:
-            results.plot(x=f"param_{hparam}", y="mean_train_score", ax=ax)
+
+        for col in score_cols:
+            results.plot(x=f"param_{hparam}", y=col, ax=ax)
         ax.axvline(
             self.model.best_params_[hparam],
             c="k",
             label=f"{hparam} = {self.model.best_params_[hparam]}",
         )
+        ax.set_title(_get_query_string(hparam).replace("==", "="))
         ax.legend()
         return ax
 
-# Cell
-class _Search2Inspector(_Inspector):
-    """Inspector for `BaseSearchCV` models with two hyperparameters"""
-
-    @delegates(sns.heatmap)
-    def plot_scores_vs_hparams(self, axes=None, **kwargs):
-        """Plot model scores against hyperparameters
+    @delegates(pd.DataFrame().style.background_gradient)
+    def show_score_vs_hparam_pair(self, score_col=None, **kwargs):
+        """Show model scores against a pair of hyperparameters
 
         Parameters:
-        - `axes`: NumPy array of Matplotlib `Axes` objects. Test scores
-        are plotted in `axes[0]`. If `self.model.cv_results_` has a
-        "mean_train_score" column, those scores are plotted in
-        `axes[1]`.
+        - `hparams`: Name of the hyperparameters to plot against.
+        The first two hyperparameters in `self.model.param_grid` will be
+        used by default. Any other hyperparameters will be fixed at the
+        value they have in `self.model.best_params_`.
+        - `score_col`: Name of score column to plot. By default will
+        be the mean test score for the primary scoring metric.
         """
-
-        def _plot_results(col, hparams, ax):
-            score_matrix_test = results.pivot_table(
-                index=f"param_{hparams[0]}", columns=f"param_{hparams[1]}"
-            ).loc[:, col]
-            sns.heatmap(data=score_matrix_test, ax=ax, **kwargs)
-            ax.set_title(col)
-
+        score_col = (
+            score_col
+            if score_col is not None
+            else "mean_test_score"
+            if self.model.refit is True
+            else f"mean_test_{self.model.refit}"
+        )
         results = pd.DataFrame(self.model.cv_results_)
-        if axes is None:
-            if "mean_train_score" in results:
-                _, axes = plt.subplots(1, 2, constrained_layout=True)
-            else:
-                _, ax = plt.subplots()
-                axes = np.array([ax])
-
         hparams = list(results.params[0].keys())
-
-        score_cols = ["mean_test_score"]
-        if "mean_train_score" in results:
-            score_cols += ["mean_train_score"]
-        kwargs = {
-            **{
-                "annot": True,
-                "vmin": results.loc[:, score_cols].to_numpy().min(),
-                "vmax": results.loc[:, score_cols].to_numpy().max(),
-            },
-            **kwargs,
-        }
-
-        _plot_results(col="mean_test_score", hparams=hparams, ax=axes[0])
-        if "mean_train_score" in results:
-            _plot_results(col="mean_train_score", hparams=hparams, ax=axes[1])
-
-        return axes
+        return (
+            results.pivot_table(
+                index=f"param_{hparams[0]}", columns=f"param_{hparams[1]}"
+            )
+            .loc[:, score_col]
+            .style.background_gradient(**kwargs)
+        )
 
 # Cell
 class _Plotter:
@@ -1248,6 +1271,10 @@ class _2dMultiPlotterMixin:
         return axes
 
 # Cell
+class _Reg2dMultiPlotter(_Reg2dPlotter, _2dMultiPlotterMixin):
+    pass
+
+# Cell
 class _Bin2dPlotter(_2dPlotter):
     def plot(
         self,
@@ -1413,6 +1440,10 @@ class _Bin2dPlotter(_2dPlotter):
             zlabel=f"{self.y.name} prediction",
         )
         return ax
+
+# Cell
+class _Bin2dMultiPlotter(_Bin2dPlotter, _2dMultiPlotterMixin):
+    pass
 
 # Cell
 class _Multi2dPlotter(_2dPlotter):
