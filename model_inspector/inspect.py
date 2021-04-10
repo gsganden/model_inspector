@@ -784,10 +784,9 @@ class _SearchInspector(_Inspector):
         """Plot model scores against values of one hyperparameter
 
         Parameters:
-        - `hparam`: Name of the hyperparameter to plot against. The
-        values of that hyperparameter must be numeric. Must be provided
-        if there are multiple hyperparameters. Any other hyperparameters
-        will be fixed at the value they have in
+        - `hparam`: Name of the hyperparameter to plot against. Must be
+        provided if there are multiple hyperparameters. Any other
+        hyperparameters will be fixed at the value they have in
         `self.model.best_params_`.
         - `score_cols`: Name of score columns to plot. By default will
         be the mean test and (if present) train score for the primary
@@ -828,6 +827,19 @@ class _SearchInspector(_Inspector):
             ]
             return score_cols + train_cols
 
+        def _plot_scores(results, hparam, score_cols, ax):
+            if isinstance(self.model.best_params_[hparam], str):
+                results.plot.bar(x=f"param_{hparam}", y=score_cols, ax=ax)
+
+            else:
+                for col in score_cols:
+                    results.plot(x=f"param_{hparam}", y=col, ax=ax)
+                ax.axvline(
+                    self.model.best_params_[hparam],
+                    c="k",
+                    label=f"{hparam} = {self.model.best_params_[hparam]}",
+                )
+
         if hparam is None:
             hparam = _get_hparam()
 
@@ -841,13 +853,7 @@ class _SearchInspector(_Inspector):
         if ax is None:
             _, ax = plt.subplots()
 
-        for col in score_cols:
-            results.plot(x=f"param_{hparam}", y=col, ax=ax)
-        ax.axvline(
-            self.model.best_params_[hparam],
-            c="k",
-            label=f"{hparam} = {self.model.best_params_[hparam]}",
-        )
+        _plot_scores(results, hparam, score_cols, ax)
         ax.set_title(_get_query_string(hparam).replace("==", "="))
         ax.legend()
         return ax
