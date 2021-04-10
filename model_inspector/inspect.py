@@ -859,7 +859,7 @@ class _SearchInspector(_Inspector):
         return ax
 
     @delegates(pd.DataFrame().style.background_gradient)
-    def show_score_vs_hparam_pair(self, score_col=None, **kwargs):
+    def show_score_vs_hparam_pair(self, hparams=None, score_col=None, **kwargs):
         """Show model scores against a pair of hyperparameters
 
         Parameters:
@@ -877,8 +877,18 @@ class _SearchInspector(_Inspector):
             if self.model.refit is True
             else f"mean_test_{self.model.refit}"
         )
+
+        all_hparams = list(self.model.best_params_.keys())
+        assert len(all_hparams) > 1, "Method requires at least two hyperparameters"
+        if hparams is None:
+            if len(all_hparams) == 2:
+                hparams = all_hparams
+            else:
+                raise ValueError(
+                    "`hparams` must be specified unless there are exactly two hyperparameters"
+                )
+
         results = pd.DataFrame(self.model.cv_results_)
-        hparams = list(results.params[0].keys())
         return (
             results.pivot_table(
                 index=f"param_{hparams[0]}", columns=f"param_{hparams[1]}"
