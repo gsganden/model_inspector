@@ -32,7 +32,7 @@ from sklearn.utils.validation import check_is_fitted
 import waterfall_chart
 
 from .delegate import delegates
-from .explore import plot_correlation
+from .explore import show_correlation
 from .tune import (
     calculate_metrics_by_thresh_binary,
     calculate_metrics_by_thresh_multi,
@@ -143,11 +143,11 @@ class _Inspector(GetAttr):
         ax.set(title="Feature importances")
         return ax
 
-    @delegates(plot_correlation)
-    def plot_correlation(self, **kwargs) -> Axes:
-        """Plot a correlation matrix for `self.X` and `self.y`"""
-        return plot_correlation(
-            pd.concat((self.X, self.y), axis="columns"),
+    @delegates(show_correlation)
+    def show_correlation(self, **kwargs) -> Axes:
+        """Show a correlation matrix for `self.X` and `self.y`"""
+        return show_correlation(
+            df=pd.concat((self.X, self.y), axis="columns"),
             **kwargs,
         )
 
@@ -238,7 +238,6 @@ class _BinClasInspector(_Inspector):
     def confusion_matrix(
         self,
         thresh: float = 0.5,
-        shade_axis: Optional[Union[str, int]] = None,
         **kwargs,
     ) -> pd.DataFrame:
         """Get confusion matrix
@@ -251,13 +250,10 @@ class _BinClasInspector(_Inspector):
         Parameters:
         - `thresh`: Probability threshold for counting a prediction as
         positive
-        - `shade_axis`: `axis` argument to pass to
-        `pd.DataFrame.style.background_gradient`
         """
         return confusion_matrix(
             y_true=self.y,
             y_pred=self.model.predict_proba(self.X)[:, 1] > thresh,
-            shade_axis=shade_axis,
             **kwargs,
         )
 
@@ -290,25 +286,20 @@ class _MultiClasInspector(_Inspector):
             metrics=metrics,
         )
 
+    @delegates(pd.DataFrame().style.background_gradient)
     def confusion_matrix(
         self,
-        shade_axis: Optional[Union[str, int]] = None,
         **kwargs,
     ) -> pd.DataFrame:
         """Get confusion matrix
 
         Uses `self.y` as ground-truth values,
         `self.model.predict(self.X)` as predictions.
-
-        Parameters:
-        - `shade_axis`: `axis` argument to pass to
-        `pd.DataFrame.style.background_gradient`
         """
 
         return confusion_matrix(
             y_true=self.y,
             y_pred=self.model.predict(self.X),
-            shade_axis=shade_axis,
             **kwargs,
         )
 

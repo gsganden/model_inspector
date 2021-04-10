@@ -13,7 +13,7 @@ index = {"COLORS": "00_inspect.ipynb",
          "calculate_metric_ignoring_nan": "01_tune.ipynb",
          "fbeta": "01_tune.ipynb",
          "confusion_matrix": "01_tune.ipynb",
-         "plot_correlation": "02_explore.ipynb",
+         "show_correlation": "02_explore.ipynb",
          "delegates": "03_delegate.ipynb"}
 
 modules = ["inspect.py",
