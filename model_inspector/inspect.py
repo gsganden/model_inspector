@@ -882,7 +882,10 @@ class _SearchInspector(_Inspector):
                 hparams = all_hparams
             else:
                 raise ValueError(
-                    "`hparams` must be specified unless there are exactly two hyperparameters"
+                    """
+                        `hparams` must be specified unless there are
+                        exactly two hyperparameters
+                    """
                 )
 
         results = pd.DataFrame(self.model.cv_results_)

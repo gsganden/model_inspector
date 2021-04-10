@@ -3,9 +3,7 @@
 __all__ = ['show_correlation']
 
 # Cell
-import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 
 from .delegate import delegates
 
@@ -18,6 +16,4 @@ def show_correlation(df: pd.DataFrame, **kwargs):
     - `df`: DataFrame
     """
     kwargs = {**{"cmap": "bwr", "vmin": -1, "vmax": 1}, **kwargs}
-    return (
-        df.corr().style.background_gradient(**kwargs).format("{0:,.2f}")
-    )
+    return df.corr().style.background_gradient(**kwargs).format("{0:,.2f}")
