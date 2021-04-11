@@ -466,6 +466,7 @@ class _LinRegInspector(_RegInspector):
 
         fig, ax = plt.subplots()
         ax.plot(vals, coefs)
+        ax.plot([vals.min(), vals.max()], [0, 0], linestyle="dotted", c="k")
         ax.axvline(current_val, c="k", label="current value")
         ax.set(xlabel=hparam, ylabel="coefficient value")
         ax.legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
@@ -558,27 +559,13 @@ class _LinBinInspector(_BinClasInspector):
             setattr(model, hparam, val)
             coef_arrays.append(model.fit(self.X, self.y).coef_)
 
-        num_target_vals = len(set(self.y))
-        if num_target_vals == 2:
-            fig, ax = plt.subplots()
-            ax.plot(vals, [coefs[0] for coefs in coef_arrays])
-            axes = np.array(ax)[None]
-        else:
-            fig, axes = plt.subplots(
-                num_target_vals, 1, sharex=True, sharey=True, constrained_layout=True
-            )
-            for target_val_num in range(num_target_vals):
-                axes[target_val_num].plot(
-                    vals, [coefs[target_val_num] for coefs in coef_arrays]
-                )
-                axes[target_val_num].set_title(
-                    f"y={sorted(set(self.y))[target_val_num]}"
-                )
-        axes[0].set(xlabel=hparam, ylabel="Coefficient Value")
-        for ax in axes:
-            ax.axvline(current_val, c="k", label="current value")
-        axes[0].legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
-        return axes
+        fig, ax = plt.subplots()
+        ax.plot(vals, [coefs[0] for coefs in coef_arrays])
+        ax.plot([vals.min(), vals.max()], [0, 0], linestyle="dotted", c="k")
+        ax.set(xlabel=hparam, ylabel="Coefficient Value")
+        ax.axvline(current_val, c="k", label="current value")
+        ax.legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
+        return ax
 
     def show_model(
         self,
@@ -667,24 +654,19 @@ class _LinMultiInspector(_MultiClasInspector):
             coef_arrays.append(model.fit(self.X, self.y).coef_)
 
         num_target_vals = len(set(self.y))
-        if num_target_vals == 2:
-            fig, ax = plt.subplots()
-            ax.plot(vals, [coefs[0] for coefs in coef_arrays])
-            axes = np.array(ax)[None]
-        else:
-            fig, axes = plt.subplots(
-                num_target_vals, 1, sharex=True, sharey=True, constrained_layout=True
+
+        fig, axes = plt.subplots(
+            num_target_vals, 1, sharex=True, sharey=True, constrained_layout=True
+        )
+        for target_val_num in range(num_target_vals):
+            axes[target_val_num].plot(
+                vals, [coefs[target_val_num] for coefs in coef_arrays]
             )
-            for target_val_num in range(num_target_vals):
-                axes[target_val_num].plot(
-                    vals, [coefs[target_val_num] for coefs in coef_arrays]
-                )
-                axes[target_val_num].set_title(
-                    f"y={sorted(set(self.y))[target_val_num]}"
-                )
+            axes[target_val_num].set_title(f"y={sorted(set(self.y))[target_val_num]}")
         axes[0].set(xlabel=hparam, ylabel="Coefficient Value")
         for ax in axes:
             ax.axvline(current_val, c="k", label="current value")
+            ax.plot([vals.min(), vals.max()], [0, 0], linestyle="dotted", c="k")
         axes[0].legend(X.columns, bbox_to_anchor=(1.05, 1.0), loc="upper left")
         return axes
 
