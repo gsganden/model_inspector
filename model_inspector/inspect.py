@@ -1234,10 +1234,11 @@ class _2dMultiPlotterMixin:
         for row_num, row in enumerate(axes):
             for col_num, col in enumerate(row):
                 estimator_num = col_num + len(row) * row_num
-                get_inspector(
-                    self.model.estimators_[estimator_num], self.X, self.y
-                ).plot(ax=axes[row_num, col_num], **kwargs)
-                axes[row_num, col_num].set(title=None)
+                if estimator_num < len(self.model.estimators_):
+                    get_inspector(
+                        self.model.estimators_[estimator_num], self.X, self.y
+                    ).plot(ax=axes[row_num, col_num], **kwargs)
+                    axes[row_num, col_num].set(title=None)
         return axes
 
     def plot_components3d(self, axes=None, **kwargs):
@@ -1262,10 +1263,11 @@ class _2dMultiPlotterMixin:
         for row_num, row in enumerate(axes):
             for col_num, col in enumerate(row):
                 estimator_num = col_num + len(row) * row_num
-                get_inspector(
-                    self.model.estimators_[estimator_num], self.X, self.y
-                ).plot3d(ax=axes[row_num, col_num], **kwargs)
-                axes[row_num, col_num].set(title=None)
+                if estimator_num < len(self.model.estimators_):
+                    get_inspector(
+                        self.model.estimators_[estimator_num], self.X, self.y
+                    ).plot3d(ax=axes[row_num, col_num], **kwargs)
+                    axes[row_num, col_num].set(title=None)
         return axes
 
 # Cell
