@@ -1415,7 +1415,9 @@ class _Bin2dPlotter(_2dPlotter):
             y_numeric = pd.Series(
                 np.where(self.y == y_vals[0], 0, 1), index=self.y.index
             )
-            y_pred = pd.Series(self.model.predict_proba(self.X)[:, 1] > thresh)
+            y_pred = pd.Series(
+                self.model.predict_proba(self.X)[:, 1] > thresh, index=self.y.index
+            )
             ax.scatter(
                 self.X.loc[y_numeric == 1].iloc[:, 0],
                 self.X.loc[y_numeric == 1].iloc[:, 1],
