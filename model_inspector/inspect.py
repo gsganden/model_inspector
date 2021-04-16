@@ -683,7 +683,7 @@ class _LinMultiInspector(_MultiClasInspector):
         """
         model_string = ""
         for target_name, coefs, intercept in zip(
-            self.y.unique(), self.model.coef_, self.model.intercept_
+            np.unique(self.y), self.model.coef_, self.model.intercept_
         ):
             model_string += f"""
                     <p>
@@ -727,7 +727,7 @@ class _TreeMixin(_Inspector):
         return plot_tree(
             self.model,
             feature_names=self.X.columns,
-            class_names=self.y.unique().astype(str),
+            class_names=np.unique(self.y).astype(str),
             ax=ax,
             **kwargs,
         )[0].axes
@@ -1019,21 +1019,24 @@ class _Bin1dPlotter(_Plotter):
         if ax is None:
             _, ax = plt.subplots()
 
+        y_vals = np.unique(self.y)
+        y_numeric = pd.Series(np.where(self.y == y_vals[0], 0, 1), index=self.y.index)
+
         if plot_data:
             scatter_kwargs_correct, scatter_kwargs_incorrect = _set_scatter_kwargs(
                 scatter_kwargs=scatter_kwargs,
                 scatter_kwargs_correct=scatter_kwargs_correct,
                 scatter_kwargs_incorrect=scatter_kwargs_incorrect,
             )
-            is_correct = self.y == (self.model.predict_proba(self.X)[:, 1] > thresh)
+            is_correct = y_numeric == (self.model.predict_proba(self.X)[:, 1] > thresh)
             ax.scatter(
                 self.X.loc[is_correct].iloc[:, 0],
-                self.y.loc[is_correct],
+                y_numeric.loc[is_correct],
                 **scatter_kwargs_correct,
             )
             ax.scatter(
                 self.X.loc[~is_correct].iloc[:, 0],
-                self.y.loc[~is_correct],
+                y_numeric.loc[~is_correct],
                 **scatter_kwargs_incorrect,
             )
 
@@ -1050,6 +1053,7 @@ class _Bin1dPlotter(_Plotter):
         }
         if "c" not in thresh_line_kwargs and "color" not in thresh_line_kwargs:
             thresh_line_kwargs["c"] = "k"
+
         ax.plot(
             self.X.iloc[:, 0],
             thresh * np.ones(self.X.shape),
@@ -1322,7 +1326,7 @@ class _Bin2dPlotter(_2dPlotter):
         if ax is None:
             _, ax = plt.subplots()
 
-        y_vals = self.y.unique()
+        y_vals = np.unique(self.y)
         label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
 
         if heatmap_kwargs is None:
@@ -1407,19 +1411,23 @@ class _Bin2dPlotter(_2dPlotter):
                 **prob_surf_kwargs,
             )
         if plot_data:
-            y_pred = self.model.predict_proba(self.X)[:, 1] > thresh
+            y_vals = np.unique(self.y)
+            y_numeric = pd.Series(
+                np.where(self.y == y_vals[0], 0, 1), index=self.y.index
+            )
+            y_pred = pd.Series(self.model.predict_proba(self.X)[:, 1] > thresh)
             ax.scatter(
-                self.X.loc[self.y == 1].iloc[:, 0],
-                self.X.loc[self.y == 1].iloc[:, 1],
-                y_pred[self.y == 1],
+                self.X.loc[y_numeric == 1].iloc[:, 0],
+                self.X.loc[y_numeric == 1].iloc[:, 1],
+                y_pred.loc[y_numeric == 1],
                 c="b",
                 label="positive",
                 **scatter_kwargs,
             )
             ax.scatter(
-                self.X.loc[self.y == 0].iloc[:, 0],
-                self.X.loc[self.y == 0].iloc[:, 1],
-                y_pred[self.y == 0],
+                self.X.loc[y_numeric == 0].iloc[:, 0],
+                self.X.loc[y_numeric == 0].iloc[:, 1],
+                y_pred.loc[y_numeric == 0],
                 c="r",
                 label="negative",
                 **scatter_kwargs,
@@ -1507,7 +1515,7 @@ class _Multi2dPlotter(_2dPlotter):
         if ax is None:
             _, ax = plt.subplots()
 
-        y_vals = self.y.unique()
+        y_vals = np.unique(self.y)
         label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
 
         if heatmap_kwargs is None:
@@ -1560,17 +1568,19 @@ class _Multi2dPlotter(_2dPlotter):
         if scatter_kwargs is None:
             scatter_kwargs = {}
 
-        y_vals = self.y.unique()
+        y_vals = np.unique(self.y)
         label_to_num = {label: num for label, num in zip(y_vals, range(len(y_vals)))}
         y_int = self.y.map(label_to_num)
 
-        y_pred_int = pd.Series(self.model.predict(self.X)).map(label_to_num)
+        y_pred_int = pd.Series(self.model.predict(self.X), index=self.y.index).map(
+            label_to_num
+        )
         x0_grid, x1_grid = self._create_grid(num_points=20)
         grid_preds = pd.DataFrame(self._get_grid_preds(x0_grid, x1_grid)).applymap(
             lambda x: label_to_num[x]
         )
 
-        for val in y_int.unique():
+        for val in y_vals:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 ax.plot_surface(
