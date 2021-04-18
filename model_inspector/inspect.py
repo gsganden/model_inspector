@@ -348,37 +348,47 @@ class _RegInspector(_Inspector):
 
     def plot_residuals(
         self,
-        ax: Optional[Axes] = None,
+        axes: Optional[np.array] = None,
         scatter_kwargs: Optional[dict] = None,
         line_kwargs: Optional[dict] = None,
+        hist_kwargs: Optional[dict] = None,
     ) -> Axes:
         """Plot residuals
 
         Parameters:
-        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
-        if provided; otherwise a new `Axes` object will be generated.
+        - `axes`: 1D array of two Matplotlib `Axes` objects. Plot will
+        be added to these objects if provided; otherwise a new array of
+        `Axes` objects will be generated.
         - `scatter_kwargs`: kwargs to pass to `plt.scatter`
         - `line_kwargs`: kwargs to pass to `plt.plot` for line at y=0
+        - `hist_kwargs`: kwargs to pass to `plt.hist` for histogram of
+        residuals
         """
-        if ax is None:
-            _, ax = plt.subplots()
+        if axes is None:
+            _, axes = plt.subplots(1, 2, gridspec_kw={"width_ratios": [4, 1]})
 
         if scatter_kwargs is None:
             scatter_kwargs = {}
         scatter_kwargs = {**{"alpha": 0.3}, **scatter_kwargs}
         if "c" not in scatter_kwargs and "color" not in scatter_kwargs:
             scatter_kwargs["c"] = "k"
-        ax.scatter(
+        axes[0].scatter(
             x=self.y.index, y=self.y - self.model.predict(self.X), **scatter_kwargs
         )
 
         if line_kwargs is None:
             line_kwargs = {}
         line_kwargs = {**{"linestyle": "dashed"}, **line_kwargs}
-        ax.plot([self.y.index.min(), self.y.index.max()], [0, 0], **line_kwargs)
+        axes[0].plot([self.y.index.min(), self.y.index.max()], [0, 0], **line_kwargs)
+        axes[0].set(
+            ylabel="actual - predicted", xlabel=self.y.index.name, title="Residuals"
+        )
 
-        ax.set_ylabel("actual - predicted")
-        return ax
+        if hist_kwargs is None:
+            hist_kwargs = {}
+        hist_kwargs = {**{"orientation": "horizontal", "color": "k"}, **hist_kwargs}
+        axes[1].hist(self.y - self.model.predict(self.X), **hist_kwargs)
+        return axes
 
 # Cell
 # export
