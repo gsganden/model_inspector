@@ -365,7 +365,9 @@ class _RegInspector(_Inspector):
         residuals
         """
         if axes is None:
-            _, axes = plt.subplots(1, 2, gridspec_kw={"width_ratios": [4, 1]})
+            _, axes = plt.subplots(
+                1, 2, gridspec_kw={"width_ratios": [4, 1]}, sharey=True
+            )
 
         if scatter_kwargs is None:
             scatter_kwargs = {}
