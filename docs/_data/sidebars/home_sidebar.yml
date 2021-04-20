@@ -10,7 +10,7 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: inspect
+      title: Methods
       url: inspect.html
     - output: web,pdf
       title: tune

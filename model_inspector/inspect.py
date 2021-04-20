@@ -215,12 +215,15 @@ class _BinClasInspector(_Inspector):
     ) -> pd.DataFrame:
         """Calculate classification metrics as a function of threshold
 
-        Assumes that `self.model` has a `.predict_proba()` method.
+        Assumes that `self.model` has a `.predict_proba()` method. Uses
+        `self.y` as ground-truth values,
+        `self.model.predict_proba(self.X)[:, 1] > thresh` as
+        predictions.
 
         Parameters:
         - `metrics`: Callables that take `y_true`, `y_pred` as
         positional arguments and return a number. Must have a `__name__`
-        attribute and must be able to handle `np.nan` values.
+        attribute.
 
         Returns: DataFrame with one column "thresh" indicating the
         thresholds used, which is 0 and the sorted set of values that
@@ -265,9 +268,9 @@ class _MultiClasInspector(_Inspector):
         """Calculate classification metrics as a function of threshold
 
         Assumes that `self.model` has a `.predict_proba()` method. Uses
-        `self.y` as ground-truth values,
-        `self.model.predict_proba(self.X)[:, 1] > thresh` as
-        predictions.
+        `self.y` as ground-truth values, uses the value with the highest
+        probability as the prediction if that probability exceeds the
+        threshold, `np.nan` otherwise.
 
         Parameters:
         - `metrics`: Callables that take `y_true`, `y_pred` as
