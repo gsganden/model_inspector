@@ -31,21 +31,11 @@ def delegates(to=None, keep=False):
         if keep:
             sigd["kwargs"] = k
         from_f.__signature__ = sig.replace(parameters=sigd.values())
-        f.__doc__ += (
-            textwrap.dedent(
-                f"""
-                Remaining parameters are passed to
-                `{to.__module__}.{to.__name__}`,
-                which has the following docstring.
-
-                """
-            )
-            + textwrap.dedent(
-                """
-                ___
-                """
-            )
-            + textwrap.dedent(to.__doc__)
+        f.__doc__ += textwrap.dedent(
+            f"""
+            Remaining parameters are passed to
+            `{to.__module__}.{to.__name__}`.
+            """
         )
         return f
 
