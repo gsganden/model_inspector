@@ -1,7 +1,7 @@
 {
   "model_inspector": {
     "Overview": "/",
-    "Methods": "inspect.html",
+    "inspect": "inspect.html",
     "tune": "tune.html",
     "explore": "explore.html",
     "delegate": "delegate.html"
