@@ -7,30 +7,20 @@ __all__ = ['COLORS', 'get_inspector', 'identify_type', 'ModelType', 'generate_mo
 COLORS = {"blue": "#377eb8", "orange": "#ff7f00", "green": "#4daf4a", "pink": "#f781bf"}
 
 # Cell
-from enum import auto, Enum
-from typing import Callable, Iterable, List, Optional, Sequence, Union
 import warnings
+from enum import Enum, auto
+from typing import Callable, Iterable, List, Optional, Sequence, Union
 
-from fastcore.basics import basic_repr, GetAttr, store_attr
-from fastcore.test import test_fig_exists
-from IPython.display import HTML
-from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import sklearn
-from sklearn.base import ClassifierMixin, clone, RegressorMixin
-from sklearn.dummy import DummyClassifier, DummyRegressor
-from sklearn.inspection import permutation_importance
-from sklearn.linear_model._base import LinearModel, LinearClassifierMixin
-from sklearn.model_selection._search import BaseSearchCV
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.tree import BaseDecisionTree, plot_tree
-from sklearn.utils import check_X_y
-from sklearn.utils.validation import check_is_fitted
 import waterfall_chart
-
+from fastcore.basics import GetAttr, basic_repr, store_attr
+from fastcore.test import test_fig_exists
+from IPython.display import HTML
+from matplotlib.axes import Axes
 from .delegate import delegates
 from .explore import show_correlation
 from .tune import (
@@ -38,6 +28,15 @@ from .tune import (
     calculate_metrics_by_thresh_multi,
     confusion_matrix,
 )
+from sklearn.base import ClassifierMixin, RegressorMixin, clone
+from sklearn.dummy import DummyClassifier, DummyRegressor
+from sklearn.inspection import permutation_importance
+from sklearn.linear_model._base import LinearClassifierMixin, LinearModel
+from sklearn.model_selection._search import BaseSearchCV
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.tree import BaseDecisionTree, plot_tree
+from sklearn.utils import check_X_y
+from sklearn.utils.validation import check_is_fitted
 
 # Cell
 class _Inspector(GetAttr):
