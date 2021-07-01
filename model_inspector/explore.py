@@ -9,11 +9,12 @@ from .delegate import delegates
 
 # Cell
 @delegates(pd.DataFrame().style.background_gradient)
-def show_correlation(df: pd.DataFrame, **kwargs):
+def show_correlation(df: pd.DataFrame, method='pearson', **kwargs):
     """Show correlation heatmap
 
     Parameters:
     - `df`: DataFrame
+    - `method`: Method of correlation to pass to `df.corr()`
     """
     kwargs = {**{"cmap": "bwr", "vmin": -1, "vmax": 1}, **kwargs}
-    return df.corr().style.background_gradient(**kwargs).format("{0:,.2f}")
+    return df.corr(method=method).style.background_gradient(**kwargs).format("{0:,.2f}")
