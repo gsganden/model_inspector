@@ -9,7 +9,7 @@ from .delegate import delegates
 
 # Cell
 @delegates(pd.DataFrame().style.background_gradient)
-def show_correlation(df: pd.DataFrame, method='pearson', **kwargs):
+def show_correlation(df: pd.DataFrame, method="pearson", **kwargs):
     """Show correlation heatmap
 
     Parameters:
