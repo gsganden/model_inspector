@@ -1346,7 +1346,7 @@ class _Bin2dPlotter(_2dPlotter):
         if heatmap_kwargs is None:
             heatmap_kwargs = {}
         heatmap_kwargs = {
-            **{"cmap": sns.diverging_palette(10, 220, n=99), "vmin": 0, "vmax": 1},
+            **{"cmap": "bwr_r", "vmin": 0, "vmax": 1},
             **heatmap_kwargs,
         }
         _plot_preds(y_vals, label_to_num, ax=ax, **heatmap_kwargs)
