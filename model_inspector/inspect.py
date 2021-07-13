@@ -1005,7 +1005,7 @@ class _Bin1dPlotter(_Plotter):
             scatter_kwargs_incorrect = {
                 **{"label": "incorrect"},
                 **scatter_kwargs,
-                **scatter_kwargs_correct,
+                **scatter_kwargs_incorrect,
             }
             if (
                 "c" not in scatter_kwargs_correct
