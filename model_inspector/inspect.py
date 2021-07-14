@@ -74,7 +74,7 @@ class _Inspector(GetAttr):
         model_type = identify_type(self.model, self.y)
         if model_type is ModelType.REGRESSION:
             if num_features == 1:
-                result = _1dPlotter
+                result = _Reg1dPlotter
             elif num_features == 2:
                 if hasattr(self.model, "estimators_"):
                     result = _Reg2dMultiPlotter
@@ -90,7 +90,7 @@ class _Inspector(GetAttr):
                     result = _Bin2dPlotter
         else:
             if num_features == 1:
-                result = _1dPlotter
+                result = _Multi1dPlotter
             elif num_features == 2:
                 if hasattr(self.model, "estimators_"):
                     result = _Multi2dMultiPlotter
@@ -901,7 +901,7 @@ class _Plotter:
     __repr__ = basic_repr(["model"])
 
 # Cell
-class _1dPlotter(_Plotter):
+class _Reg1dPlotter(_Plotter):
     def plot(
         self,
         plot_data: bool = True,
@@ -909,8 +909,7 @@ class _1dPlotter(_Plotter):
         line_kwargs: Optional[dict] = None,
         scatter_kwargs: Optional[dict] = None,
     ) -> Axes:
-        """Plot predictions from a regression or multiclass model with a
-        single input as a line
+        """Plot predictions from a regression model with a single input
 
         Parameters:
         - `plot_data`: Make a scatter plot of the data
@@ -920,15 +919,6 @@ class _1dPlotter(_Plotter):
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
         """
-
-        def _plot_preds(ax, line_kwargs):
-            X_sorted = self.X.sort_values(self.X.columns[0])
-            ax.plot(
-                X_sorted.iloc[:, 0],
-                self.model.predict(X_sorted),
-                **line_kwargs,
-            )
-            return ax
 
         if ax is None:
             _, ax = plt.subplots()
@@ -943,14 +933,23 @@ class _1dPlotter(_Plotter):
         if line_kwargs is None:
             line_kwargs = {}
         line_kwargs = {**{"label": "predictions"}, **line_kwargs}
-        ax = _plot_preds(ax, line_kwargs)
+        ax = self._plot_preds(ax, line_kwargs)
 
         ax.set(xlabel=self.X.columns[0], ylabel=self.y.name)
         ax.legend()
         return ax
 
+    def _plot_preds(self, ax, line_kwargs):
+        X_sorted = self.X.sort_values(self.X.columns[0])
+        ax.plot(
+            X_sorted.iloc[:, 0],
+            self.model.predict(X_sorted),
+            **line_kwargs,
+        )
+        return ax
+
 # Cell
-class _Bin1dPlotter(_Plotter):
+class _Bin1dPlotter(_Reg1dPlotter):
     def plot(
         self,
         thresh: float = 0.5,
@@ -985,41 +984,6 @@ class _Bin1dPlotter(_Plotter):
         plotting data points that the model predicted incorrectly.
         Overrides `scatter_kwargs`.
         """
-
-        def _set_scatter_kwargs(
-            scatter_kwargs, scatter_kwargs_correct, scatter_kwargs_incorrect
-        ):
-            if scatter_kwargs is None:
-                scatter_kwargs = {}
-            scatter_kwargs = {**{"alpha": 0.3}, **scatter_kwargs}
-
-            if scatter_kwargs_correct is None:
-                scatter_kwargs_correct = {}
-            scatter_kwargs_correct = {
-                **{"label": "correct"},
-                **scatter_kwargs,
-                **scatter_kwargs_correct,
-            }
-            if scatter_kwargs_incorrect is None:
-                scatter_kwargs_incorrect = {}
-            scatter_kwargs_incorrect = {
-                **{"label": "incorrect"},
-                **scatter_kwargs,
-                **scatter_kwargs_incorrect,
-            }
-            if (
-                "c" not in scatter_kwargs_correct
-                and "color" not in scatter_kwargs_correct
-            ):
-                scatter_kwargs_correct["c"] = "b"
-            if (
-                "c" not in scatter_kwargs_incorrect
-                and "color" not in scatter_kwargs_incorrect
-            ):
-                scatter_kwargs_incorrect["c"] = "orange"
-
-            return scatter_kwargs_correct, scatter_kwargs_incorrect
-
         def _plot_probs(ax):
             num_points = 100
             X = np.linspace(self.X.min(), self.X.max(), num_points)
@@ -1037,7 +1001,7 @@ class _Bin1dPlotter(_Plotter):
         y_numeric = pd.Series(np.where(self.y == y_vals[0], 0, 1), index=self.y.index)
 
         if plot_data:
-            scatter_kwargs_correct, scatter_kwargs_incorrect = _set_scatter_kwargs(
+            scatter_kwargs_correct, scatter_kwargs_incorrect = self._set_scatter_kwargs(
                 scatter_kwargs=scatter_kwargs,
                 scatter_kwargs_correct=scatter_kwargs_correct,
                 scatter_kwargs_incorrect=scatter_kwargs_incorrect,
@@ -1073,6 +1037,90 @@ class _Bin1dPlotter(_Plotter):
             thresh * np.ones(self.X.shape),
             **thresh_line_kwargs,
         )
+
+        ax.set(xlabel=self.X.columns[0], ylabel=self.y.name)
+        ax.legend()
+        return ax
+
+    def _set_scatter_kwargs(
+            self, scatter_kwargs, scatter_kwargs_correct, scatter_kwargs_incorrect
+        ):
+        if scatter_kwargs is None:
+            scatter_kwargs = {}
+        scatter_kwargs = {**{"alpha": 0.3}, **scatter_kwargs}
+
+        if scatter_kwargs_correct is None:
+            scatter_kwargs_correct = {}
+        scatter_kwargs_correct = {
+            **{"label": "correct"},
+            **scatter_kwargs,
+            **scatter_kwargs_correct,
+        }
+        if scatter_kwargs_incorrect is None:
+            scatter_kwargs_incorrect = {}
+        scatter_kwargs_incorrect = {
+            **{"label": "incorrect"},
+            **scatter_kwargs,
+            **scatter_kwargs_incorrect,
+        }
+        if (
+            "c" not in scatter_kwargs_correct
+            and "color" not in scatter_kwargs_correct
+        ):
+            scatter_kwargs_correct["c"] = "b"
+        if (
+            "c" not in scatter_kwargs_incorrect
+            and "color" not in scatter_kwargs_incorrect
+        ):
+            scatter_kwargs_incorrect["c"] = "orange"
+
+        return scatter_kwargs_correct, scatter_kwargs_incorrect
+
+# Cell
+class _Multi1dPlotter(_Bin1dPlotter):
+    def plot(
+        self,
+        plot_data: bool = True,
+        ax: Optional[Axes] = None,
+        line_kwargs: Optional[dict] = None,
+        scatter_kwargs: Optional[dict] = None,
+        scatter_kwargs_correct: Optional[dict] = None,
+        scatter_kwargs_incorrect: Optional[dict] = None,
+    ) -> Axes:
+        """Plot predictions from a multiclass model with a single input
+
+        Parameters:
+        - `plot_data`: Make a scatter plot of the data
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
+        - `line_kwargs`: kwargs to pass to `ax.plot` for plotting
+        predictions
+        - `scatter_kwargs`: kwargs to pass to `ax.scatter` for plotting
+        all data points
+        - `scatter_kwargs_correct`: kwargs to pass to `ax.scatter` for
+        plotting data points that the model predicted correctly.
+        Overrides `scatter_kwargs`.
+        - `scatter_kwargs_incorrect`: kwargs to pass to `ax.scatter` for
+        plotting data points that the model predicted incorrectly.
+        Overrides `scatter_kwargs`.
+        """
+
+        if ax is None:
+            _, ax = plt.subplots()
+        if plot_data:
+            scatter_kwargs_correct, scatter_kwargs_incorrect = self._set_scatter_kwargs(
+                scatter_kwargs=scatter_kwargs,
+                scatter_kwargs_correct=scatter_kwargs_correct,
+                scatter_kwargs_incorrect=scatter_kwargs_incorrect,
+            )
+            is_correct = self.y == self.model.predict(self.X)
+            ax.scatter(self.X.loc[is_correct].iloc[:, 0], self.y.loc[is_correct], **scatter_kwargs_correct)
+            ax.scatter(self.X.loc[~is_correct].iloc[:, 0], self.y.loc[~is_correct], **scatter_kwargs_incorrect)
+
+        if line_kwargs is None:
+            line_kwargs = {}
+        line_kwargs = {**{"label": "predictions"}, **line_kwargs}
+        ax = self._plot_preds(ax, line_kwargs)
 
         ax.set(xlabel=self.X.columns[0], ylabel=self.y.name)
         ax.legend()
