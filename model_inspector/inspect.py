@@ -984,6 +984,7 @@ class _Bin1dPlotter(_Reg1dPlotter):
         plotting data points that the model predicted incorrectly.
         Overrides `scatter_kwargs`.
         """
+
         def _plot_probs(ax):
             num_points = 100
             X = np.linspace(self.X.min(), self.X.max(), num_points)
@@ -1043,8 +1044,8 @@ class _Bin1dPlotter(_Reg1dPlotter):
         return ax
 
     def _set_scatter_kwargs(
-            self, scatter_kwargs, scatter_kwargs_correct, scatter_kwargs_incorrect
-        ):
+        self, scatter_kwargs, scatter_kwargs_correct, scatter_kwargs_incorrect
+    ):
         if scatter_kwargs is None:
             scatter_kwargs = {}
         scatter_kwargs = {**{"alpha": 0.3}, **scatter_kwargs}
@@ -1063,10 +1064,7 @@ class _Bin1dPlotter(_Reg1dPlotter):
             **scatter_kwargs,
             **scatter_kwargs_incorrect,
         }
-        if (
-            "c" not in scatter_kwargs_correct
-            and "color" not in scatter_kwargs_correct
-        ):
+        if "c" not in scatter_kwargs_correct and "color" not in scatter_kwargs_correct:
             scatter_kwargs_correct["c"] = "b"
         if (
             "c" not in scatter_kwargs_incorrect
@@ -1114,8 +1112,16 @@ class _Multi1dPlotter(_Bin1dPlotter):
                 scatter_kwargs_incorrect=scatter_kwargs_incorrect,
             )
             is_correct = self.y == self.model.predict(self.X)
-            ax.scatter(self.X.loc[is_correct].iloc[:, 0], self.y.loc[is_correct], **scatter_kwargs_correct)
-            ax.scatter(self.X.loc[~is_correct].iloc[:, 0], self.y.loc[~is_correct], **scatter_kwargs_incorrect)
+            ax.scatter(
+                self.X.loc[is_correct].iloc[:, 0],
+                self.y.loc[is_correct],
+                **scatter_kwargs_correct,
+            )
+            ax.scatter(
+                self.X.loc[~is_correct].iloc[:, 0],
+                self.y.loc[~is_correct],
+                **scatter_kwargs_incorrect,
+            )
 
         if line_kwargs is None:
             line_kwargs = {}
