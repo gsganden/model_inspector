@@ -101,29 +101,33 @@ class _Inspector(GetAttr):
     @delegates(sklearn.inspection.permutation_importance)
     def permutation_importance(
         self,
+        sort: bool = True,
         **kwargs,
     ) -> pd.Series:
-        """Calculate permutation importance"""
+        """Calculate permutation importance
+
+        - `sort`: Sort features by decreasing importance
+        """
         if kwargs is None:
             kwargs = {}
         kwargs = {**{"n_jobs": -1}, **kwargs}
 
-        importances = permutation_importance(self.model, self.X, self.y, **kwargs)[
+        importances = pd.Series(permutation_importance(self.model, self.X, self.y, **kwargs)[
             "importances_mean"
-        ]
-        return pd.Series(importances, index=self.X.columns)
+        ], index=self.X.columns)
+        if sort:
+            importances = importances.sort_values(ascending=False)
+        return importances
 
     def plot_permutation_importance(
         self,
         ax: Optional[Axes] = None,
-        sort: bool = True,
         importance_kwargs: Optional[dict] = None,
         plot_kwargs: Optional[dict] = None,
     ) -> Axes:
         """Plot a correlation matrix for `self.X` and `self.y`
 
         Parameters:
-        - `sort`: Sort features by decreasing importance
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
         - `importance_kwargs`: kwargs to pass to
@@ -133,8 +137,6 @@ class _Inspector(GetAttr):
         if importance_kwargs is None:
             importance_kwargs = {}
         importance = self.permutation_importance(**importance_kwargs)
-        if sort:
-            importance = importance.sort_values()
 
         if plot_kwargs is None:
             plot_kwargs = {}
