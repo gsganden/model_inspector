@@ -112,9 +112,12 @@ class _Inspector(GetAttr):
             kwargs = {}
         kwargs = {**{"n_jobs": -1}, **kwargs}
 
-        importances = pd.Series(permutation_importance(self.model, self.X, self.y, **kwargs)[
-            "importances_mean"
-        ], index=self.X.columns)
+        importances = pd.Series(
+            permutation_importance(self.model, self.X, self.y, **kwargs)[
+                "importances_mean"
+            ],
+            index=self.X.columns,
+        )
         if sort:
             importances = importances.sort_values(ascending=False)
         return importances
