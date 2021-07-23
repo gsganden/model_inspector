@@ -136,7 +136,8 @@ class _Inspector(GetAttr):
         """
         if importance_kwargs is None:
             importance_kwargs = {}
-        importance = self.permutation_importance(**importance_kwargs)
+        # reversing the order to compensate for `barh` reversing it
+        importance = self.permutation_importance(**importance_kwargs).iloc[::-1]
 
         if plot_kwargs is None:
             plot_kwargs = {}
