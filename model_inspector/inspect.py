@@ -202,6 +202,8 @@ def identify_type(model, y):
         return ModelType.REGRESSION
     elif isinstance(model, ClassifierMixin):
         return ModelType.BINARY if len(y.unique()) == 2 else ModelType.MULTICLASS
+    elif isinstance(model, BaseSearchCV):
+        return identify_type(model.best_estimator_, y)
     else:
         return ModelType.OTHER
 
