@@ -22,7 +22,7 @@ from fastcore.test import test_fig_exists
 from IPython.display import HTML
 from matplotlib.axes import Axes
 from .delegate import delegates
-from .explore import show_correlation
+from .explore import plot_column_clusters, show_correlation
 from .tune import (
     calculate_metrics_by_thresh_binary,
     calculate_metrics_by_thresh_multi,
@@ -153,11 +153,22 @@ class _Inspector(GetAttr):
 
     @delegates(show_correlation)
     def show_correlation(self, **kwargs) -> Axes:
-        """Show a correlation matrix for `self.X` and `self.y`"""
+        """Show a correlation matrix for `self.X` and `self.y`
+        """
         return show_correlation(
             df=pd.concat((self.X, self.y), axis="columns"),
             **kwargs,
         )
+
+    @delegates(plot_column_clusters)
+    def plot_feature_clusters(self, **kwargs) -> Axes:
+        """Plot a dendrogram based on feature correlations
+
+        - `corr_method`: Method of correlation to pass to `df.corr()`
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
+        """
+        return plot_column_clusters(self.X, **kwargs)
 
 # Cell
 def get_inspector(model, X, y) -> _Inspector:
