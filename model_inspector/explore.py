@@ -3,6 +3,7 @@
 __all__ = ['show_correlation', 'plot_column_clusters']
 
 # Cell
+from fastcore.test import test_fig_exists
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 import pandas as pd
