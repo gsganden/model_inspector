@@ -6,7 +6,6 @@ __all__ = ['show_correlation', 'plot_column_clusters']
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 import pandas as pd
-import scipy
 import scipy.cluster.hierarchy as hc
 
 from .delegate import delegates

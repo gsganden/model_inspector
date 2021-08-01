@@ -153,8 +153,7 @@ class _Inspector(GetAttr):
 
     @delegates(show_correlation)
     def show_correlation(self, **kwargs) -> Axes:
-        """Show a correlation matrix for `self.X` and `self.y`
-        """
+        """Show a correlation matrix for `self.X` and `self.y`"""
         return show_correlation(
             df=pd.concat((self.X, self.y), axis="columns"),
             **kwargs,
