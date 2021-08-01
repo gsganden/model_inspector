@@ -146,6 +146,9 @@ class _Inspector(GetAttr):
             plot_kwargs = {}
         ax = importance.plot.barh(**plot_kwargs)
         ax.set(title="Feature importances")
+        ax.bar_label(ax.containers[0], fmt="%.2f")
+        # extending plot on the right to accommodate labels
+        ax.set_xlim((ax.get_xlim()[0], ax.get_xlim()[1] * 1.05))
         return ax
 
     @delegates(show_correlation)
