@@ -161,9 +161,14 @@ def confusion_matrix(
         y_true=y_true, y_pred=y_pred, sample_weight=sample_weight, normalize=normalize
     )
     vals = sorted(np.unique(y_true))
-    result = pd.DataFrame(
+    cm = pd.DataFrame(
         cm,
         columns=[f"Predicted {val}" for val in vals],
         index=[f"Actual {val}" for val in vals],
-    ).style.background_gradient("Blues", axis=shade_axis)
-    return result
+    )
+    cm.style.background_gradient("Blues", axis=shade_axis)
+    cm.loc[:, "Totals"] = cm.sum(axis="columns")
+    cm.loc["Totals"] = cm.sum(axis="rows")
+    return cm.style.background_gradient(
+        "Blues", subset=(cm.index[:-1], cm.columns[:-1]), axis=shade_axis
+    )
