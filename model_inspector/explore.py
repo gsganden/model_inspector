@@ -36,14 +36,23 @@ def plot_column_clusters(
     - `ax`: Matplotlib `Axes` object. Plot will be added to this object
     if provided; otherwise a new `Axes` object will be generated.
 
-    Adapted from https://github.com/fastai/book_nbs/blob/master/utils.py
+    Adapted from
+    https://github.com/fastai/book_nbs/blob/master/utils.py#L58-L64
     """
     corr_matrix = df.corr(method=corr_method)
-    corr_squareform = hc.distance.squareform(1 - corr_matrix)
+    # For the purpose of evaluating redundancy of features in a
+    # predictive model, variables that are perfectly correlated or
+    # anti-correlated should count as maximally close.
+    # As of 2021-08-03,
+    # https://github.com/fastai/book_nbs/blob/master/utils.py#L58-L64
+    # does not take an absolute value, which I think is a mistake; see
+    # https://forums.fast.ai/t/should-cluster-columns-use-absolute-value/90413
+    distance_matrix = 1 - abs(corr_matrix)
+    corr_squareform = hc.distance.squareform(distance_matrix)
     z = hc.linkage(corr_squareform, method="average")
 
     if ax is None:
-        fig, ax = plt.subplots()
+        _, ax = plt.subplots()
     if kwargs is None:
         kwargs = {}
     kwargs = {**kwargs, **{"orientation": "left", "leaf_font_size": 12}}
