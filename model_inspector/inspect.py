@@ -592,7 +592,7 @@ class _LinBinInspector(_BinClasInspector):
         coef_arrays = []
         for val in vals:
             setattr(model, hparam, val)
-            coef_arrays.append(model.fit(self.X, self.y).coef_)
+            coef_arrays.append(model.fit(X, self.y).coef_)
 
         fig, ax = plt.subplots()
         ax.plot(vals, [coefs[0] for coefs in coef_arrays])
@@ -686,7 +686,7 @@ class _LinMultiInspector(_MultiClasInspector):
         coef_arrays = []
         for val in vals:
             setattr(model, hparam, val)
-            coef_arrays.append(model.fit(self.X, self.y).coef_)
+            coef_arrays.append(model.fit(X, self.y).coef_)
 
         num_target_vals = len(set(self.y))
 
