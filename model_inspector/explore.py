@@ -3,18 +3,20 @@
 __all__ = ['show_correlation', 'plot_column_clusters']
 
 # Cell
-from fastcore.test import test_fig_exists
 import matplotlib.pyplot as plt
-from matplotlib.axes import Axes
 import pandas as pd
 import scipy.cluster.hierarchy as hc
-
+from fastcore.test import test_fig_exists
+from matplotlib.axes import Axes
 from .delegate import delegates
 
 # Cell
 @delegates(pd.DataFrame().style.background_gradient)
 def show_correlation(df: pd.DataFrame, method="pearson", **kwargs):
     """Show correlation heatmap
+
+    If output is not rendering properly when you reopen a notebook, make
+    sure the notebook is trusted.
 
     Parameters:
     - `df`: DataFrame
@@ -29,6 +31,9 @@ def plot_column_clusters(
     df, corr_method: str = "spearman", ax: Axes = None, **kwargs
 ) -> Axes:
     """Plot a dendrogram based on column correlations
+
+    If output is not rendering properly when you reopen a notebook, make
+    sure the notebook is trusted.
 
     Parameters:
     - `df`: DataFrame

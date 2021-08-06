@@ -153,7 +153,11 @@ class _Inspector(GetAttr):
 
     @delegates(show_correlation)
     def show_correlation(self, **kwargs) -> Axes:
-        """Show a correlation matrix for `self.X` and `self.y`"""
+        """Show a correlation matrix for `self.X` and `self.y`
+
+        If output is not rendering properly when you reopen a notebook,
+        make sure the notebook is trusted.
+        """
         return show_correlation(
             df=pd.concat((self.X, self.y), axis="columns"),
             **kwargs,
@@ -270,6 +274,9 @@ class _BinClasInspector(_Inspector):
         `self.model.predict_proba(self.X)[:, 1] > thresh` as
         predictions.
 
+        If output is not rendering properly when you reopen a notebook,
+        make sure the notebook is trusted.
+
         Parameters:
         - `thresh`: Probability threshold for counting a prediction as
         positive
@@ -318,6 +325,9 @@ class _MultiClasInspector(_Inspector):
 
         Uses `self.y` as ground-truth values,
         `self.model.predict(self.X)` as predictions.
+
+        If output is not rendering properly when you reopen a notebook,
+        make sure the notebook is trusted.
         """
 
         return confusion_matrix(
