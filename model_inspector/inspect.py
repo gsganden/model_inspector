@@ -237,6 +237,7 @@ class _BinClasInspector(_Inspector):
     def calculate_metrics_by_thresh(
         self,
         metrics: Union[Callable, Sequence[Callable]],
+        thresholds: Optional[Sequence] = None,
     ) -> pd.DataFrame:
         """Calculate classification metrics as a function of threshold
 
@@ -249,16 +250,21 @@ class _BinClasInspector(_Inspector):
         - `metrics`: Callables that take `y_true`, `y_pred` as
         positional arguments and return a number. Must have a `__name__`
         attribute.
+        - `thresholds`: `Sequence` of `float` threshold values to use. By
+        default uses `0` and the values that appear in `y_prob[:, 1]`, which
+        is a minimal set that covers all of the relevant possibilities. One
+        reason to override that default would be to save time with a large
+        dataset.
 
         Returns: DataFrame with one column "thresh" indicating the
-        thresholds used, which is 0 and the sorted set of values that
-        occur in `y_prob`, and an additional column for each input
-        metric giving the value of that metric at that threshold.
+        thresholds used and an additional column for each input metric
+        giving the value of that metric at that threshold.
         """
         return calculate_metrics_by_thresh_binary(
             y_true=self.y,
             y_prob=self.model.predict_proba(self.X),
             metrics=metrics,
+            thresholds=thresholds,
         )
 
     @delegates(sklearn.metrics.confusion_matrix)
@@ -292,6 +298,7 @@ class _MultiClasInspector(_Inspector):
     def calculate_metrics_by_thresh(
         self,
         metrics: Union[Callable, Sequence[Callable]],
+        thresholds: Optional[Sequence] = None,
     ) -> pd.DataFrame:
         """Calculate classification metrics as a function of threshold
 
@@ -304,11 +311,15 @@ class _MultiClasInspector(_Inspector):
         - `metrics`: Callables that take `y_true`, `y_pred` as
         positional arguments and return a number. Must have a `__name__`
         attribute and must be able to handle `np.nan` values.
+        - `thresholds`: `Sequence` of `float` threshold values to use. By
+        default uses 0 and all values that appear in `y_prob`, which is a
+        minimal set that covers all of the relevant possibilities. One
+        reason to override that default would be to save time with a large
+        dataset.
 
         Returns: DataFrame with one column "thresh" indicating the
-        thresholds used, which is 0 and the sorted set of values that
-        occur in `y_prob`, and an additional column for each input
-        metric giving the value of that metric at that threshold.
+        thresholds used and an additional column for each input metric
+        giving the value of that metric at that threshold.
         """
         return calculate_metrics_by_thresh_multi(
             y_true=self.y,

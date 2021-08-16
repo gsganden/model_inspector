@@ -11,6 +11,7 @@ from typing import Callable, Optional, Sequence, Union
 import numpy as np
 import pandas as pd
 from sklearn import metrics
+from tqdm import tqdm
 
 # Cell
 def _calculate_metrics_by_thresh(
@@ -25,7 +26,7 @@ def _calculate_metrics_by_thresh(
 
     results = defaultdict(list)
     results["thresh"] = thresh_picker(y_prob)
-    for thresh in results["thresh"]:
+    for thresh in tqdm(results["thresh"]):
         y_pred = prob_to_pred(y_prob, thresh)
         for metric in metrics:
             results[metric.__name__].append(metric(y_true, y_pred))
@@ -37,6 +38,7 @@ def calculate_metrics_by_thresh_binary(
     y_true: np.array,
     y_prob: np.array,
     metrics: Union[Callable, Sequence[Callable]],
+    thresholds: Optional[Sequence] = None,
 ) -> pd.DataFrame:
     """Calculate binary classification metrics as a function of
     threshold
@@ -47,20 +49,30 @@ def calculate_metrics_by_thresh_binary(
     Parameters:
     - `y_true`: Ground-truth values with shape (n_items,)
     - `y_prob`: Probability distributions with shape (n_items, 2)
-    - `metrics`: Callables that take `y_true`, `y_pred` as positional arguments
-    and return a number. Must have a `__name__` attribute.
+    - `metrics`: Callables that take `y_true`, `y_pred` as positional
+    arguments and return a number. Must have a `__name__` attribute.
+    - `thresholds`: `Sequence` of `float` threshold values to use. By
+    default uses `0` and the values that appear in `y_prob[:, 1]`, which
+    is a minimal set that covers all of the relevant possibilities. One
+    reason to override that default would be to save time with a large
+    dataset.
 
     Returns: DataFrame with one column "thresh" indicating the
-    thresholds used, which is 0 and the sorted set of values that occur in
-    `y_prob`, and an additional column for each input metric giving
-    the value of that metric at that threshold.
+    thresholds used and an additional column for each input metric
+    giving the value of that metric at that threshold.
     """
+    thresh_picker = (
+        (lambda y_prob: thresholds)
+        if thresholds is not None
+        else (lambda y_prob: sorted(np.hstack([0, np.unique(y_prob[:, 1])])))
+    )
+
     return _calculate_metrics_by_thresh(
         y_true=y_true,
         y_prob=y_prob,
         metrics=metrics,
         prob_to_pred=lambda y_prob, thresh: np.where(y_prob[:, 1] > thresh, 1, 0),
-        thresh_picker=lambda y_prob: sorted(np.hstack([0, np.unique(y_prob[:, 1])])),
+        thresh_picker=thresh_picker,
     )
 
 # Cell
@@ -68,6 +80,7 @@ def calculate_metrics_by_thresh_multi(
     y_true: np.array,
     y_prob: np.array,
     metrics: Union[Callable, Sequence[Callable]],
+    thresholds: Optional[Sequence] = None,
 ) -> pd.DataFrame:
     """Calculate multiclass metrics as a function of threshold
 
@@ -80,12 +93,21 @@ def calculate_metrics_by_thresh_multi(
     - `y_prob`: Probability distributions
     - `metrics`: Callables that take `y_true`, `y_pred` as positional arguments
     and return a number. Must have a `__name__` attribute.
+    - `thresholds`: `Sequence` of `float` threshold values to use. By
+    default uses 0 and all values that appear in `y_prob`, which is a
+    minimal set that covers all of the relevant possibilities. One
+    reason to override that default would be to save time with a large
+    dataset.
 
     Returns: DataFrame with one column "thresh" indicating the
-    thresholds used, which is 0 and the sorted set of values that occur in
-    `y_prob`, and an additional column for each input metric giving
-    the value of that metric at that threshold.
+    thresholds used and an additional column for each input metric
+    giving the value of that metric at that threshold.
     """
+    thresh_picker = (
+        (lambda y_prob: thresholds)
+        if thresholds is not None
+        else (lambda y_prob: sorted(np.hstack([0, np.unique(y_prob)])))
+    )
     return _calculate_metrics_by_thresh(
         y_true=y_true,
         y_prob=y_prob,
@@ -93,7 +115,7 @@ def calculate_metrics_by_thresh_multi(
         prob_to_pred=lambda y_prob, thresh: np.where(
             y_prob.max(axis=1) > thresh, y_prob.argmax(axis=1), np.nan
         ),
-        thresh_picker=lambda y_prob: sorted(np.hstack([0, np.unique(y_prob)])),
+        thresh_picker=thresh_picker,
     )
 
 # Cell
