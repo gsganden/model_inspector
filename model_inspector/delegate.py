@@ -7,7 +7,6 @@ import inspect
 import textwrap
 
 # Cell
-# export
 def delegates(to=None, keep=False):
     """Decorator: replace `**kwargs` in signature with params from `to`
 
