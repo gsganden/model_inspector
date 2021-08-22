@@ -897,6 +897,10 @@ class _SearchInspector(_Inspector):
     def show_score_vs_hparam_pair(self, hparams=None, score_col=None, **kwargs):
         """Show model scores against a pair of hyperparameters
 
+        Background gradient uses `axis=None` by default, to facilitate
+        identifying the best score across all combinations of
+        hyperparameter values.
+
         Parameters:
         - `hparams`: Name of the hyperparameters to plot against.
         The first two hyperparameters in `self.model.param_grid` will be
@@ -932,7 +936,7 @@ class _SearchInspector(_Inspector):
                 index=f"param_{hparams[0]}", columns=f"param_{hparams[1]}"
             )
             .loc[:, score_col]
-            .style.background_gradient(**kwargs)
+            .style.background_gradient(**{**{"axis": None}, **kwargs})
         )
 
 # Cell
