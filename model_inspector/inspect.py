@@ -287,9 +287,12 @@ class _BinClasInspector(_Inspector):
         - `thresh`: Probability threshold for counting a prediction as
         positive
         """
+        labels = np.unique(self.y)
         return confusion_matrix(
             y_true=self.y,
-            y_pred=self.model.predict_proba(self.X)[:, 1] > thresh,
+            y_pred=np.where(
+                self.model.predict_proba(self.X)[:, 1] > thresh, labels[1], labels[0]
+            ),
             **kwargs,
         )
 
