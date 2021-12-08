@@ -34,4 +34,4 @@ jobs:
         nbqa flake8 .
     - name: Run tests
       run: |
-        nbdev_test_nbs --verbose
+        nbdev_test_nbs --verbose=True
