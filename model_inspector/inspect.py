@@ -30,7 +30,7 @@ from .tune import (
 )
 from sklearn.base import ClassifierMixin, RegressorMixin, clone
 from sklearn.dummy import DummyClassifier, DummyRegressor
-from sklearn.inspection import PartialDependenceDisplay, permutation_importance
+from sklearn.inspection import permutation_importance
 from sklearn.linear_model._base import LinearClassifierMixin, LinearModel
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.preprocessing import MinMaxScaler
