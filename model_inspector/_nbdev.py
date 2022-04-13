@@ -2,25 +2,20 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"COLORS": "00_inspect.ipynb",
-         "get_inspector": "00_inspect.ipynb",
-         "identify_type": "00_inspect.ipynb",
-         "ModelType": "00_inspect.ipynb",
-         "generate_model_html": "00_inspect.ipynb",
-         "calculate_metrics_by_thresh_binary": "01_tune.ipynb",
-         "calculate_metrics_by_thresh_multi": "01_tune.ipynb",
-         "coverage": "01_tune.ipynb",
-         "calculate_metric_ignoring_nan": "01_tune.ipynb",
-         "fbeta": "01_tune.ipynb",
-         "confusion_matrix": "01_tune.ipynb",
+index = {"delegates": "01_class_utils.ipynb",
          "show_correlation": "02_explore.ipynb",
          "plot_column_clusters": "02_explore.ipynb",
-         "delegates": "03_delegate.ipynb"}
+         "get_inspector": "03_get_inspector.ipynb"}
 
-modules = ["inspect.py",
-           "tune.py",
+modules = ["inspect/any_model.py",
+           "class_utils.py",
            "explore.py",
-           "delegate.py"]
+           "get_inspector.py",
+           "inspect/regressor.py",
+           "inspect/classifier.py",
+           "inspect/linear_model.py",
+           "inspect/tree.py",
+           "inspect/searchcv_estimator.py"]
 
 doc_url = "https://gsganden.github.io/model_inspector/"
 
