@@ -5,11 +5,19 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 index = {"delegates": "01_class_utils.ipynb",
          "show_correlation": "02_explore.ipynb",
          "plot_column_clusters": "02_explore.ipynb",
-         "get_inspector": "03_get_inspector.ipynb"}
+         "calculate_metrics_by_thresh_binary": "03_tune.ipynb",
+         "calculate_metrics_by_thresh_multi": "03_tune.ipynb",
+         "coverage": "03_tune.ipynb",
+         "calculate_metric_ignoring_nan": "03_tune.ipynb",
+         "fbeta": "03_tune.ipynb",
+         "confusion_matrix": "03_tune.ipynb",
+         "get_inspector": "04_get_inspector.ipynb",
+         "COLORS": "07_linear_model.ipynb"}
 
 modules = ["inspect/any_model.py",
            "class_utils.py",
            "explore.py",
+           "tune.py",
            "get_inspector.py",
            "inspect/regressor.py",
            "inspect/classifier.py",

@@ -14,7 +14,6 @@ from ..explore import plot_column_clusters, show_correlation
 from sklearn.base import BaseEstimator
 from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.utils import check_X_y
-from sklearn.utils.multiclass import type_of_target
 from sklearn.utils.validation import check_is_fitted
 
 # Cell
@@ -37,10 +36,10 @@ class _Inspector:
     __repr__ = basic_repr(["model"])
 
     @delegates(sklearn.inspection.PartialDependenceDisplay.from_estimator)
-    def plot_dependence(self, *args, **kwargs) -> Axes:
+    def plot_dependence(self, **kwargs) -> Axes:
         """Plot partial dependence"""
         return sklearn.inspection.PartialDependenceDisplay.from_estimator(
-            estimator=self.model, X=self.X, *args, **kwargs
+            estimator=self.model, X=self.X, **kwargs
         ).axes_
 
     @delegates(sklearn.inspection.permutation_importance)
@@ -58,9 +57,9 @@ class _Inspector:
         kwargs = {**{"n_jobs": -1}, **kwargs}
 
         importances = pd.Series(
-            permutation_importance(self.model, self.X, self.y, **kwargs)[
-                "importances_mean"
-            ],
+            sklearn.inspection.permutation_importance(
+                self.model, self.X, self.y, **kwargs
+            )["importances_mean"],
             index=self.X.columns,
         )
         if sort:
