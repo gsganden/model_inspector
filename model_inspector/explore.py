@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['show_correlation', 'plot_column_clusters']
 
-# %% ../nbs/02_explore.ipynb 2
+# %% ../nbs/02_explore.ipynb 3
 import matplotlib.pyplot as plt
 import pandas as pd
 import scipy.cluster.hierarchy as hc
