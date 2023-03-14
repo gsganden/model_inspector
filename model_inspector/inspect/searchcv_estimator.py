@@ -8,9 +8,10 @@ from typing import Optional, Sequence, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.model_selection._search import BaseSearchCV
+
 from ..delegate import delegates
 from .any_model import _Inspector
-from sklearn.model_selection._search import BaseSearchCV
 
 # %% ../../nbs/09_searchcv_estimator.ipynb 4
 class _SearchCVInspector(_Inspector):
@@ -25,6 +26,7 @@ class _SearchCVInspector(_Inspector):
         """Plot model scores against values of one hyperparameter
 
         Parameters:
+
         - `hparam`: Name of the hyperparameter to plot against. Must be
         provided if there are multiple hyperparameters. Any other
         hyperparameters will be fixed at the value they have in
@@ -101,13 +103,14 @@ class _SearchCVInspector(_Inspector):
 
     @delegates(pd.DataFrame().style.background_gradient)
     def show_score_vs_hparam_pair(self, hparams=None, score_col=None, **kwargs):
-        """Show model scores against a pair of hyperparameters
+        """Show model scores against a pair of hyperparameters.
 
         Background gradient uses `axis=None` by default, to facilitate
         identifying the best score across all combinations of
         hyperparameter values.
 
         Parameters:
+
         - `hparams`: Name of the hyperparameters to plot against.
         The first two hyperparameters in `self.model.param_grid` will be
         used by default. Any other hyperparameters will be fixed at the
@@ -138,7 +141,7 @@ class _SearchCVInspector(_Inspector):
 
         results = pd.DataFrame(self.model.cv_results_)
         return (
-            results.pivot_table(
+            results.loc[:, [f"param_{hparams[0]}", f"param_{hparams[1]}"] + [score_col]].pivot_table(
                 index=f"param_{hparams[0]}", columns=f"param_{hparams[1]}"
             )
             .loc[:, score_col]

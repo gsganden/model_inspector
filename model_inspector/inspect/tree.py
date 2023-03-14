@@ -49,5 +49,5 @@ class _TreeInspector(_Inspector):
             **kwargs,
         )[0].axes
 
-# %% ../../nbs/08_tree.ipynb 24
+# %% ../../nbs/08_tree.ipynb 23
 _all_ = ["_TreeInspector"]
