@@ -38,7 +38,7 @@ class _Inspector:
 
     @delegates(sklearn.inspection.PartialDependenceDisplay.from_estimator)
     def plot_dependence(self, **kwargs) -> Axes:
-        """Plot partial dependence"""
+        """Plot partial dependence."""
         return sklearn.inspection.PartialDependenceDisplay.from_estimator(
             estimator=self.model, X=self.X, **kwargs
         ).axes_
@@ -49,7 +49,7 @@ class _Inspector:
         sort: bool = True,
         **kwargs,
     ) -> pd.Series:
-        """Calculate permutation importance
+        """Calculate permutation importance.
 
         - `sort`: Sort features by decreasing importance
         """
@@ -73,7 +73,7 @@ class _Inspector:
         importance_kwargs: Optional[dict] = None,
         plot_kwargs: Optional[dict] = None,
     ) -> Axes:
-        """Plot a correlation matrix for `self.X` and `self.y`
+        """Plot a correlation matrix for `self.X` and `self.y`.
 
         Parameters:
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
@@ -98,7 +98,7 @@ class _Inspector:
 
     @delegates(show_correlation)
     def show_correlation(self, **kwargs) -> Axes:
-        """Show a correlation matrix for `self.X` and `self.y`
+        """Show a correlation matrix for `self.X` and `self.y`.
 
         If output is not rendering properly when you reopen a notebook,
         make sure the notebook is trusted.
@@ -110,7 +110,7 @@ class _Inspector:
 
     @delegates(plot_column_clusters)
     def plot_feature_clusters(self, **kwargs) -> Axes:
-        """Plot a dendrogram based on feature correlations
+        """Plot a dendrogram based on feature correlations.
 
         - `corr_method`: Method of correlation to pass to `df.corr()`
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
