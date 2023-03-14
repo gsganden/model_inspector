@@ -9,6 +9,7 @@ from typing import Callable, Optional, Sequence, Union
 import numpy as np
 import pandas as pd
 import sklearn
+
 from ..delegate import delegates
 from .any_model import _Inspector
 from model_inspector.tune import (
@@ -43,6 +44,7 @@ class _BinInspector(_ClasInspector):
         predictions.
 
         Parameters:
+
         - `metrics`: Callables that take `y_true`, `y_pred` as
         positional arguments and return a number. Must have a `__name__`
         attribute.
@@ -52,7 +54,7 @@ class _BinInspector(_ClasInspector):
         reason to override that default would be to save time with a large
         dataset.
 
-        Returns: DataFrame with one column "thresh" indicating the
+        Returns: `DataFrame` with one column "thresh" indicating the
         thresholds used and an additional column for each input metric
         giving the value of that metric at that threshold.
         """
@@ -80,6 +82,7 @@ class _BinInspector(_ClasInspector):
         make sure the notebook is trusted.
 
         Parameters:
+
         - `thresh`: Probability threshold for counting a prediction as
         positive
         """
@@ -92,7 +95,7 @@ class _BinInspector(_ClasInspector):
             **kwargs,
         )
 
-# %% ../../nbs/06_classifier.ipynb 10
+# %% ../../nbs/06_classifier.ipynb 18
 class _MultiInspector(_ClasInspector):
     """Multiclass model inspector"""
     
@@ -109,6 +112,7 @@ class _MultiInspector(_ClasInspector):
         threshold, `np.nan` otherwise.
 
         Parameters:
+
         - `metrics`: Callables that take `y_true`, `y_pred` as
         positional arguments and return a number. Must have a `__name__`
         attribute and must be able to handle `np.nan` values.
@@ -148,5 +152,5 @@ class _MultiInspector(_ClasInspector):
             **kwargs,
         )
 
-# %% ../../nbs/06_classifier.ipynb 11
+# %% ../../nbs/06_classifier.ipynb 28
 _all_ = ["_BinInspector", "_MultiInspector"]

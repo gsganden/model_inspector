@@ -19,7 +19,7 @@ from sklearn.utils.validation import check_is_fitted
 
 # %% ../../nbs/00_any_model.ipynb 4
 class _Inspector:
-    """Model inspector base class
+    """Model inspector base class.
 
     Users should use `get_inspector` to generate appropriate
     `_Inspector` objects rather than instantiating this class or its
@@ -42,7 +42,7 @@ class _Inspector:
         return sklearn.inspection.PartialDependenceDisplay.from_estimator(
             estimator=self.model, X=self.X, **kwargs
         ).axes_
-
+    
     @delegates(sklearn.inspection.permutation_importance)
     def permutation_importance(
         self,
@@ -52,8 +52,8 @@ class _Inspector:
         """Calculate permutation importance.
         
         Parameters:
-
-        - `sort`: Sort features by decreasing importance
+        
+        - `sort`: Sort features by decreasing importance.
         """
         if kwargs is None:
             kwargs = {}
@@ -125,7 +125,7 @@ class _Inspector:
 
     @property
     def methods(self):
-        """Show available methods"""
+        """Show available methods."""
         return [
             i
             for i in dir(self)

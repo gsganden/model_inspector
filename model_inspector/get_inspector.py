@@ -23,9 +23,10 @@ from sklearn.utils.multiclass import type_of_target
 
 # %% ../nbs/04_get_inspector.ipynb 4
 def get_inspector(model: BaseEstimator, X: pd.DataFrame, y: pd.Series) -> _Inspector:
-    """Get an appropriate inspector for your model and data
+    """Get an appropriate inspector for your model and data.
 
     Parameters:
+
     - `model`: Fitted sklearn model
     - `X`: Matrix with the same features `model` was trained on
     - `y`: Series with same length as `X` and same meaning as target
@@ -39,14 +40,7 @@ def get_inspector(model: BaseEstimator, X: pd.DataFrame, y: pd.Series) -> _Inspe
         elif type_of_target(y) == "multiclass":
             return _LinMultiInspector(model, X, y)
     elif isinstance(model, BaseDecisionTree):
-        # `type_of_target` can't reliably distinguish between continuous
-        # and multiclass
-        if isinstance(model, RegressorMixin):
-            return _TreeRegInspector(model, X, y)
-        elif type_of_target(y) == "binary":
-            return _TreeBinInspector(model, X, y)
-        elif type_of_target(y) == "multiclass":
-            return _TreeMultiInspector(model, X, y)
+        return _TreeInspector(model, X, y)
     elif isinstance(model, BaseSearchCV):
         return _SearchCVInspector(model, X, y)
     # `type_of_target` can't reliably distinguish between continuous and

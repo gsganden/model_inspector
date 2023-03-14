@@ -104,6 +104,7 @@ class _LinRegInspector(_RegInspector, _LinInspectorMixin):
         """Show model equation
 
         Parameters:
+
         - `intercept_formatter`: Intercept format specifier
         - `coef_formatter`: Intercept format specifier
         """
@@ -121,6 +122,7 @@ class _LinRegInspector(_RegInspector, _LinInspectorMixin):
         """Plot coefficient values against a hyperparameter
 
         Parameters:
+
         - `hparam`: Name of hyperparameter; must be an attribute of
         `self.model`
         - `vals`: Values of that hyperparameter to use
@@ -162,6 +164,7 @@ class _LinRegInspector(_RegInspector, _LinInspectorMixin):
         to the prediction for the input item.
 
         Parameters:
+
         - `item`: Input item, with the same shape and value meanings as
         a single row from `self.X`
         - `bar_num_formatter`: Bar label format specifier
@@ -185,7 +188,7 @@ class _LinRegInspector(_RegInspector, _LinInspectorMixin):
             **kwargs,
         )
 
-# %% ../../nbs/07_linear_model.ipynb 12
+# %% ../../nbs/07_linear_model.ipynb 21
 class _LinBinInspector(_BinInspector, _LinInspectorMixin):
     """Linear binary classification model inspector"""
 
@@ -193,6 +196,7 @@ class _LinBinInspector(_BinInspector, _LinInspectorMixin):
         """Plot coefficient values against a hyperparameter
 
         Parameters:
+
         - `hparam`: Name of hyperparameter; must be an attribute of
         `self.model`
         - `vals`: Values of that hyperparameter to use
@@ -224,6 +228,7 @@ class _LinBinInspector(_BinInspector, _LinInspectorMixin):
         """Show model equation
 
         Parameters:
+
         - `intercept_formatter`: Intercept format specifier
         - `coef_formatter`: Intercept format specifier
         """
@@ -255,6 +260,7 @@ class _LinBinInspector(_BinInspector, _LinInspectorMixin):
         model.
 
         Parameters:
+
         - `item`: Input item, with the same shape and value meanings as
         a single row from `self.X`
         - `bar_num_formatter`: Bar label format specifier
@@ -276,7 +282,7 @@ class _LinBinInspector(_BinInspector, _LinInspectorMixin):
             **kwargs,
         )
 
-# %% ../../nbs/07_linear_model.ipynb 17
+# %% ../../nbs/07_linear_model.ipynb 35
 class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
     """Linear multiclass classification model inspector"""
 
@@ -284,6 +290,7 @@ class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
         """Plot coefficient values against a hyperparameter
 
         Parameters:
+
         - `hparam`: Name of hyperparameter; must be an attribute of
         `self.model`
         - `vals`: Values of that hyperparameter to use
@@ -324,6 +331,7 @@ class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
         """Show model equation
 
         Parameters:
+
         - `intercept_formatter`: Intercept format specifier
         - `coef_formatter`: Intercept format specifier
         """
@@ -345,5 +353,5 @@ class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
                 """
         return HTML(model_string)
 
-# %% ../../nbs/07_linear_model.ipynb 20
+# %% ../../nbs/07_linear_model.ipynb 45
 _all_ = ["_LinRegInspector", "_LinBinInspector", "_LinMultiInspector"]

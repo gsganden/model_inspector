@@ -9,6 +9,7 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.axes import Axes
+
 from .any_model import _Inspector
 
 # %% ../../nbs/05_regressor.ipynb 4
@@ -19,9 +20,10 @@ class _RegInspector(_Inspector):
         scatter_kwargs: Optional[dict] = None,
         line_kwargs: Optional[dict] = None,
     ) -> Axes:
-        """Plot predicted vs. actual values
+        """Plot predicted vs. actual values.
 
         Parameters:
+
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
         - `scatter_kwargs`: kwargs to pass to `plt.scatter`
@@ -61,9 +63,10 @@ class _RegInspector(_Inspector):
         line_kwargs: Optional[dict] = None,
         hist_kwargs: Optional[dict] = None,
     ) -> Axes:
-        """Plot residuals
+        """Plot residuals.
 
         Parameters:
+
         - `axes`: 1D array of two Matplotlib `Axes` objects. Plot will
         be added to these objects if provided; otherwise a new array of
         `Axes` objects will be generated.
