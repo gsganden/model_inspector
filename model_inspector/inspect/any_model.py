@@ -50,6 +50,8 @@ class _Inspector:
         **kwargs,
     ) -> pd.Series:
         """Calculate permutation importance.
+        
+        Parameters:
 
         - `sort`: Sort features by decreasing importance
         """
@@ -76,6 +78,7 @@ class _Inspector:
         """Plot a correlation matrix for `self.X` and `self.y`.
 
         Parameters:
+
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
         - `importance_kwargs`: kwargs to pass to
@@ -111,6 +114,8 @@ class _Inspector:
     @delegates(plot_column_clusters)
     def plot_feature_clusters(self, **kwargs) -> Axes:
         """Plot a dendrogram based on feature correlations.
+        
+        Parameters:
 
         - `corr_method`: Method of correlation to pass to `df.corr()`
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
