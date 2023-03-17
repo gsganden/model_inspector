@@ -9,5 +9,5 @@ jobs:
       run: |
         nbqa black --check .
         nbqa flake8 .
-    uses: fastai/workflows/nbdev-ci@master
+    - uses: fastai/workflows/nbdev-ci@master
       
