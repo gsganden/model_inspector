@@ -5,6 +5,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+    - uses: fastai/workflows/nbdev-ci@master
     - name: Check linting
       run: |
         echo "hi1"
@@ -16,5 +17,4 @@ jobs:
         echo "hi4"
         nbqa black --check ../nbs
         nbqa flake8 ../nbs
-    - uses: fastai/workflows/nbdev-ci@master
       
