@@ -21,16 +21,17 @@ from model_inspector.tune import (
 # %% ../../nbs/06_classifier.ipynb 4
 class _ClasInspector(_Inspector):
     """Abstract class for classification model inspectors"""
+
     def calculate_metrics_by_thresh(*args, **kwargs):
         raise NotImplementedError()
-        
+
     def confusion_matrix(*args, **kwargs):
         raise NotImplementedError()
 
 # %% ../../nbs/06_classifier.ipynb 6
 class _BinInspector(_ClasInspector):
     """Binary classification model inspector"""
-    
+
     def calculate_metrics_by_thresh(
         self,
         metrics: Union[Callable, Sequence[Callable]],
@@ -95,10 +96,10 @@ class _BinInspector(_ClasInspector):
             **kwargs,
         )
 
-# %% ../../nbs/06_classifier.ipynb 18
+# %% ../../nbs/06_classifier.ipynb 25
 class _MultiInspector(_ClasInspector):
     """Multiclass model inspector"""
-    
+
     def calculate_metrics_by_thresh(
         self,
         metrics: Union[Callable, Sequence[Callable]],
@@ -152,5 +153,5 @@ class _MultiInspector(_ClasInspector):
             **kwargs,
         )
 
-# %% ../../nbs/06_classifier.ipynb 28
+# %% ../../nbs/06_classifier.ipynb 35
 _all_ = ["_BinInspector", "_MultiInspector"]

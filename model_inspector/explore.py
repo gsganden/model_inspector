@@ -11,7 +11,7 @@ from fastcore.test import test_fig_exists
 from matplotlib.axes import Axes
 from .delegate import delegates
 
-# %% ../nbs/02_explore.ipynb 6
+# %% ../nbs/02_explore.ipynb 4
 @delegates(pd.DataFrame().style.background_gradient)
 def show_correlation(df: pd.DataFrame, method="pearson", **kwargs):
     """Show correlation heatmap
@@ -20,13 +20,14 @@ def show_correlation(df: pd.DataFrame, method="pearson", **kwargs):
     sure the notebook is trusted.
 
     Parameters:
+
     - `df`: DataFrame
     - `method`: Method of correlation to pass to `df.corr()`
     """
     kwargs = {**{"cmap": "bwr", "vmin": -1, "vmax": 1}, **kwargs}
     return df.corr(method=method).style.background_gradient(**kwargs).format("{0:,.2f}")
 
-# %% ../nbs/02_explore.ipynb 11
+# %% ../nbs/02_explore.ipynb 10
 @delegates(hc.dendrogram)
 def plot_column_clusters(
     df, corr_method: str = "spearman", ax: Axes = None, **kwargs
@@ -36,14 +37,15 @@ def plot_column_clusters(
     If output is not rendering properly when you reopen a notebook, make
     sure the notebook is trusted.
 
+    Adapted from
+    [https://github.com/fastai/book_nbs/blob/master/utils.py#L58-L64](https://github.com/fastai/book_nbs/blob/master/utils.py#L58-L64)
+
     Parameters:
+
     - `df`: DataFrame
     - `corr_method`: Method of correlation to pass to `df.corr()`
     - `ax`: Matplotlib `Axes` object. Plot will be added to this object
     if provided; otherwise a new `Axes` object will be generated.
-
-    Adapted from
-    https://github.com/fastai/book_nbs/blob/master/utils.py#L58-L64
     """
     corr_matrix = df.corr(method=corr_method)
     # For the purpose of evaluating redundancy of features in a

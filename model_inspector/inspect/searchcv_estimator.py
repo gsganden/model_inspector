@@ -8,7 +8,6 @@ from typing import Optional, Sequence, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn.model_selection._search import BaseSearchCV
 
 from ..delegate import delegates
 from .any_model import _Inspector
@@ -141,9 +140,8 @@ class _SearchCVInspector(_Inspector):
 
         results = pd.DataFrame(self.model.cv_results_)
         return (
-            results.loc[:, [f"param_{hparams[0]}", f"param_{hparams[1]}"] + [score_col]].pivot_table(
-                index=f"param_{hparams[0]}", columns=f"param_{hparams[1]}"
-            )
+            results.loc[:, [f"param_{hparams[0]}", f"param_{hparams[1]}"] + [score_col]]
+            .pivot_table(index=f"param_{hparams[0]}", columns=f"param_{hparams[1]}")
             .loc[:, score_col]
             .style.background_gradient(**{**{"axis": None}, **kwargs})
         )

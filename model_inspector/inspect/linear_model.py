@@ -4,10 +4,13 @@
 __all__ = ['COLORS', '_LinRegInspector', '_LinBinInspector', '_LinMultiInspector']
 
 # %% ../../nbs/07_linear_model.ipynb 3
-from typing import Iterable, Sequence, Union
+from typing import Sequence, Union
 
+from fastcore.test import test_fig_exists
+from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 import numpy as np
+from numpy.typing import NDArray
 import pandas as pd
 import waterfall_chart
 from IPython.display import HTML
@@ -188,7 +191,7 @@ class _LinRegInspector(_RegInspector, _LinInspectorMixin):
             **kwargs,
         )
 
-# %% ../../nbs/07_linear_model.ipynb 21
+# %% ../../nbs/07_linear_model.ipynb 25
 class _LinBinInspector(_BinInspector, _LinInspectorMixin):
     """Linear binary classification model inspector"""
 
@@ -265,7 +268,7 @@ class _LinBinInspector(_BinInspector, _LinInspectorMixin):
         a single row from `self.X`
         - `bar_num_formatter`: Bar label format specifier
         - `tick_num_formatter`: Tick label format specifier
-        - ``waterfall_kwargs`: kwargs to pass to `waterfall_chart.plot`
+        - `waterfall_kwargs`: kwargs to pass to `waterfall_chart.plot`
         """
         return self._plot_waterfall(
             item=item,
@@ -282,11 +285,11 @@ class _LinBinInspector(_BinInspector, _LinInspectorMixin):
             **kwargs,
         )
 
-# %% ../../nbs/07_linear_model.ipynb 35
+# %% ../../nbs/07_linear_model.ipynb 40
 class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
     """Linear multiclass classification model inspector"""
 
-    def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]) -> np.array:
+    def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]) -> NDArray[Axes]:
         """Plot coefficient values against a hyperparameter
 
         Parameters:
@@ -353,5 +356,5 @@ class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
                 """
         return HTML(model_string)
 
-# %% ../../nbs/07_linear_model.ipynb 45
+# %% ../../nbs/07_linear_model.ipynb 51
 _all_ = ["_LinRegInspector", "_LinBinInspector", "_LinMultiInspector"]

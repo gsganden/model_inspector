@@ -5,13 +5,13 @@ __all__ = ['delegates']
 
 # %% ../nbs/01_class_utils.ipynb 3
 import inspect
-import textwrap
 
 # %% ../nbs/01_class_utils.ipynb 4
 def delegates(to=None, keep=False):
     """Decorator: replace `**kwargs` in signature with params from `to`
 
-    Adapted from https://fastcore.fast.ai/meta.html#delegates
+    Adapted from
+    [https://fastcore.fast.ai/meta.html#delegates](https://fastcore.fast.ai/meta.html#delegates)
     """
 
     def _f(f):
@@ -32,7 +32,7 @@ def delegates(to=None, keep=False):
             sigd["kwargs"] = k
         from_f.__signature__ = sig.replace(parameters=sigd.values())
         f.__doc__ += f"""
-        
+
         Remaining parameters are passed to `{to.__module__}.{to.__name__}`.
         """
         return f

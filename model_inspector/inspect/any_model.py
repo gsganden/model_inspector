@@ -7,15 +7,17 @@ __all__ = ['_Inspector']
 from typing import Optional
 
 import pandas as pd
-import sklearn.inspection
 from fastcore.basics import basic_repr, store_attr
 from matplotlib.axes import Axes
-from ..delegate import delegates
-from ..explore import plot_column_clusters, show_correlation
+from numpy.typing import NDArray
 from sklearn.base import BaseEstimator
 from sklearn.dummy import DummyClassifier, DummyRegressor
+import sklearn.inspection
 from sklearn.utils import check_X_y
 from sklearn.utils.validation import check_is_fitted
+
+from ..delegate import delegates
+from ..explore import plot_column_clusters, show_correlation
 
 # %% ../../nbs/00_any_model.ipynb 4
 class _Inspector:
@@ -37,12 +39,12 @@ class _Inspector:
     __repr__ = basic_repr(["model"])
 
     @delegates(sklearn.inspection.PartialDependenceDisplay.from_estimator)
-    def plot_dependence(self, **kwargs) -> Axes:
+    def plot_partial_dependence(self, **kwargs) -> NDArray[Axes]:
         """Plot partial dependence."""
         return sklearn.inspection.PartialDependenceDisplay.from_estimator(
             estimator=self.model, X=self.X, **kwargs
         ).axes_
-    
+
     @delegates(sklearn.inspection.permutation_importance)
     def permutation_importance(
         self,
@@ -50,9 +52,9 @@ class _Inspector:
         **kwargs,
     ) -> pd.Series:
         """Calculate permutation importance.
-        
+
         Parameters:
-        
+
         - `sort`: Sort features by decreasing importance.
         """
         if kwargs is None:
@@ -100,7 +102,7 @@ class _Inspector:
         return ax
 
     @delegates(show_correlation)
-    def show_correlation(self, **kwargs) -> Axes:
+    def show_correlation(self, **kwargs):
         """Show a correlation matrix for `self.X` and `self.y`.
 
         If output is not rendering properly when you reopen a notebook,
@@ -114,7 +116,7 @@ class _Inspector:
     @delegates(plot_column_clusters)
     def plot_feature_clusters(self, **kwargs) -> Axes:
         """Plot a dendrogram based on feature correlations.
-        
+
         Parameters:
 
         - `corr_method`: Method of correlation to pass to `df.corr()`

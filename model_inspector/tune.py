@@ -48,6 +48,7 @@ def calculate_metrics_by_thresh_binary(
     threshold, `0` otherwise.
 
     Parameters:
+
     - `y_true`: Ground-truth values with shape (n_items,)
     - `y_prob`: Probability distributions with shape (n_items, 2)
     - `metrics`: Callables that take `y_true`, `y_pred` as positional
@@ -76,7 +77,7 @@ def calculate_metrics_by_thresh_binary(
         thresh_picker=thresh_picker,
     )
 
-# %% ../nbs/03_tune.ipynb 11
+# %% ../nbs/03_tune.ipynb 12
 def calculate_metrics_by_thresh_multi(
     y_true: np.array,
     y_prob: np.array,
@@ -90,6 +91,7 @@ def calculate_metrics_by_thresh_multi(
     `np.nan` otherwise.
 
     Parameters:
+
     - `y_true`: Ground-truth values
     - `y_prob`: Probability distributions
     - `metrics`: Callables that take `y_true`, `y_pred` as positional arguments
@@ -119,25 +121,27 @@ def calculate_metrics_by_thresh_multi(
         thresh_picker=thresh_picker,
     )
 
-# %% ../nbs/03_tune.ipynb 13
+# %% ../nbs/03_tune.ipynb 14
 def coverage(y_true: np.array, y_pred: np.array):
     """How often the model makes a prediction, where `np.nan` indicates
     abstaining from predicting.
 
     Parameters:
+
     - `y_true`: Ground-truth values
     - `y_pred`: Predicted values, possibly including `np.nan` to
     indicate abstraining from predicting
     """
     return (~np.isnan(y_pred)).mean()
 
-# %% ../nbs/03_tune.ipynb 14
+# %% ../nbs/03_tune.ipynb 15
 def calculate_metric_ignoring_nan(
     y_true: np.array, y_pred: np.array, metric: Callable, *args, **kwargs
 ):
     """Calculate `metric` ignoring `np.nan` predictions
 
     Parameters:
+
     - `y_true`: Ground-truth values
     - `y_pred`: Predicted values, possibly including `np.nan` to
     indicate abstraining from predicting
@@ -153,15 +157,15 @@ def calculate_metric_ignoring_nan(
         **kwargs,
     )
 
-# %% ../nbs/03_tune.ipynb 15
+# %% ../nbs/03_tune.ipynb 16
 def fbeta(precision: float, recall: float, beta: float = 1):
     weighted_mean_of_inverses = (
-        1 / (1 + beta ** 2) * (1 / precision + beta ** 2 * 1 / recall)
+        1 / (1 + beta**2) * (1 / precision + beta**2 * 1 / recall)
     )
     weighted_harmonic_mean = 1 / weighted_mean_of_inverses
     return weighted_harmonic_mean
 
-# %% ../nbs/03_tune.ipynb 19
+# %% ../nbs/03_tune.ipynb 21
 def confusion_matrix(
     y_true: Union[np.array, pd.Series],
     y_pred: Union[np.array, pd.Series],
@@ -172,6 +176,7 @@ def confusion_matrix(
     """Get confusion matrix
 
     Parameters:
+
     - `y_true`: Ground-truth values
     - `y_pred`: Predicted values
     - `shade_axis`: `axis` argument to pass to

@@ -5,12 +5,20 @@ __all__ = ['get_inspector']
 
 # %% ../nbs/04_get_inspector.ipynb 3
 import pandas as pd
-from .inspect.any_model import *
-from .inspect.classifier import *
-from .inspect.linear_model import *
-from .inspect.regressor import *
-from .inspect.searchcv_estimator import *
-from .inspect.tree import *
+from .inspect.any_model import _Inspector
+from .inspect.classifier import _BinInspector, _MultiInspector
+from model_inspector.inspect.linear_model import (
+    _LinRegInspector,
+    _LinBinInspector,
+    _LinMultiInspector,
+)
+from .inspect.regressor import _RegInspector
+from .inspect.searchcv_estimator import _SearchCVInspector
+from model_inspector.inspect.tree import (
+    _TreeRegInspector,
+    _TreeBinInspector,
+    _TreeMultiInspector,
+)
 from sklearn.base import BaseEstimator
 from sklearn.linear_model._base import (
     LinearClassifierMixin,
@@ -40,7 +48,14 @@ def get_inspector(model: BaseEstimator, X: pd.DataFrame, y: pd.Series) -> _Inspe
         elif type_of_target(y) == "multiclass":
             return _LinMultiInspector(model, X, y)
     elif isinstance(model, BaseDecisionTree):
-        return _TreeInspector(model, X, y)
+        # `type_of_target` can't reliably distinguish between continuous and
+        # multiclass
+        if isinstance(model, RegressorMixin):
+            return _TreeRegInspector(model, X, y)
+        elif type_of_target(y) == "binary":
+            return _TreeBinInspector(model, X, y)
+        elif type_of_target(y) == "multiclass":
+            return _TreeMultiInspector(model, X, y)
     elif isinstance(model, BaseSearchCV):
         return _SearchCVInspector(model, X, y)
     # `type_of_target` can't reliably distinguish between continuous and
