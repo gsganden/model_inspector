@@ -10,7 +10,7 @@ jobs:
         pip install black flake8 nbqa
         pwd
         ls
-        nbqa black --check .
-        nbqa flake8 .
+        nbqa black --check ../nbs
+        nbqa flake8 ../nbs
     - uses: fastai/workflows/nbdev-ci@master
       
