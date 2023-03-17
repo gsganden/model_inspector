@@ -142,5 +142,15 @@ checklink/cookies.txt
 _docs/
 sidebar.yml
 
-# nbdev preview
-_proc
+# nbdev stuff
+_publish.yml
+_quarto.yml
+_proc/
+tests/settings.ini
+idx/
+.install
+conda/
+_site/
+_docs/
+test_settings.ini
+index_files/
