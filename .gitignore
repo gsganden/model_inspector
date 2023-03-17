@@ -153,4 +153,5 @@ conda/
 _site/
 _docs/
 test_settings.ini
-index_files/
+index_files/_docs/
+_proc/
