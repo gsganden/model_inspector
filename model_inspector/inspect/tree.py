@@ -6,7 +6,6 @@ __all__ = ['_TreeRegInspector', '_TreeBinInspector', '_TreeMultiInspector']
 # %% ../../nbs/08_tree.ipynb 3
 from typing import Optional
 
-from fastcore.test import test_fig_exists
 import matplotlib.pyplot as plt
 from nbdev.showdoc import show_doc
 import numpy as np
@@ -67,5 +66,5 @@ class _TreeMultiInspector(_TreeInspector, _MultiInspector):
 
     pass
 
-# %% ../../nbs/08_tree.ipynb 34
+# %% ../../nbs/08_tree.ipynb 32
 _all_ = ["_TreeRegInspector", "_TreeBinInspector", "_TreeMultiInspector"]

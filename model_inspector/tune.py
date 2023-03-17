@@ -14,7 +14,7 @@ import pandas as pd
 from sklearn import metrics
 from tqdm import tqdm
 
-# %% ../nbs/03_tune.ipynb 5
+# %% ../nbs/03_tune.ipynb 4
 def _calculate_metrics_by_thresh(
     y_true: np.array,
     y_prob: np.array,
@@ -34,7 +34,7 @@ def _calculate_metrics_by_thresh(
 
     return pd.DataFrame(results)
 
-# %% ../nbs/03_tune.ipynb 6
+# %% ../nbs/03_tune.ipynb 5
 def calculate_metrics_by_thresh_binary(
     y_true: np.array,
     y_prob: np.array,
@@ -77,7 +77,7 @@ def calculate_metrics_by_thresh_binary(
         thresh_picker=thresh_picker,
     )
 
-# %% ../nbs/03_tune.ipynb 12
+# %% ../nbs/03_tune.ipynb 10
 def calculate_metrics_by_thresh_multi(
     y_true: np.array,
     y_prob: np.array,
@@ -121,7 +121,7 @@ def calculate_metrics_by_thresh_multi(
         thresh_picker=thresh_picker,
     )
 
-# %% ../nbs/03_tune.ipynb 14
+# %% ../nbs/03_tune.ipynb 12
 def coverage(y_true: np.array, y_pred: np.array):
     """How often the model makes a prediction, where `np.nan` indicates
     abstaining from predicting.
@@ -134,7 +134,7 @@ def coverage(y_true: np.array, y_pred: np.array):
     """
     return (~np.isnan(y_pred)).mean()
 
-# %% ../nbs/03_tune.ipynb 15
+# %% ../nbs/03_tune.ipynb 13
 def calculate_metric_ignoring_nan(
     y_true: np.array, y_pred: np.array, metric: Callable, *args, **kwargs
 ):
@@ -157,7 +157,7 @@ def calculate_metric_ignoring_nan(
         **kwargs,
     )
 
-# %% ../nbs/03_tune.ipynb 16
+# %% ../nbs/03_tune.ipynb 14
 def fbeta(precision: float, recall: float, beta: float = 1):
     weighted_mean_of_inverses = (
         1 / (1 + beta**2) * (1 / precision + beta**2 * 1 / recall)
@@ -165,7 +165,7 @@ def fbeta(precision: float, recall: float, beta: float = 1):
     weighted_harmonic_mean = 1 / weighted_mean_of_inverses
     return weighted_harmonic_mean
 
-# %% ../nbs/03_tune.ipynb 21
+# %% ../nbs/03_tune.ipynb 18
 def confusion_matrix(
     y_true: Union[np.array, pd.Series],
     y_pred: Union[np.array, pd.Series],

@@ -96,7 +96,7 @@ class _BinInspector(_ClasInspector):
             **kwargs,
         )
 
-# %% ../../nbs/06_classifier.ipynb 25
+# %% ../../nbs/06_classifier.ipynb 24
 class _MultiInspector(_ClasInspector):
     """Multiclass model inspector"""
 
@@ -153,5 +153,5 @@ class _MultiInspector(_ClasInspector):
             **kwargs,
         )
 
-# %% ../../nbs/06_classifier.ipynb 35
+# %% ../../nbs/06_classifier.ipynb 33
 _all_ = ["_BinInspector", "_MultiInspector"]

@@ -6,7 +6,6 @@ __all__ = ['COLORS', '_LinRegInspector', '_LinBinInspector', '_LinMultiInspector
 # %% ../../nbs/07_linear_model.ipynb 3
 from typing import Sequence, Union
 
-from fastcore.test import test_fig_exists
 from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 import numpy as np
@@ -191,7 +190,7 @@ class _LinRegInspector(_RegInspector, _LinInspectorMixin):
             **kwargs,
         )
 
-# %% ../../nbs/07_linear_model.ipynb 25
+# %% ../../nbs/07_linear_model.ipynb 23
 class _LinBinInspector(_BinInspector, _LinInspectorMixin):
     """Linear binary classification model inspector"""
 
@@ -285,7 +284,7 @@ class _LinBinInspector(_BinInspector, _LinInspectorMixin):
             **kwargs,
         )
 
-# %% ../../nbs/07_linear_model.ipynb 40
+# %% ../../nbs/07_linear_model.ipynb 36
 class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
     """Linear multiclass classification model inspector"""
 
@@ -356,5 +355,5 @@ class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
                 """
         return HTML(model_string)
 
-# %% ../../nbs/07_linear_model.ipynb 51
+# %% ../../nbs/07_linear_model.ipynb 46
 _all_ = ["_LinRegInspector", "_LinBinInspector", "_LinMultiInspector"]
