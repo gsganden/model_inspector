@@ -1,0 +1,16 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 04_get_inspector.ipynb
+      - section: Inspecting Models
+        contents:
+          - 00_any_model.ipynb
+          - 05_regressor.ipynb
+          - 06_classifier.ipynb
+          - 07_linear_model.ipynb
+          - 08_tree.ipynb
+          - 09_searchcv_estimator.ipynb
+      - 02_explore.ipynb
+      - 03_tune.ipynb
+      - 01_class_utils.ipynb
