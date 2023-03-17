@@ -5,7 +5,5 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      run: |
-        export MPLBACKEND=qtagg
       [uses: fastai/workflows/nbdev-ci@master]
 
