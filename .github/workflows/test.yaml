@@ -1,0 +1,14 @@
+name: CI
+on:  [workflow_dispatch, pull_request, push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check linting
+      run: |
+        pip install black flake8 nbqa
+        nbqa black --check .
+        nbqa flake8 .
+    - uses: fastai/workflows/nbdev-ci@master
+      

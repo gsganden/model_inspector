@@ -1,6 +1,3 @@
-from .inspect import *
-from .explore import *
-from .tune import *
+__version__ = "0.27.0"
 
-
-__version__ = "0.26.7"
+from .get_inspector import get_inspector

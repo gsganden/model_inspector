@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "model_inspector"
+  site-url: "https://gsganden.github.io/model_inspector/"
+  description: "Inspect machine learning models"
+  repo-branch: main
+  repo-url: "https://github.com/gsganden/model_inspector/tree/main/"
