@@ -8,7 +8,9 @@ jobs:
     - name: Check linting
       run: |
         pip install black flake8 nbqa
-        nbqa black --check nbs
-        nbqa flake8 nbs
+        pwd
+        ls
+        nbqa black --check .
+        nbqa flake8 .
     - uses: fastai/workflows/nbdev-ci@master
       
