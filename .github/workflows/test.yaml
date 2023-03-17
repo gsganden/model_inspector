@@ -6,15 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: fastai/workflows/nbdev-ci@master
-    - name: Check linting
+    - name: Lint
       run: |
-        echo "hi1"
-        pwd
-        echo "hi2"
-        ls
-        echo "hi3"
         pip install black flake8 nbqa
-        echo "hi4"
-        nbqa black --check ../nbs
-        nbqa flake8 ../nbs
+        nbqa black --check nbs
+        nbqa flake8 nbs
       
