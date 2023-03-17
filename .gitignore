@@ -141,3 +141,6 @@ checklink/cookies.txt
 
 _docs/
 sidebar.yml
+
+# nbdev preview
+_proc
