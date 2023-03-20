@@ -7,7 +7,6 @@ __all__ = ['_TreeRegInspector', '_TreeBinInspector', '_TreeMultiInspector']
 from typing import Optional
 
 import matplotlib.pyplot as plt
-from nbdev.showdoc import show_doc
 import numpy as np
 from matplotlib.axes import Axes
 from ..delegate import delegates
@@ -66,5 +65,5 @@ class _TreeMultiInspector(_TreeInspector, _MultiInspector):
 
     pass
 
-# %% ../../nbs/08_tree.ipynb 32
+# %% ../../nbs/08_tree.ipynb 33
 _all_ = ["_TreeRegInspector", "_TreeBinInspector", "_TreeMultiInspector"]

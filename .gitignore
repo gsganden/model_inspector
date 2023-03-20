@@ -140,7 +140,6 @@ checklink/cookies.txt
 .gitconfig
 
 _docs/
-sidebar.yml
 
 # nbdev stuff
 _publish.yml
