@@ -42,12 +42,36 @@ class _Inspector:
     ):
         check_is_fitted(model)
         check_X_y(X, y)
-        if not model.n_features_in_ == len(X.columns):
-            raise ValueError("`model.get_n_features_in()` must equal `len(X.columns)`.")
+        self._check_cols(model, X)
 
         store_attr()
 
     __repr__ = basic_repr(["model"])
+
+    def _check_cols(self, model, X):
+        try:
+            if not model.feature_names_in_.equals(X.columns):
+                raise ValueError("`model.feature_names_in_` should match `X.columns`")
+        except AttributeError:
+            warnings.warn(
+                """`model` does not have the `feature_names_in_`
+                attribute, so we cannot confirm that `model`'s feature
+                names match `X`'s column names. Proceed at your own
+                risk!
+                """
+            )
+            try:
+                if not model.n_features_in_ == len(X.columns):
+                    raise ValueError(
+                        "`model.n_features_in_` must equal `len(X.columns)`."
+                    )
+            except AttributeError:
+                warnings.warn(
+                    """`model` does not have the `n_features_in_`
+                    attribute, so we cannot confirm that `X` has as many
+                    columns as `model` has features. Proceed at your own
+                    risk!"""
+                )
 
     @delegates(sklearn.inspection.PartialDependenceDisplay.from_estimator)
     def plot_partial_dependence(self, **kwargs) -> NDArray[Axes]:
