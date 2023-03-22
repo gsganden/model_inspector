@@ -1,3 +1,5 @@
+## PR Checklist
+
 Recommended steps to avoid delays in CI and code review:
 
 - [ ] Use `nbqa black nbs` to use `black` to format the notebook code.
