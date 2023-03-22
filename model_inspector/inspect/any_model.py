@@ -35,7 +35,9 @@ class _Inspector:
     def __init__(self, model: Estimator, X: pd.DataFrame, y: pd.Series):
         check_is_fitted(model)
         check_X_y(X, y)
-        if not model.n_features_in_ == len(X.columns):  # works for `CatBoostClassifier` and `CatBoostRegressor`
+        if not model.n_features_in_ == len(
+            X.columns
+        ):  # works for `CatBoostClassifier` and `CatBoostRegressor`
             raise ValueError("`model.get_n_features_in()` must equal `len(X.columns)`.")
 
         store_attr()
