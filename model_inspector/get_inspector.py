@@ -4,7 +4,9 @@
 __all__ = ['get_inspector']
 
 # %% ../nbs/04_get_inspector.ipynb 3
+from catboost import CatBoostRegressor
 import pandas as pd
+
 from .inspect.any_model import _Inspector
 from .inspect.classifier import _BinInspector, _MultiInspector
 from model_inspector.inspect.linear_model import (
@@ -60,7 +62,7 @@ def get_inspector(model: BaseEstimator, X: pd.DataFrame, y: pd.Series) -> _Inspe
         return _SearchCVInspector(model, X, y)
     # `type_of_target` can't reliably distinguish between continuous and
     # multiclass
-    if isinstance(model, RegressorMixin):
+    if isinstance(model, (RegressorMixin, CatBoostRegressor)):
         return _RegInspector(model, X, y)
     elif type_of_target(y) == "binary":
         return _BinInspector(model, X, y)
