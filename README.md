@@ -464,7 +464,9 @@ inspector.methods
 
 `model_inspector` works with at least some estimators from libraries
 other than `scikit-learn` that mimic the `scikit-learn` interface, such
-as `XGBClassifier` and `XGBRegressor` from the `xgboost` library.
+as `XGBClassifier` and `XGBRegressor` from the `xgboost` library and
+`CatBoostRegressor` and `CatBoostClassifier` from the `catboost`
+library.
 
 ## Install
 
