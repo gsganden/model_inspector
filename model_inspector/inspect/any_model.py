@@ -4,7 +4,7 @@
 __all__ = ['_Inspector']
 
 # %% ../../nbs/00_any_model.ipynb 3
-from typing import Optional, Union
+from typing import Optional
 import warnings
 
 import pandas as pd
@@ -38,13 +38,11 @@ class _Inspector:
         # would like to avoid if possible.
         model: BaseEstimator,
         X: pd.DataFrame,
-        y: pd.Series
+        y: pd.Series,
     ):
         check_is_fitted(model)
         check_X_y(X, y)
-        if not model.n_features_in_ == len(
-            X.columns
-        ):
+        if not model.n_features_in_ == len(X.columns):
             raise ValueError("`model.get_n_features_in()` must equal `len(X.columns)`.")
 
         store_attr()
