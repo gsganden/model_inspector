@@ -6,10 +6,10 @@ __all__ = ['_Inspector']
 # %% ../../nbs/00_any_model.ipynb 3
 from typing import Optional
 
+import numpy as np
 import pandas as pd
 from fastcore.basics import basic_repr, store_attr
 from matplotlib.axes import Axes
-from numpy.typing import NDArray
 from sklearn.base import BaseEstimator
 from sklearn.dummy import DummyClassifier, DummyRegressor
 import sklearn.inspection
@@ -39,8 +39,11 @@ class _Inspector:
     __repr__ = basic_repr(["model"])
 
     @delegates(sklearn.inspection.PartialDependenceDisplay.from_estimator)
-    def plot_partial_dependence(self, **kwargs) -> NDArray[Axes]:
-        """Plot partial dependence."""
+    def plot_partial_dependence(self, **kwargs) -> np.ndarray:
+        """Plot partial dependence.
+        
+        Returns NumPy array of `Axes` objects.
+        """
         return sklearn.inspection.PartialDependenceDisplay.from_estimator(
             estimator=self.model, X=self.X, **kwargs
         ).axes_

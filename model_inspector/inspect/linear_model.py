@@ -9,7 +9,6 @@ from typing import Sequence, Union
 from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy.typing import NDArray
 import pandas as pd
 import waterfall_chart
 from IPython.display import HTML
@@ -288,7 +287,7 @@ class _LinBinInspector(_BinInspector, _LinInspectorMixin):
 class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
     """Linear multiclass classification model inspector"""
 
-    def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]) -> NDArray[Axes]:
+    def plot_coefs_vs_hparam(self, hparam: str, vals: Sequence[float]) -> np.ndarray:
         """Plot coefficient values against a hyperparameter
 
         Parameters:
@@ -296,6 +295,8 @@ class _LinMultiInspector(_MultiInspector, _LinInspectorMixin):
         - `hparam`: Name of hyperparameter; must be an attribute of
         `self.model`
         - `vals`: Values of that hyperparameter to use
+
+        Returns NumPy array of Axes objects.
         """
         current_val = getattr(self.model, hparam)
         model = clone(self.model)
