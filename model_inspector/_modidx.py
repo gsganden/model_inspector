@@ -3,7 +3,7 @@
 d = { 'settings': { 'branch': 'main',
                 'doc_baseurl': '/model_inspector/',
                 'doc_host': 'https://gsganden.github.io',
-                'git_url': 'https://github.com/gsganden/model_inspector/tree/main/',
+                'git_url': 'https://github.com/gsganden/model_inspector/',
                 'lib_path': 'model_inspector'},
   'syms': { 'model_inspector.class_utils': { 'model_inspector.class_utils.delegates': ( 'class_utils.html#delegates',
                                                                                         'model_inspector/class_utils.py')},
