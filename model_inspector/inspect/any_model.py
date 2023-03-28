@@ -41,7 +41,7 @@ class _Inspector:
     @delegates(sklearn.inspection.PartialDependenceDisplay.from_estimator)
     def plot_partial_dependence(self, **kwargs) -> np.ndarray:
         """Plot partial dependence.
-        
+
         Returns NumPy array of `Axes` objects.
         """
         return sklearn.inspection.PartialDependenceDisplay.from_estimator(

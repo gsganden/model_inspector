@@ -6,7 +6,6 @@ __all__ = ['COLORS', '_LinRegInspector', '_LinBinInspector', '_LinMultiInspector
 # %% ../../nbs/07_linear_model.ipynb 3
 from typing import Sequence, Union
 
-from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
