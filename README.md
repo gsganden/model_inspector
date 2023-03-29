@@ -462,11 +462,19 @@ inspector.methods
      'plot_residuals',
      'show_correlation']
 
-`model_inspector` works with at least some estimators from libraries
-other than `scikit-learn` that mimic the `scikit-learn` interface, such
-as `XGBClassifier` and `XGBRegressor` from the `xgboost` library and
-`CatBoostRegressor` and `CatBoostClassifier` from the `catboost`
-library.
+`model_inspector` makes some attempt to support estimators from popular
+libraries other than `scikit-learn` that mimic the `scikit-learn`
+interface. The following estimators are specifically supported:
+
+- From `catboost`:
+  - `CatBoostClassifier`
+  - `CatBoostRegressor`
+- From `lightgbm`:
+  - `LGBMClassifier`
+  - `LGBMRegressor`
+- From `xgboost`:
+  - `XGBClassifier`
+  - `XGBRegressor`
 
 ## Install
 
