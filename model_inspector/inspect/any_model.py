@@ -131,13 +131,18 @@ class _Inspector:
     @property
     def methods(self):
         """Show available methods."""
-        return [
-            i
-            for i in dir(self)
-            if not i.startswith("__")
-            and i not in self.__stored_args__
-            and i != "methods"
-        ]
+        return sorted(
+            [
+                i
+                for i in dir(self)
+                if not i.startswith("__")
+                and i not in self.__stored_args__
+                and i != "methods"
+            ],
+            # Ignore "plot_" prefix e.g. to put "permutation_importance"
+            # and "plot_permutation_importance" next to each other
+            key=lambda x: x[5:] if x.startswith("plot_") else x
+        )
 
 # %% ../../nbs/00_any_model.ipynb 5
 _all_ = ["_Inspector"]
