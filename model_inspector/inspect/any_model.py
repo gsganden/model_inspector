@@ -141,7 +141,7 @@ class _Inspector:
             ],
             # Ignore "plot_" prefix e.g. to put "permutation_importance"
             # and "plot_permutation_importance" next to each other
-            key=lambda x: x[5:] if x.startswith("plot_") else x
+            key=lambda x: x[5:] if x.startswith("plot_") else x,
         )
 
 # %% ../../nbs/00_any_model.ipynb 5
