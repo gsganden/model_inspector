@@ -262,6 +262,12 @@ inspector.methods
      'show_correlation']
 
 ``` python
+ax = inspector.plot_feature_clusters()
+```
+
+![](index_files/figure-commonmark/cell-11-output-1.png)
+
+``` python
 most_important_features = inspector.permutation_importance().index[:2]
 axes = inspector.plot_partial_dependence(
     features=[*most_important_features, most_important_features]
@@ -269,7 +275,41 @@ axes = inspector.plot_partial_dependence(
 axes[0, 0].get_figure().set_size_inches(12, 3)
 ```
 
-![](index_files/figure-commonmark/cell-11-output-1.png)
+![](index_files/figure-commonmark/cell-12-output-1.png)
+
+``` python
+inspector.permutation_importance()
+```
+
+    bmi    0.241886
+    s5     0.153085
+    sex    0.003250
+    s3     0.000734
+    bp     0.000461
+    s4    -0.002687
+    s2    -0.004366
+    s1    -0.008953
+    s6    -0.018925
+    age   -0.022768
+    dtype: float64
+
+``` python
+ax = inspector.plot_permutation_importance()
+```
+
+![](index_files/figure-commonmark/cell-14-output-1.png)
+
+``` python
+ax = inspector.plot_pred_vs_act()
+```
+
+![](index_files/figure-commonmark/cell-15-output-1.png)
+
+``` python
+axes = inspector.plot_residuals()
+```
+
+![](index_files/figure-commonmark/cell-16-output-1.png)
 
 ``` python
 inspector.show_correlation()
@@ -635,46 +675,6 @@ inspector.show_correlation()
     </tr>
   </tbody>
 </table>
-
-``` python
-inspector.permutation_importance()
-```
-
-    bmi    0.241886
-    s5     0.153085
-    sex    0.003250
-    s3     0.000734
-    bp     0.000461
-    s4    -0.002687
-    s2    -0.004366
-    s1    -0.008953
-    s6    -0.018925
-    age   -0.022768
-    dtype: float64
-
-``` python
-ax = inspector.plot_permutation_importance()
-```
-
-![](index_files/figure-commonmark/cell-14-output-1.png)
-
-``` python
-ax = inspector.plot_feature_clusters()
-```
-
-![](index_files/figure-commonmark/cell-15-output-1.png)
-
-``` python
-ax = inspector.plot_pred_vs_act()
-```
-
-![](index_files/figure-commonmark/cell-16-output-1.png)
-
-``` python
-axes = inspector.plot_residuals()
-```
-
-![](index_files/figure-commonmark/cell-17-output-1.png)
 
 ## Install
 
