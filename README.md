@@ -682,7 +682,7 @@ axes = inspector.plot_residuals()
 
 ## Alternatives
 
-## Yellowbrick
+### Yellowbrick
 
 [Yellowbrick](https://www.scikit-yb.org/en/latest/) is similar to Model
 Inspector in that it provides tools for visualizing the behavior of
@@ -704,7 +704,7 @@ machine learning *visualization* library, while Model Inspector treats
 visualization as just one approach to inspecting the behavior of machine
 learning models.
 
-## SHAP
+### SHAP
 
 [SHAP](https://github.com/slundberg/shap) is another library that
 provides a set of tools for understanding the behavior of machine
