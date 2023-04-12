@@ -5,13 +5,13 @@ __all__ = ['_Inspector']
 
 # %% ../../nbs/00_any_model.ipynb 3
 from typing import Optional
+import warnings
 
 import numpy as np
 import pandas as pd
 from fastcore.basics import basic_repr, store_attr
 from matplotlib.axes import Axes
 from sklearn.base import BaseEstimator
-from sklearn.dummy import DummyClassifier, DummyRegressor
 import sklearn.inspection
 from sklearn.utils import check_X_y
 from sklearn.utils.validation import check_is_fitted
@@ -28,15 +28,50 @@ class _Inspector:
     subclasses directly.
     """
 
-    def __init__(self, model: BaseEstimator, X: pd.DataFrame, y: pd.Series):
+    def __init__(
+        self,
+        # We aim to support estimators with `scikit-learn`-compatible
+        # interfaces from popular libraries such as `xgboost` and
+        # `catboost` even if they do not inherit from `BaseEstimator`,
+        # but I do not know of a simple way to include them in this type
+        # hint without adding those libraries as dependencies, which I
+        # would like to avoid if possible.
+        model: BaseEstimator,
+        X: pd.DataFrame,
+        y: pd.Series,
+    ):
         check_is_fitted(model)
         check_X_y(X, y)
-        if not isinstance(model, (DummyClassifier, DummyRegressor)):
-            model._check_n_features(X, reset=False)
+        self._check_cols(model, X)
 
         store_attr()
 
     __repr__ = basic_repr(["model"])
+
+    def _check_cols(self, model, X):
+        try:
+            if not model.feature_names_in_.equals(X.columns):
+                raise ValueError("`model.feature_names_in_` should match `X.columns`")
+        except AttributeError:
+            warnings.warn(
+                """`model` does not have the `feature_names_in_`
+                attribute, so we cannot confirm that `model`'s feature
+                names match `X`'s column names. Proceed at your own
+                risk!
+                """
+            )
+            try:
+                if not model.n_features_in_ == len(X.columns):
+                    raise ValueError(
+                        "`model.n_features_in_` must equal `len(X.columns)`."
+                    )
+            except AttributeError:
+                warnings.warn(
+                    """`model` does not have the `n_features_in_`
+                    attribute, so we cannot confirm that `X` has as many
+                    columns as `model` has features. Proceed at your own
+                    risk!"""
+                )
 
     @delegates(sklearn.inspection.PartialDependenceDisplay.from_estimator)
     def plot_partial_dependence(self, **kwargs) -> np.ndarray:
