@@ -10,11 +10,13 @@ import numpy as np
 import pandas as pd
 import sklearn
 
+from matplotlib.axes import Axes
 from ..delegate import delegates
 from .any_model import _Inspector
 from model_inspector.tune import (
     calculate_metrics_by_thresh_binary,
     calculate_metrics_by_thresh_multi,
+    plot_pr_curve,
     confusion_matrix,
 )
 
@@ -66,6 +68,27 @@ class _BinInspector(_ClasInspector):
             thresholds=thresholds,
         )
 
+    @delegates(plot_pr_curve)
+    def plot_pr_curve(
+        self,
+        ax: Optional[Axes] = None,
+        **kwargs,
+    ) -> Axes:
+        """
+        Plot the precision-recall curve.
+
+        Parameters:
+
+        - `ax`: Matplotlib `Axes` object. Plot will be added to this object
+        if provided; otherwise a new `Axes` object will be generated.
+        """
+        return plot_pr_curve(
+            y_true=self.y,
+            y_prob=self.model.predict_proba(self.X),
+            ax=ax,
+            **kwargs,
+        )
+
     @delegates(sklearn.metrics.confusion_matrix)
     def confusion_matrix(
         self,
@@ -96,7 +119,7 @@ class _BinInspector(_ClasInspector):
             **kwargs,
         )
 
-# %% ../../nbs/06_classifier.ipynb 24
+# %% ../../nbs/06_classifier.ipynb 26
 class _MultiInspector(_ClasInspector):
     """Multiclass model inspector"""
 
@@ -153,5 +176,5 @@ class _MultiInspector(_ClasInspector):
             **kwargs,
         )
 
-# %% ../../nbs/06_classifier.ipynb 33
+# %% ../../nbs/06_classifier.ipynb 35
 _all_ = ["_BinInspector", "_MultiInspector"]
