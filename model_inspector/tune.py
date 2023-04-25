@@ -90,8 +90,7 @@ def plot_pr_curve(
     **kwargs,
 ) -> Axes:
     """
-    Compute and plot the precision-recall curve for a binary classification
-    problem.
+    Plot the precision-recall curve for a binary classification problem.
 
     Parameters:
 
@@ -102,11 +101,10 @@ def plot_pr_curve(
 
     Returns: Matplotlib `Axes` object.
     """
-    p, r, _ = metrics.precision_recall_curve(y_true, y_prob[:, 1], **kwargs)
-
     if ax is None:
         _, ax = plt.subplots()
 
+    p, r, _ = metrics.precision_recall_curve(y_true, y_prob[:, 1], **kwargs)
     ax.plot(r, p)
     ax.set(xlabel="Recall", ylabel="Precision", title="Precision-Recall Curve")
 

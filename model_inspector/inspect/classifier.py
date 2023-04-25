@@ -16,7 +16,6 @@ from .any_model import _Inspector
 from model_inspector.tune import (
     calculate_metrics_by_thresh_binary,
     calculate_metrics_by_thresh_multi,
-    calculate_pr_curve,
     plot_pr_curve,
     confusion_matrix,
 )
@@ -69,57 +68,16 @@ class _BinInspector(_ClasInspector):
             thresholds=thresholds,
         )
 
-    def calculate_pr_curve(
-        self,
-        thresholds: Optional[Sequence] = None,
-    ) -> pd.DataFrame:
-        """Compute the precision-recall curve for a binary classification
-        problem.
-
-        Assumes that `self.model` has a `.predict_proba()` method. Uses
-        `self.y` as ground-truth values,
-        `self.model.predict_proba(self.X)[:, 1] > thresh` as
-        predictions.
-
-        Parameters:
-
-        - `thresholds`: `Sequence` of `float` threshold values to use. By
-        default uses the values that appear in `y_prob[:, 1]`, which is a
-        minimal set that covers all of the relevant possibilities. One
-        reason to override that default would be to save time with a large
-        dataset.
-
-        Returns: Pandas DataFrame with two columns: `recall_score` and
-        `precision_score`. Each row represents a point on the
-        precision-recall curve, and the DataFrame is sorted by increasing
-        `recall_score`.
-
-        Raises:
-
-        - `ValueError`: If the shapes of y_true and y_prob do not match.
-        """
-        return calculate_pr_curve(
-            y_true=self.y,
-            y_prob=self.model.predict_proba(self.X),
-            thresholds=thresholds,
-        )
-
+    @delegates(plot_pr_curve)
     def plot_pr_curve(
         self,
-        thresholds: Optional[Sequence] = None,
         ax: Optional[Axes] = None,
+        **kwargs,
     ) -> Axes:
         """
-        Compute and plot the precision-recall curve for a binary classification
-        problem.
+        Plot the precision-recall curve.
 
         Parameters:
-
-        - `thresholds`: `Sequence` of `float` threshold values to use. By
-        default uses the values that appear in `y_prob[:, 1]`, which is a
-        minimal set that covers all of the relevant possibilities. One
-        reason to override that default would be to save time with a large
-        dataset.
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
 
@@ -128,8 +86,8 @@ class _BinInspector(_ClasInspector):
         return plot_pr_curve(
             y_true=self.y,
             y_prob=self.model.predict_proba(self.X),
-            thresholds=thresholds,
             ax=ax,
+            **kwargs,
         )
 
     @delegates(sklearn.metrics.confusion_matrix)
