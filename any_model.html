@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Inspector functionality for any model">
+
+<title>model_inspector - Any Model</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="model_inspector - Any Model">
+<meta property="og:description" content="Inspector functionality for any model">
+<meta property="og:image" content="https://gsganden.github.io/model_inspector/00_any_model_files/figure-html/cell-9-output-1.png">
+<meta property="og:site-name" content="model_inspector">
+<meta property="og:image:height" content="432">
+<meta property="og:image:width" content="571">
+<meta name="twitter:title" content="model_inspector - Any Model">
+<meta name="twitter:description" content="Inspector functionality for any model">
+<meta name="twitter:image" content="https://gsganden.github.io/model_inspector/00_any_model_files/figure-html/cell-9-output-1.png">
+<meta name="twitter:image-height" content="432">
+<meta name="twitter:image-width" content="571">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">model_inspector</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./any_model.html">Inspecting Models</a></li><li class="breadcrumb-item"><a href="./any_model.html">Any Model</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model Inspector</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./get_inspector.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Get an Inspector</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Inspecting Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./any_model.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Any Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regressor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regressor</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classifier.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classifier</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./linear_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tree.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Decision Tree</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./searchcv_estimator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SearchCV</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gbm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">GBMs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./explore.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Explore Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tune.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tune a Model</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./class_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Class Utils</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#inspector.methods" id="toc-inspector.methods" class="nav-link active" data-scroll-target="#inspector.methods">_Inspector.methods</a></li>
+  <li><a href="#inspector.permutation_importance" id="toc-inspector.permutation_importance" class="nav-link" data-scroll-target="#inspector.permutation_importance">_Inspector.permutation_importance</a></li>
+  <li><a href="#inspector.plot_partial_dependence" id="toc-inspector.plot_partial_dependence" class="nav-link" data-scroll-target="#inspector.plot_partial_dependence">_Inspector.plot_partial_dependence</a></li>
+  <li><a href="#inspector.plot_feature_clusters" id="toc-inspector.plot_feature_clusters" class="nav-link" data-scroll-target="#inspector.plot_feature_clusters">_Inspector.plot_feature_clusters</a></li>
+  <li><a href="#inspector.plot_permutation_importance" id="toc-inspector.plot_permutation_importance" class="nav-link" data-scroll-target="#inspector.plot_permutation_importance">_Inspector.plot_permutation_importance</a></li>
+  <li><a href="#inspector.show_correlation" id="toc-inspector.show_correlation" class="nav-link" data-scroll-target="#inspector.show_correlation">_Inspector.show_correlation</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/gsganden/model_inspector/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Any Model</h1>
+</div>
+
+<div>
+  <div class="description">
+    Inspector functionality for any model
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.datasets</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> model_inspector <span class="im">import</span> get_inspector</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>X_diabetes, y_diabetes <span class="op">=</span> sklearn.datasets.load_diabetes(return_X_y<span class="op">=</span><span class="va">True</span>, as_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>inspector <span class="op">=</span> get_inspector(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    RandomForestRegressor().fit(X_diabetes, y_diabetes), X_diabetes, y_diabetes</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/greg.gandenberger/repos/model_inspector/model_inspector/inspect/any_model.py:56: UserWarning: `model` does not have the `feature_names_in_`
+                attribute, so we cannot confirm that `model`'s feature
+                names match `X`'s column names. Proceed at your own
+                risk!
+                
+  warnings.warn(</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/gsganden/model_inspector/blob/main/model_inspector/inspect/any_model.py#L167" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="inspector.methods" class="level3">
+<h3 class="anchored" data-anchor-id="inspector.methods">_Inspector.methods</h3>
+<blockquote class="blockquote">
+<pre><code> _Inspector.methods ()</code></pre>
+</blockquote>
+<p>Show available methods.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>inspector.methods</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>['_check_cols',
+ 'permutation_importance',
+ 'plot_feature_clusters',
+ 'plot_partial_dependence',
+ 'plot_permutation_importance',
+ 'plot_pred_vs_act',
+ 'plot_residuals',
+ 'show_correlation']</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/gsganden/model_inspector/blob/main/model_inspector/inspect/any_model.py#L87" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="inspector.permutation_importance" class="level3">
+<h3 class="anchored" data-anchor-id="inspector.permutation_importance">_Inspector.permutation_importance</h3>
+<blockquote class="blockquote">
+<pre><code> _Inspector.permutation_importance (sort:bool=True, scoring=None,
+                                    n_repeats=5, n_jobs=None,
+                                    random_state=None, sample_weight=None,
+                                    max_samples=1.0)</code></pre>
+</blockquote>
+<p>Calculate permutation importance.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>sort</code>: Sort features by decreasing importance.</li>
+</ul>
+<p>Remaining parameters are passed to <code>sklearn.inspection._permutation_importance.permutation_importance</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>inspector.permutation_importance()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>bmi    0.482974
+s5     0.472974
+bp     0.137960
+s6     0.092853
+s3     0.088472
+age    0.077993
+s2     0.067045
+s1     0.051492
+sex    0.023468
+s4     0.022805
+dtype: float64</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/gsganden/model_inspector/blob/main/model_inspector/inspect/any_model.py#L77" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="inspector.plot_partial_dependence" class="level3">
+<h3 class="anchored" data-anchor-id="inspector.plot_partial_dependence">_Inspector.plot_partial_dependence</h3>
+<blockquote class="blockquote">
+<pre><code> _Inspector.plot_partial_dependence (categorical_features=None,
+                                     feature_names=None, target=None,
+                                     response_method='auto', n_cols=3,
+                                     grid_resolution=100,
+                                     percentiles=(0.05, 0.95),
+                                     method='auto', n_jobs=None,
+                                     verbose=0, line_kw=None,
+                                     ice_lines_kw=None, pd_line_kw=None,
+                                     contour_kw=None, ax=None,
+                                     kind='average', centered=False,
+                                     subsample=1000, random_state=None)</code></pre>
+</blockquote>
+<p>Plot partial dependence.</p>
+<p>Returns NumPy array of <code>Axes</code> objects.</p>
+<p>Remaining parameters are passed to <code>sklearn.inspection._plot.partial_dependence.from_estimator</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>axes <span class="op">=</span> inspector.plot_partial_dependence(features<span class="op">=</span>[<span class="st">"bp"</span>, <span class="st">"bmi"</span>, [<span class="st">"bp"</span>, <span class="st">"bmi"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="00_any_model_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/gsganden/model_inspector/blob/main/model_inspector/inspect/any_model.py#L155" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="inspector.plot_feature_clusters" class="level3">
+<h3 class="anchored" data-anchor-id="inspector.plot_feature_clusters">_Inspector.plot_feature_clusters</h3>
+<blockquote class="blockquote">
+<pre><code> _Inspector.plot_feature_clusters (corr_method:str='spearman',
+                                   ax:matplotlib.axes._axes.Axes=None,
+                                   p=30, truncate_mode=None,
+                                   color_threshold=None, get_leaves=True,
+                                   orientation='top', labels=None,
+                                   count_sort=False, distance_sort=False,
+                                   show_leaf_counts=True, no_plot=False,
+                                   no_labels=False, leaf_font_size=None,
+                                   leaf_rotation=None,
+                                   leaf_label_func=None,
+                                   show_contracted=False,
+                                   link_color_func=None,
+                                   above_threshold_color='C0')</code></pre>
+</blockquote>
+<p>Plot a dendrogram based on feature correlations.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>corr_method</code>: Method of correlation to pass to <code>df.corr()</code></li>
+<li><code>ax</code>: Matplotlib <code>Axes</code> object. Plot will be added to this object if provided; otherwise a new <code>Axes</code> object will be generated.</li>
+</ul>
+<p>Remaining parameters are passed to <a href="https://gsganden.github.io/model_inspector/explore.html#plot_column_clusters"><code>model_inspector.explore.plot_column_clusters</code></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> inspector.plot_feature_clusters()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="00_any_model_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/gsganden/model_inspector/blob/main/model_inspector/inspect/any_model.py#L112" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="inspector.plot_permutation_importance" class="level3">
+<h3 class="anchored" data-anchor-id="inspector.plot_permutation_importance">_Inspector.plot_permutation_importance</h3>
+<blockquote class="blockquote">
+<pre><code> _Inspector.plot_permutation_importance
+                                         (ax:Optional[matplotlib.axes._axe
+                                         s.Axes]=None, importance_kwargs:O
+                                         ptional[dict]=None,
+                                         plot_kwargs:Optional[dict]=None)</code></pre>
+</blockquote>
+<p>Plot a correlation matrix for <code>self.X</code> and <code>self.y</code>.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>ax</code>: Matplotlib <code>Axes</code> object. Plot will be added to this object if provided; otherwise a new <code>Axes</code> object will be generated.</li>
+<li><code>importance_kwargs</code>: kwargs to pass to <code>sklearn.inspection.permutation_importance</code></li>
+<li><code>plot_kwargs</code>: kwargs to pass to <code>pd.Series.plot.barh</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> inspector.plot_permutation_importance()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="00_any_model_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/gsganden/model_inspector/blob/main/model_inspector/inspect/any_model.py#L143" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="inspector.show_correlation" class="level3">
+<h3 class="anchored" data-anchor-id="inspector.show_correlation">_Inspector.show_correlation</h3>
+<blockquote class="blockquote">
+<pre><code> _Inspector.show_correlation (method='pearson', cmap:str|Colormap='PuBu',
+                              low:float=0, high:float=0, axis:Axis|None=0,
+                              subset:Subset|None=None,
+                              text_color_threshold:float=0.408,
+                              vmin:float|None=None, vmax:float|None=None,
+                              gmap:Sequence|None=None)</code></pre>
+</blockquote>
+<p>Show a correlation matrix for <code>self.X</code> and <code>self.y</code>.</p>
+<p>If output is not rendering properly when you reopen a notebook, make sure the notebook is trusted.</p>
+<p>Remaining parameters are passed to <a href="https://gsganden.github.io/model_inspector/explore.html#show_correlation"><code>model_inspector.explore.show_correlation</code></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>inspector.show_correlation()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+#T_c2421_row0_col0, #T_c2421_row1_col1, #T_c2421_row2_col2, #T_c2421_row3_col3, #T_c2421_row4_col4, #T_c2421_row5_col5, #T_c2421_row6_col6, #T_c2421_row7_col7, #T_c2421_row8_col8, #T_c2421_row9_col9, #T_c2421_row10_col10 {
+  background-color: #ff0000;
+  color: #f1f1f1;
+}
+#T_c2421_row0_col1, #T_c2421_row1_col0, #T_c2421_row5_col10, #T_c2421_row10_col5 {
+  background-color: #ffd2d2;
+  color: #000000;
+}
+#T_c2421_row0_col2, #T_c2421_row2_col0, #T_c2421_row3_col5, #T_c2421_row5_col3 {
+  background-color: #ffd0d0;
+  color: #000000;
+}
+#T_c2421_row0_col3, #T_c2421_row1_col7, #T_c2421_row3_col0, #T_c2421_row7_col1 {
+  background-color: #ffaaaa;
+  color: #000000;
+}
+#T_c2421_row0_col4, #T_c2421_row2_col5, #T_c2421_row4_col0, #T_c2421_row5_col2 {
+  background-color: #ffbcbc;
+  color: #000000;
+}
+#T_c2421_row0_col5, #T_c2421_row5_col0 {
+  background-color: #ffc6c6;
+  color: #000000;
+}
+#T_c2421_row0_col6, #T_c2421_row6_col0 {
+  background-color: #ececff;
+  color: #000000;
+}
+#T_c2421_row0_col7, #T_c2421_row1_col9, #T_c2421_row7_col0, #T_c2421_row9_col1 {
+  background-color: #ffcaca;
+  color: #000000;
+}
+#T_c2421_row0_col8, #T_c2421_row8_col0 {
+  background-color: #ffbaba;
+  color: #000000;
+}
+#T_c2421_row0_col9, #T_c2421_row9_col0 {
+  background-color: #ffb2b2;
+  color: #000000;
+}
+#T_c2421_row0_col10, #T_c2421_row10_col0 {
+  background-color: #ffcece;
+  color: #000000;
+}
+#T_c2421_row1_col2, #T_c2421_row2_col1 {
+  background-color: #ffe8e8;
+  color: #000000;
+}
+#T_c2421_row1_col3, #T_c2421_row3_col1 {
+  background-color: #ffc2c2;
+  color: #000000;
+}
+#T_c2421_row1_col4, #T_c2421_row4_col1 {
+  background-color: #fff6f6;
+  color: #000000;
+}
+#T_c2421_row1_col5, #T_c2421_row5_col1 {
+  background-color: #ffdada;
+  color: #000000;
+}
+#T_c2421_row1_col6, #T_c2421_row6_col1 {
+  background-color: #9e9eff;
+  color: #f1f1f1;
+}
+#T_c2421_row1_col8, #T_c2421_row8_col1 {
+  background-color: #ffd8d8;
+  color: #000000;
+}
+#T_c2421_row1_col10, #T_c2421_row10_col1 {
+  background-color: #fff4f4;
+  color: #000000;
+}
+#T_c2421_row2_col3, #T_c2421_row3_col2, #T_c2421_row3_col8, #T_c2421_row8_col3 {
+  background-color: #ff9a9a;
+  color: #000000;
+}
+#T_c2421_row2_col4, #T_c2421_row3_col4, #T_c2421_row4_col2, #T_c2421_row4_col3 {
+  background-color: #ffc0c0;
+  color: #000000;
+}
+#T_c2421_row2_col6, #T_c2421_row6_col2 {
+  background-color: #a2a2ff;
+  color: #f1f1f1;
+}
+#T_c2421_row2_col7, #T_c2421_row7_col2 {
+  background-color: #ff9696;
+  color: #000000;
+}
+#T_c2421_row2_col8, #T_c2421_row8_col2 {
+  background-color: #ff8c8c;
+  color: #000000;
+}
+#T_c2421_row2_col9, #T_c2421_row3_col9, #T_c2421_row9_col2, #T_c2421_row9_col3 {
+  background-color: #ff9c9c;
+  color: #000000;
+}
+#T_c2421_row2_col10, #T_c2421_row10_col2 {
+  background-color: #ff6868;
+  color: #f1f1f1;
+}
+#T_c2421_row3_col6, #T_c2421_row6_col3 {
+  background-color: #d2d2ff;
+  color: #000000;
+}
+#T_c2421_row3_col7, #T_c2421_row7_col3 {
+  background-color: #ffbebe;
+  color: #000000;
+}
+#T_c2421_row3_col10, #T_c2421_row10_col3 {
+  background-color: #ff8e8e;
+  color: #000000;
+}
+#T_c2421_row4_col5, #T_c2421_row5_col4 {
+  background-color: #ff1a1a;
+  color: #f1f1f1;
+}
+#T_c2421_row4_col6, #T_c2421_row6_col4 {
+  background-color: #fff2f2;
+  color: #000000;
+}
+#T_c2421_row4_col7, #T_c2421_row7_col4 {
+  background-color: #ff7474;
+  color: #f1f1f1;
+}
+#T_c2421_row4_col8, #T_c2421_row8_col4 {
+  background-color: #ff7c7c;
+  color: #f1f1f1;
+}
+#T_c2421_row4_col9, #T_c2421_row9_col4 {
+  background-color: #ffacac;
+  color: #000000;
+}
+#T_c2421_row4_col10, #T_c2421_row10_col4 {
+  background-color: #ffc8c8;
+  color: #000000;
+}
+#T_c2421_row5_col6, #T_c2421_row6_col5 {
+  background-color: #ccccff;
+  color: #000000;
+}
+#T_c2421_row5_col7, #T_c2421_row7_col5 {
+  background-color: #ff5656;
+  color: #f1f1f1;
+}
+#T_c2421_row5_col8, #T_c2421_row8_col5 {
+  background-color: #ffaeae;
+  color: #000000;
+}
+#T_c2421_row5_col9, #T_c2421_row9_col5 {
+  background-color: #ffb4b4;
+  color: #000000;
+}
+#T_c2421_row6_col7, #T_c2421_row7_col6 {
+  background-color: #4242ff;
+  color: #f1f1f1;
+}
+#T_c2421_row6_col8, #T_c2421_row8_col6 {
+  background-color: #9898ff;
+  color: #f1f1f1;
+}
+#T_c2421_row6_col9, #T_c2421_row9_col6 {
+  background-color: #b8b8ff;
+  color: #000000;
+}
+#T_c2421_row6_col10, #T_c2421_row10_col6 {
+  background-color: #9a9aff;
+  color: #f1f1f1;
+}
+#T_c2421_row7_col8, #T_c2421_row8_col7 {
+  background-color: #ff6060;
+  color: #f1f1f1;
+}
+#T_c2421_row7_col9, #T_c2421_row9_col7 {
+  background-color: #ff9494;
+  color: #000000;
+}
+#T_c2421_row7_col10, #T_c2421_row10_col7 {
+  background-color: #ff9090;
+  color: #000000;
+}
+#T_c2421_row8_col9, #T_c2421_row9_col8 {
+  background-color: #ff8888;
+  color: #f1f1f1;
+}
+#T_c2421_row8_col10, #T_c2421_row10_col8 {
+  background-color: #ff6e6e;
+  color: #f1f1f1;
+}
+#T_c2421_row9_col10, #T_c2421_row10_col9 {
+  background-color: #ff9e9e;
+  color: #000000;
+}
+</style>
+
+<table id="T_c2421" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_c2421_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">age</th>
+<th id="T_c2421_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">sex</th>
+<th id="T_c2421_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">bmi</th>
+<th id="T_c2421_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">bp</th>
+<th id="T_c2421_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">s1</th>
+<th id="T_c2421_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">s2</th>
+<th id="T_c2421_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">s3</th>
+<th id="T_c2421_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">s4</th>
+<th id="T_c2421_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">s5</th>
+<th id="T_c2421_level0_col9" class="col_heading level0 col9" data-quarto-table-cell-role="th">s6</th>
+<th id="T_c2421_level0_col10" class="col_heading level0 col10" data-quarto-table-cell-role="th">target</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_c2421_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">age</td>
+<td id="T_c2421_row0_col0" class="data row0 col0">1.00</td>
+<td id="T_c2421_row0_col1" class="data row0 col1">0.17</td>
+<td id="T_c2421_row0_col2" class="data row0 col2">0.19</td>
+<td id="T_c2421_row0_col3" class="data row0 col3">0.34</td>
+<td id="T_c2421_row0_col4" class="data row0 col4">0.26</td>
+<td id="T_c2421_row0_col5" class="data row0 col5">0.22</td>
+<td id="T_c2421_row0_col6" class="data row0 col6">-0.08</td>
+<td id="T_c2421_row0_col7" class="data row0 col7">0.20</td>
+<td id="T_c2421_row0_col8" class="data row0 col8">0.27</td>
+<td id="T_c2421_row0_col9" class="data row0 col9">0.30</td>
+<td id="T_c2421_row0_col10" class="data row0 col10">0.19</td>
+</tr>
+<tr class="even">
+<td id="T_c2421_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">sex</td>
+<td id="T_c2421_row1_col0" class="data row1 col0">0.17</td>
+<td id="T_c2421_row1_col1" class="data row1 col1">1.00</td>
+<td id="T_c2421_row1_col2" class="data row1 col2">0.09</td>
+<td id="T_c2421_row1_col3" class="data row1 col3">0.24</td>
+<td id="T_c2421_row1_col4" class="data row1 col4">0.04</td>
+<td id="T_c2421_row1_col5" class="data row1 col5">0.14</td>
+<td id="T_c2421_row1_col6" class="data row1 col6">-0.38</td>
+<td id="T_c2421_row1_col7" class="data row1 col7">0.33</td>
+<td id="T_c2421_row1_col8" class="data row1 col8">0.15</td>
+<td id="T_c2421_row1_col9" class="data row1 col9">0.21</td>
+<td id="T_c2421_row1_col10" class="data row1 col10">0.04</td>
+</tr>
+<tr class="odd">
+<td id="T_c2421_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">bmi</td>
+<td id="T_c2421_row2_col0" class="data row2 col0">0.19</td>
+<td id="T_c2421_row2_col1" class="data row2 col1">0.09</td>
+<td id="T_c2421_row2_col2" class="data row2 col2">1.00</td>
+<td id="T_c2421_row2_col3" class="data row2 col3">0.40</td>
+<td id="T_c2421_row2_col4" class="data row2 col4">0.25</td>
+<td id="T_c2421_row2_col5" class="data row2 col5">0.26</td>
+<td id="T_c2421_row2_col6" class="data row2 col6">-0.37</td>
+<td id="T_c2421_row2_col7" class="data row2 col7">0.41</td>
+<td id="T_c2421_row2_col8" class="data row2 col8">0.45</td>
+<td id="T_c2421_row2_col9" class="data row2 col9">0.39</td>
+<td id="T_c2421_row2_col10" class="data row2 col10">0.59</td>
+</tr>
+<tr class="even">
+<td id="T_c2421_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">bp</td>
+<td id="T_c2421_row3_col0" class="data row3 col0">0.34</td>
+<td id="T_c2421_row3_col1" class="data row3 col1">0.24</td>
+<td id="T_c2421_row3_col2" class="data row3 col2">0.40</td>
+<td id="T_c2421_row3_col3" class="data row3 col3">1.00</td>
+<td id="T_c2421_row3_col4" class="data row3 col4">0.24</td>
+<td id="T_c2421_row3_col5" class="data row3 col5">0.19</td>
+<td id="T_c2421_row3_col6" class="data row3 col6">-0.18</td>
+<td id="T_c2421_row3_col7" class="data row3 col7">0.26</td>
+<td id="T_c2421_row3_col8" class="data row3 col8">0.39</td>
+<td id="T_c2421_row3_col9" class="data row3 col9">0.39</td>
+<td id="T_c2421_row3_col10" class="data row3 col10">0.44</td>
+</tr>
+<tr class="odd">
+<td id="T_c2421_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">s1</td>
+<td id="T_c2421_row4_col0" class="data row4 col0">0.26</td>
+<td id="T_c2421_row4_col1" class="data row4 col1">0.04</td>
+<td id="T_c2421_row4_col2" class="data row4 col2">0.25</td>
+<td id="T_c2421_row4_col3" class="data row4 col3">0.24</td>
+<td id="T_c2421_row4_col4" class="data row4 col4">1.00</td>
+<td id="T_c2421_row4_col5" class="data row4 col5">0.90</td>
+<td id="T_c2421_row4_col6" class="data row4 col6">0.05</td>
+<td id="T_c2421_row4_col7" class="data row4 col7">0.54</td>
+<td id="T_c2421_row4_col8" class="data row4 col8">0.52</td>
+<td id="T_c2421_row4_col9" class="data row4 col9">0.33</td>
+<td id="T_c2421_row4_col10" class="data row4 col10">0.21</td>
+</tr>
+<tr class="even">
+<td id="T_c2421_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">s2</td>
+<td id="T_c2421_row5_col0" class="data row5 col0">0.22</td>
+<td id="T_c2421_row5_col1" class="data row5 col1">0.14</td>
+<td id="T_c2421_row5_col2" class="data row5 col2">0.26</td>
+<td id="T_c2421_row5_col3" class="data row5 col3">0.19</td>
+<td id="T_c2421_row5_col4" class="data row5 col4">0.90</td>
+<td id="T_c2421_row5_col5" class="data row5 col5">1.00</td>
+<td id="T_c2421_row5_col6" class="data row5 col6">-0.20</td>
+<td id="T_c2421_row5_col7" class="data row5 col7">0.66</td>
+<td id="T_c2421_row5_col8" class="data row5 col8">0.32</td>
+<td id="T_c2421_row5_col9" class="data row5 col9">0.29</td>
+<td id="T_c2421_row5_col10" class="data row5 col10">0.17</td>
+</tr>
+<tr class="odd">
+<td id="T_c2421_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">s3</td>
+<td id="T_c2421_row6_col0" class="data row6 col0">-0.08</td>
+<td id="T_c2421_row6_col1" class="data row6 col1">-0.38</td>
+<td id="T_c2421_row6_col2" class="data row6 col2">-0.37</td>
+<td id="T_c2421_row6_col3" class="data row6 col3">-0.18</td>
+<td id="T_c2421_row6_col4" class="data row6 col4">0.05</td>
+<td id="T_c2421_row6_col5" class="data row6 col5">-0.20</td>
+<td id="T_c2421_row6_col6" class="data row6 col6">1.00</td>
+<td id="T_c2421_row6_col7" class="data row6 col7">-0.74</td>
+<td id="T_c2421_row6_col8" class="data row6 col8">-0.40</td>
+<td id="T_c2421_row6_col9" class="data row6 col9">-0.27</td>
+<td id="T_c2421_row6_col10" class="data row6 col10">-0.39</td>
+</tr>
+<tr class="even">
+<td id="T_c2421_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">s4</td>
+<td id="T_c2421_row7_col0" class="data row7 col0">0.20</td>
+<td id="T_c2421_row7_col1" class="data row7 col1">0.33</td>
+<td id="T_c2421_row7_col2" class="data row7 col2">0.41</td>
+<td id="T_c2421_row7_col3" class="data row7 col3">0.26</td>
+<td id="T_c2421_row7_col4" class="data row7 col4">0.54</td>
+<td id="T_c2421_row7_col5" class="data row7 col5">0.66</td>
+<td id="T_c2421_row7_col6" class="data row7 col6">-0.74</td>
+<td id="T_c2421_row7_col7" class="data row7 col7">1.00</td>
+<td id="T_c2421_row7_col8" class="data row7 col8">0.62</td>
+<td id="T_c2421_row7_col9" class="data row7 col9">0.42</td>
+<td id="T_c2421_row7_col10" class="data row7 col10">0.43</td>
+</tr>
+<tr class="odd">
+<td id="T_c2421_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">s5</td>
+<td id="T_c2421_row8_col0" class="data row8 col0">0.27</td>
+<td id="T_c2421_row8_col1" class="data row8 col1">0.15</td>
+<td id="T_c2421_row8_col2" class="data row8 col2">0.45</td>
+<td id="T_c2421_row8_col3" class="data row8 col3">0.39</td>
+<td id="T_c2421_row8_col4" class="data row8 col4">0.52</td>
+<td id="T_c2421_row8_col5" class="data row8 col5">0.32</td>
+<td id="T_c2421_row8_col6" class="data row8 col6">-0.40</td>
+<td id="T_c2421_row8_col7" class="data row8 col7">0.62</td>
+<td id="T_c2421_row8_col8" class="data row8 col8">1.00</td>
+<td id="T_c2421_row8_col9" class="data row8 col9">0.46</td>
+<td id="T_c2421_row8_col10" class="data row8 col10">0.57</td>
+</tr>
+<tr class="even">
+<td id="T_c2421_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">s6</td>
+<td id="T_c2421_row9_col0" class="data row9 col0">0.30</td>
+<td id="T_c2421_row9_col1" class="data row9 col1">0.21</td>
+<td id="T_c2421_row9_col2" class="data row9 col2">0.39</td>
+<td id="T_c2421_row9_col3" class="data row9 col3">0.39</td>
+<td id="T_c2421_row9_col4" class="data row9 col4">0.33</td>
+<td id="T_c2421_row9_col5" class="data row9 col5">0.29</td>
+<td id="T_c2421_row9_col6" class="data row9 col6">-0.27</td>
+<td id="T_c2421_row9_col7" class="data row9 col7">0.42</td>
+<td id="T_c2421_row9_col8" class="data row9 col8">0.46</td>
+<td id="T_c2421_row9_col9" class="data row9 col9">1.00</td>
+<td id="T_c2421_row9_col10" class="data row9 col10">0.38</td>
+</tr>
+<tr class="odd">
+<td id="T_c2421_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">target</td>
+<td id="T_c2421_row10_col0" class="data row10 col0">0.19</td>
+<td id="T_c2421_row10_col1" class="data row10 col1">0.04</td>
+<td id="T_c2421_row10_col2" class="data row10 col2">0.59</td>
+<td id="T_c2421_row10_col3" class="data row10 col3">0.44</td>
+<td id="T_c2421_row10_col4" class="data row10 col4">0.21</td>
+<td id="T_c2421_row10_col5" class="data row10 col5">0.17</td>
+<td id="T_c2421_row10_col6" class="data row10 col6">-0.39</td>
+<td id="T_c2421_row10_col7" class="data row10 col7">0.43</td>
+<td id="T_c2421_row10_col8" class="data row10 col8">0.57</td>
+<td id="T_c2421_row10_col9" class="data row10 col9">0.38</td>
+<td id="T_c2421_row10_col10" class="data row10 col10">1.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
