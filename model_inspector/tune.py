@@ -98,8 +98,6 @@ def plot_pr_curve(
     - `y_prob`: Probability distributions with shape (n_items, 2)
     - `ax`: Matplotlib `Axes` object. Plot will be added to this object
     if provided; otherwise a new `Axes` object will be generated.
-
-    Returns: Matplotlib `Axes` object.
     """
     if ax is None:
         _, ax = plt.subplots()

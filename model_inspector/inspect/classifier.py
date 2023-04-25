@@ -78,10 +78,9 @@ class _BinInspector(_ClasInspector):
         Plot the precision-recall curve.
 
         Parameters:
+
         - `ax`: Matplotlib `Axes` object. Plot will be added to this object
         if provided; otherwise a new `Axes` object will be generated.
-
-        Returns: Matplotlib `Axes` object.
         """
         return plot_pr_curve(
             y_true=self.y,
