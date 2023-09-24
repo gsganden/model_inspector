@@ -7,13 +7,18 @@ __all__ = ['_TreeRegInspector', '_TreeBinInspector', '_TreeMultiInspector']
 from typing import Optional
 
 import matplotlib.pyplot as plt
-import numpy as np
 from matplotlib.axes import Axes
+from ..colors import COLORS
 from ..delegate import delegates
 from .any_model import _Inspector
 from .classifier import _BinInspector, _MultiInspector
 from .regressor import _RegInspector
+import numpy as np
+import pandas as pd
 from sklearn.tree import plot_tree
+from treeinterpreter import treeinterpreter
+from typing import Union
+import waterfall_chart
 
 # %% ../../nbs/08_tree.ipynb 4
 class _TreeInspector(_Inspector):
@@ -46,18 +51,110 @@ class _TreeInspector(_Inspector):
             ax=ax,
             **kwargs,
         )[0].axes
+    
+    def _plot_waterfall(
+        self,
+        index,
+        data,
+        y_lab,
+        bar_num_formatter,
+        **kwargs,
+    ):
+        kwargs = {
+            "sorted_value": True,
+            "threshold": 0.01,
+            "blue_color": COLORS["blue"],
+            "green_color": COLORS["green"],
+            "red_color": COLORS["orange"],
+            "sorted_value": True,
+            "threshold": 0.01,
+            "rotation_value": 270,
+        } | kwargs
+        waterfall_chart.plot(
+            index=index,
+            data=data,
+            y_lab=y_lab,
+            formatting=f"{{:,{bar_num_formatter}}}",
+            **kwargs
+        )
 
 # %% ../../nbs/08_tree.ipynb 5
 class _TreeRegInspector(_TreeInspector, _RegInspector):
     """Decision tree regression model inspector"""
 
-    pass
+    def plot_waterfall(
+        self,
+        item: Union[pd.Series, np.array],
+        bar_num_formatter: str = ".1f",
+        tick_num_formatter: str = ".2f",
+        **kwargs
+    ):
+        """Make a waterfall chart showing how each feature contributes
+        to the prediction for the input item.
+
+        Parameters:
+
+        - `item`: Input item, with the same shape and value meanings as
+        a single row from `self.X`
+        - `bar_num_formatter`: Bar label format specifier
+        - `tick_num_formatter`: Tick label format specifier
+
+        Additional keyword arguments will be passed to
+        `waterfall_chart.plot`
+        """
+        prediction, bias, contributions = treeinterpreter.predict(self.model, pd.DataFrame(item).T)
+        index = ["int"] + [
+            f"{name}: {val:{tick_num_formatter}}"
+            for name, val in zip(self.X.columns, item)
+        ]
+        vals = np.hstack((bias, contributions[0]))
+        self._plot_waterfall(
+            index=index,
+            data=vals,
+            y_lab=self.y.name,
+            bar_num_formatter=bar_num_formatter,
+            **kwargs
+        )
+        return plt.gca()
 
 # %% ../../nbs/08_tree.ipynb 6
 class _TreeBinInspector(_TreeInspector, _BinInspector):
     """Decision tree binary classification model inspector"""
 
-    pass
+    def plot_waterfall(
+        self,
+        item: Union[pd.Series, np.array],
+        bar_num_formatter: str = ".2f",
+        tick_num_formatter: str = ".2f",
+        **kwargs
+    ):
+        """Make a waterfall chart showing how each feature contributes
+        to the prediction for the input item.
+
+        Parameters:
+
+        - `item`: Input item, with the same shape and value meanings as
+        a single row from `self.X`
+        - `bar_num_formatter`: Bar label format specifier
+        - `tick_num_formatter`: Tick label format specifier
+
+        Additional keyword arguments will be passed to
+        `waterfall_chart.plot`
+        """
+        prediction, bias, contributions = treeinterpreter.predict(self.model, pd.DataFrame(item).T)
+        index = ["int"] + [
+            f"{name}: {val:{tick_num_formatter}}"
+            for name, val in zip(self.X.columns, item)
+        ]
+        vals = np.hstack((bias[:, 1], contributions[0, :, 1]))
+        self._plot_waterfall(
+            index=index,
+            data=vals,
+            y_lab=self.y.name,
+            bar_num_formatter=bar_num_formatter,
+            **kwargs
+        )
+        return plt.gca()
 
 # %% ../../nbs/08_tree.ipynb 7
 class _TreeMultiInspector(_TreeInspector, _MultiInspector):
@@ -65,5 +162,5 @@ class _TreeMultiInspector(_TreeInspector, _MultiInspector):
 
     pass
 
-# %% ../../nbs/08_tree.ipynb 33
+# %% ../../nbs/08_tree.ipynb 38
 _all_ = ["_TreeRegInspector", "_TreeBinInspector", "_TreeMultiInspector"]

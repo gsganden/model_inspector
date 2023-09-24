@@ -115,7 +115,7 @@ class _Inspector:
         importance_kwargs: Optional[dict] = None,
         plot_kwargs: Optional[dict] = None,
     ) -> Axes:
-        """Plot a correlation matrix for `self.X` and `self.y`.
+        """Make a bar plot of premutation importance.
 
         Parameters:
 
